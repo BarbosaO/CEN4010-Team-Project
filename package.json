@@ -1,0 +1,23 @@
+{
+  "name": "cen4010-team-project",
+  "version": "1.0.0",
+  "description": "Online Bookstore Web Application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BarbosaO/CEN4010-Team-Project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BarbosaO/CEN4010-Team-Project/issues"
+  },
+  "homepage": "https://github.com/BarbosaO/CEN4010-Team-Project#readme",
+  "dependencies": {
+    "ejs": "^2.7.1",
+    "express": "^4.17.1"
+  }
+}
