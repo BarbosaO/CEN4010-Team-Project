@@ -5,11 +5,12 @@ var path = require("path");
 //npm install request - for making http calls
 //var request = require("request");
 
-app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, '/views')));
+app.set("views", path.join(__dirname, "views"));
 
+app.set("view engine", "ejs");
 app.get("/", function(req, res){
-    res.render('index');
+    res.render('pages/index.ejs');
 });
 
 // Server
