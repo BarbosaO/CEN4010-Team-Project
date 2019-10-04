@@ -4,37 +4,56 @@
 <html lang="en">
     <head>
         <% include partials/head.ejs %>
+        <script type="text/javascript" src="../scripts/stars.js"></script>
+        <script type="text/javascript" src="../scripts/validateReview.js"></script>
     </head>
     <body class="container-fluid">
-
         <header>
             <% include partials/header.ejs %>
         </header>
-
         <main>
-            <form action="">
-                <div class="form-group">
-                  <label for="comment">Comment</label>
-                  <textarea class="form-control" id="comment" rows="3"></textarea>
-                </div>
-                <div class="form-inline">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="anonymous">
-                        <label class="form-check-label" for="anonymous">Anonymous</label>
-                    </div> 
-                    <div>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
+            <div class="container">
+                <div class="row">
+                    <div class="col-3"></div>
+                    <div class="col-6">
+                        <form action="/submitReview" method="POST">
+                            <div class="form-group">
+                            <label for="comment">Comment</label>
+                            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                            </div>
+
+                            <!-- this input will hold the value for rating to send to backend -->
+                            <input type="number" class="d-none" id="rating" name="rating">
+
+                            <!-- Star Rating -->
+                            <div class="form-inline row">
+                                <div class="col-3">
+                                    <span class="fa fa-star" id="star1"></span>
+                                    <span class="fa fa-star" id="star2"></span>
+                                    <span class="fa fa-star" id="star3"></span>
+                                    <span class="fa fa-star" id="star4"></span>
+                                    <span class="fa fa-star" id="star5"></span>
+                                </div>
+                                <div class="col-6"></div>
+                                <div class="form-check col-3">
+                                    <input class="form-check-input" type="checkbox" id="anonymous" name="anonymous">
+                                    <label class="form-check-label" for="anonymous">Anonymous</label>
+                                </div> 
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9"></div>
+                                <div class="col-3">
+                                    <button  onclick="validateReview()" class="btn btn-success btn-md" type="submit">Submit</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </div>
-                <button class="btn btn-success btn-md" type="submit">Submit</button>
-              </form>
+                    <div class="col-3"></div>
+                </div>    
         </main>
 
-        <footer>
+        <footer class="footer">
             <% include partials/footer.ejs %>
         </footer>
 
