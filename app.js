@@ -25,10 +25,12 @@ app.post('/submitReview', (req,res) => {
     var comment = req.body.comment;
     var rating = req.body.rating;
     var anonymous = false;
-    
+
     if (req.body.anonymous == 'on'){
         anonymous = true;
     }
+
+    //insert into db
 
     res.redirect('/review');
 });
@@ -38,7 +40,7 @@ app.listen(3000, "localhost", function(){
     console.log("Listening on port 3000...")
 })
 
-MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", function (err, client) {
+var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", function (err, client) {
    
     if(err) throw err;
     else console.log('connected to database');
