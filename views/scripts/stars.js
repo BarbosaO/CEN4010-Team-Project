@@ -16,7 +16,7 @@ window.onload = function(e){
     });
 
     star3.addEventListener("click", function(){
-        uncheckAll()
+       uncheckAll()
        addClass3star()
     });
 
@@ -37,36 +37,6 @@ window.onload = function(e){
         star4.classList.remove('checked');
         star5.classList.remove('checked');
     }
-
-    $("#star1").hover(function(){
-       addClass1star()
-    }, function(){
-        uncheckAll()
-    });
-
-    $("#star2").hover(function(){
-        addClass2star()
-    }, function(){
-       uncheckAll()
-    });
-
-    $("#star3").hover(function(){
-        addClass3star()
-    }, function(){
-        uncheckAll()
-    });
-
-    $("#star4").hover(function(){
-        addClass4star()
-    }, function(){
-       uncheckAll()
-    });
-
-    $("#star5").hover(function(){
-        addClass5star()
-    }, function(){
-        uncheckAll()
-    });
 
     function addClass1star(){
         star1.classList.add('checked');
