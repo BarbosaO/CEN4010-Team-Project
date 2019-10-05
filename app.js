@@ -30,6 +30,10 @@ app.post('/submitReview', (req,res) => {
         anonymous = true;
     }
 
+    console.log(comment);
+    console.log(rating);
+    console.log(anonymous);
+
     //insert into db
 
     res.redirect('/review');

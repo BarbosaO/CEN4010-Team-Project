@@ -7,37 +7,27 @@ window.onload = function(e){
 
     star1.addEventListener("click", function(){
         uncheckAll()
-        star1.classList.add('checked');
+        addClass1star()
     });
 
     star2.addEventListener("click", function(){
         uncheckAll()
-        star1.classList.add('checked');
-        star2.classList.add('checked');
+        addClass2star()
     });
 
     star3.addEventListener("click", function(){
         uncheckAll()
-        star1.classList.add('checked');
-        star2.classList.add('checked');
-        star3.classList.add('checked');
+       addClass3star()
     });
 
     star4.addEventListener("click", function(){
         uncheckAll()
-        star1.classList.add('checked');
-        star2.classList.add('checked');
-        star3.classList.add('checked');
-        star4.classList.add('checked');
+        addClass4star()
     });
 
     star5.addEventListener("click", function(){
         uncheckAll()
-        star1.classList.add('checked');
-        star2.classList.add('checked');
-        star3.classList.add('checked');
-        star4.classList.add('checked');
-        star5.classList.add('checked');
+        addClass5star()
     });
 
     function uncheckAll(){
@@ -46,5 +36,65 @@ window.onload = function(e){
         star3.classList.remove('checked');
         star4.classList.remove('checked');
         star5.classList.remove('checked');
+    }
+
+    $("#star1").hover(function(){
+       addClass1star()
+    }, function(){
+        uncheckAll()
+    });
+
+    $("#star2").hover(function(){
+        addClass2star()
+    }, function(){
+       uncheckAll()
+    });
+
+    $("#star3").hover(function(){
+        addClass3star()
+    }, function(){
+        uncheckAll()
+    });
+
+    $("#star4").hover(function(){
+        addClass4star()
+    }, function(){
+       uncheckAll()
+    });
+
+    $("#star5").hover(function(){
+        addClass5star()
+    }, function(){
+        uncheckAll()
+    });
+
+    function addClass1star(){
+        star1.classList.add('checked');
+    }
+
+    function addClass2star(){
+        star1.classList.add('checked');
+        star2.classList.add('checked');
+    }
+
+    function addClass3star(){
+        star1.classList.add('checked');
+        star2.classList.add('checked');
+        star3.classList.add('checked');
+    }
+
+    function addClass4star(){
+        star1.classList.add('checked');
+        star2.classList.add('checked');
+        star3.classList.add('checked');
+        star4.classList.add('checked');
+    }
+
+    function addClass5star(){
+        star1.classList.add('checked');
+        star2.classList.add('checked');
+        star3.classList.add('checked');
+        star4.classList.add('checked');
+        star5.classList.add('checked');
     }
 }
