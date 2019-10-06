@@ -24,11 +24,11 @@ app.listen(3000, "localhost", function(){
     console.log("Listening on port 3000...")
 })
 
-MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", function (err, db) {
+MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", { useNewUrlParser: true, useUnifiedTopology: true}, function (err, db) {
    
      if(err) throw err;
      else console.log('connected to database');
 
      //Write databse Insert/Update/Query code here..
-                
+	                
 });
