@@ -3,6 +3,7 @@ var app = express();
 var path = require("path");
 var MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
+var db;
 
 //npm install request - for making http calls
 //var request = require("request");
@@ -34,30 +35,30 @@ app.post('/submitReview', (req,res) => {
     console.log(rating);
     console.log(anonymous);
 
-    //insert into db
+    //insert 
+    db.collection('Reviews').insertOne({
+        BookId: "d8a9e774a8e050c38420630",
+        UserId: 1,
+        Rating: rating,
+        Comment: comment,
+        Anonymous: anonymous
+    });
 
-    res.redirect('/review');
+    res.redirect('/index');
 });
 
-// Server
-app.listen(3000, "localhost", function(){
-    console.log("Listening on port 3000...")
-})
-
 var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", function (err, client) {
-   
-    if(err) throw err;
-    else console.log('connected to database');
 
-    const db = client.db("Test1");
+    db = client.db("Test1");
+    if(err) 
+        return console.log(err);
+    else 
+        console.log('connected to database');
 
-    // db.collection('Reviews').insertOne({
-    //     BookId: "d8a9e774a8e050c38420630",
-    //     UserId: 1,
-    //     Rating: 5,
-    //     Comment: "I love this book!",
-    //     Anonymous: false
-    // });
+    // Server
+    app.listen(3000, "localhost", function(){
+        console.log("Listening on port 3000...")
+    });
 
     //db.close();
 });
