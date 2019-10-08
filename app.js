@@ -22,29 +22,39 @@ app.get("/review", function(req, res){
     res.render('pages/review.ejs');
 });
 
+app.get('/reviewsList', function(req, res){
+    db.collection('Reviews').find({}).toArray(function(err, reviews){
+        if (err) { console.log(err); }
+        else {
+            //console.log(reviews);
+            res.render("pages/reviewsList.ejs", {reviews: reviews});  
+        };
+    });
+});
+
 app.post('/submitReview', (req,res) => {
     var comment = req.body.comment;
     var rating = req.body.rating;
+    var date = req.body.date;
     var anonymous = false;
+
+    console.log(date);
 
     if (req.body.anonymous == 'on'){
         anonymous = true;
     }
 
-    console.log(comment);
-    console.log(rating);
-    console.log(anonymous);
-
     //insert 
     db.collection('Reviews').insertOne({
         BookId: "d8a9e774a8e050c38420630",
         UserId: 1,
+        Date: date,
         Rating: rating,
         Comment: comment,
         Anonymous: anonymous
     });
 
-    res.redirect('/index');
+    res.render('pages/review.ejs');
 });
 
 var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", function (err, client) {
@@ -56,9 +66,8 @@ var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush
         console.log('connected to database');
 
     // Server
-    app.listen(3000, "localhost", function(){
-        console.log("Listening on port 3000...")
+    app.listen(3001, "localhost", function(){
+        console.log("Listening on port 3001...")
     });
 
-    //db.close();
 });
