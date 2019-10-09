@@ -10,13 +10,8 @@ app.use(express.static(path.join(__dirname, '/views')));
 app.set("views", path.join(__dirname, "views"));
 
 app.set("view engine", "ejs");
-
 app.get("/", function(req, res){
     res.render('pages/index.ejs');
-});
-
-app.get("/review", function(req, res){
-    res.render('pages/review.ejs');
 });
 
 // Server
