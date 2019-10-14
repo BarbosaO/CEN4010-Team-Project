@@ -23,20 +23,23 @@ app.listen(3000, "localhost", function(){
 
 MongoClient.connect(url,{ useNewUrlParser: true, useUnifiedTopology: true}, function(err, client) 
 {
-assert.equal(null, err);
-console.log("Successfully connected to server");
-var db = client.db('Test1');
-// Find some documents in our collection
-// Right now set to select books with Author: "John Doe" for testing
-db.collection('Test').find({Author: "John Doe"}).toArray(function(err, docs) {
-// Print the documents returned
-docs.forEach(function(doc) {
-console.log(doc.Title);
-});
-// Close the DB
-client.close();
-});
-// Declare success
-console.log("Called find()");
+	assert.equal(null, err);
+	console.log("Successfully connected to server");
+	var db = client.db('Test1');
+	// Find some documents in our collection
+	// Right now set to select books with Author: "John Doe" for testing
+	app.get('/booksList', function(req, res){
+		db.collection('Test').find({}).toArray(function(err, docs) {
+			// Print the documents returned
+			//docs.forEach(function(doc) {
+			//console.log(doc.Title);
+			res.render("pages/bookList.ejs", {docs: docs});
+			//});
+		// Close the DB
+			client.close();
+		});
+	});
+	// Declare success
+	console.log("Called find()");
  });
  
