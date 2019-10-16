@@ -26,7 +26,8 @@ app.get("/addProfile", function(req, res)
 {
     res.render('pages/addProfile.ejs');
 });
-// username
+
+// create user
 app.post("/addUser", (req, res) =>
 {
     var username = req.body.username;
