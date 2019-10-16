@@ -27,12 +27,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method')); // for delete and put requests
 
-app.get("/", checkAuthenticated, (req, res) => {
+app.get("/", function(req, res){
     res.render('pages/index.ejs');
+});
+
+app.get("/cart", function(req, res){
+    res.render('pages/cart.ejs');
 });
 
 app.get("/review", function(req, res){
     res.render('pages/review.ejs');
+});
+
+app.get("/login", function(req, res){
+    res.render('pages/login.ejs');
 });
 
 app.get('/reviewsList', function(req, res){
@@ -167,4 +175,3 @@ function initialize(passport){
     passport.serializeUser((user, done) => done(null, user))
     passport.deserializeUser((user, done) => done(null, user))
 }
-
