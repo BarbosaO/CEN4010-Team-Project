@@ -119,7 +119,7 @@ app.delete('/logout', function(req, res){
     res.redirect('/login')
 });
 
-var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", function (err, client) {
+var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test",{ useNewUrlParser: true, useUnifiedTopology: true  }, function (err, client) {
 
     db = client.db("Test1");
     if(err) 
