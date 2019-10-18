@@ -27,15 +27,32 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method')); // for delete and put requests
 
-
 //ROUTES
 app.get("/", checkAuthenticated, (req, res) => {
     console.log(req.user)
     res.render('pages/index.ejs');
 });
 
+app.get("/cart", checkAuthenticated,  function(req, res){
+    res.render('pages/cart.ejs');
+});
+
+app.get("/review", checkAuthenticated, function(req, res){
+    res.render('pages/review.ejs', {email: req.user[0].Email});
+});
+
+app.get('/reviewsList', checkAuthenticated, function(req, res){
+    db.collection('Reviews').find({}).toArray(function(err, reviews){
+        if (err) { console.log(err); }
+        else {
+            //console.log(reviews);
+            res.render("pages/reviewsList.ejs", {reviews: reviews});  
+        };
+    });
+});
+
 //LOGIN AND REGISTER
-//we don't want authenticated users going to the login page - checkNotAuthenticated
+//WE DONT WANT AUTHENTICATED USERS TO GO TO THE REGISTER OR LOG IN PAGE SO CHECKNOTAUTHENTICATED
 app.get("/register", checkNotAuthenticated, function(req, res){
     res.render('pages/register.ejs', {message: null});
 });
@@ -161,8 +178,9 @@ function initialize(passport){
     passport.deserializeUser((user, done) => done(null, user))
 }
 
+
 //SERVER AND DATABASE 
-var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", function (err, client) {
+var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", { useNewUrlParser: true, useUnifiedTopology: true  }, function (err, client) {
 
     db = client.db("Test1");
     if(err) 
@@ -171,8 +189,8 @@ var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush
         console.log('connected to database');
 
     // Server
-    app.listen(3000, "localhost", function(){
-        console.log("Listening on port 3000...")
+    app.listen(3001, "localhost", function(){
+        console.log("Listening on port 3001...")
     });
 
 });
