@@ -18,8 +18,17 @@
                     <div class="col-6">
                         <form action="/submitReview" method="POST">
                             <div class="form-group">
-                            <label for="comment">Comment</label>
-                            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                                <div class="form-inline row">
+                                    <div class="col-2">
+                                        <label for="comment" style="text-align:left;">Comment</label>
+                                    </div>
+                                    <div class="col-3"></div>
+                                    <div class="col-7">
+                                        <p id="invisibleNickname"style="display:none"><%= email %></p>
+                                        <p id="nickname"style="margin-bottom:0; text-align:right;">Comment as: <%= email %></p>
+                                    </div>
+                                </div>
+                                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
                             </div>
 
                             <!-- input will hold value for date -->
@@ -39,8 +48,8 @@
                                 </div>
                                 <div class="col-6"></div>
                                 <div class="form-check col-3">
-                                    <input class="form-check-input" type="checkbox" id="anonymous" name="anonymous">
-                                    <label class="form-check-label" for="anonymous">Anonymous</label>
+                                    <input class="form-check-input" type="checkbox" id="anonymous" name="anonymous" onclick="toggleAnon()">
+                                    <label class="form-check-label" style="color:grey;" for="anonymous">Anonymous</label>
                                 </div> 
                             </div>
 
@@ -60,5 +69,15 @@
             <% include partials/footer.ejs %>
         </footer>
 
+        <script>
+                function toggleAnon(){
+                    if(document.getElementById('anonymous').checked == true){
+                        console.log('anon')
+                        document.getElementById('nickname').innerHTML = 'Comment as: Anonymous';
+                    }else{
+                        document.getElementById('nickname').innerHTML = 'Comment as: ' + document.getElementById('invisibleNickname').innerHTML;
+                    }
+                }
+            </script>
     </body>
 </html>

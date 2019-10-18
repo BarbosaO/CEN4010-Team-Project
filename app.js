@@ -27,26 +27,16 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method')); // for delete and put requests
 
+
+//ROUTES
 app.get("/", checkAuthenticated, (req, res) => {
+    console.log(req.user)
     res.render('pages/index.ejs');
 });
 
-app.get("/review", function(req, res){
-    res.render('pages/review.ejs');
-});
-
-app.get('/reviewsList', function(req, res){
-    db.collection('Reviews').find({}).toArray(function(err, reviews){
-        if (err) { console.log(err); }
-        else {
-            //console.log(reviews);
-            res.render("pages/reviewsList.ejs", {reviews: reviews});  
-        };
-    });
-});
-
-app.get("/register", checkNotAuthenticated, function(req, res)
-{
+//LOGIN AND REGISTER
+//we don't want authenticated users going to the login page - checkNotAuthenticated
+app.get("/register", checkNotAuthenticated, function(req, res){
     res.render('pages/register.ejs', {message: null});
 });
 
@@ -60,7 +50,7 @@ app.post("/login", checkNotAuthenticated, passport.authenticate('local', {
     failureFlash: true
 }));
 
-app.post("/register", (req, res) =>{
+app.post("/register", checkNotAuthenticated, (req, res) =>{
     var email = req.body.email;
     var password = req.body.password;
 
@@ -81,7 +71,22 @@ app.post("/register", (req, res) =>{
     });
 });
 
-app.post('/submitReview', (req,res) => {
+//REVIEWS
+app.get("/review", checkAuthenticated, function(req, res){
+    res.render('pages/review.ejs', {email: req.user[0].Email});
+});
+
+app.get('/reviewsList', checkAuthenticated, function(req, res){
+    db.collection('Reviews').find({}).toArray(function(err, reviews){
+        if (err) { console.log(err); }
+        else {
+            //console.log(reviews);
+            res.render("pages/reviewsList.ejs", {reviews: reviews});  
+        };
+    });
+});
+
+app.post('/submitReview', checkAuthenticated, (req,res) => {
     var comment = req.body.comment;
     var rating = req.body.rating;
     var date = req.body.date;
@@ -111,23 +116,12 @@ app.delete('/logout', function(req, res){
     res.redirect('/login')
 });
 
-var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", function (err, client) {
 
-    db = client.db("Test1");
-    if(err) 
-        return console.log(err);
-    else 
-        console.log('connected to database');
-
-    // Server
-    app.listen(3000, "localhost", function(){
-        console.log("Listening on port 3000...")
-    });
-
-});
-
+//PASSPORT FUNCTIONS
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
+        console.log('check authenticated')
+        console.log(req.user);
         return next();
     }else{
         res.redirect('/login');
@@ -144,23 +138,22 @@ function checkNotAuthenticated(req, res, next){
 
 function initialize(passport){
     const authenticateUser = (email, password, done) => {
+        db.collection('User').find({"Email": email}).toArray(function(err, user){
+            if (err) { console.log(err); }
+            else {
+                var userFound = user[0];
 
-            db.collection('User').find({"Email": email}).toArray(function(err, user){
-                if (err) { console.log(err); }
-                else {
-                    var userFound = user[0];
-
-                    if(userFound == null){
-                        return done(null, false, {message: 'No user found with that email.'})
-                    }
-        
-                    if(password.localeCompare(userFound.Password) == 0){ //equal
-                        return done(null, user)
-                    }else{
-                        return done(null, false, {message: 'Password incorrect'})
-                    }
-                };
-            });
+                if(userFound == null){
+                    return done(null, false, {message: 'No user found with that email.'})
+                }
+    
+                if(password.localeCompare(userFound.Password) == 0){ //equal
+                    return done(null, user)
+                }else{
+                    return done(null, false, {message: 'Password incorrect'})
+                }
+            };
+        });
     }
 
     passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser))
@@ -168,3 +161,18 @@ function initialize(passport){
     passport.deserializeUser((user, done) => done(null, user))
 }
 
+//SERVER AND DATABASE 
+var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", function (err, client) {
+
+    db = client.db("Test1");
+    if(err) 
+        return console.log(err);
+    else 
+        console.log('connected to database');
+
+    // Server
+    app.listen(3000, "localhost", function(){
+        console.log("Listening on port 3000...")
+    });
+
+});
