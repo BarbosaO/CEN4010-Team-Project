@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <nav role="navigation">
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a href="/">Home</a>
+            </li>
+        </ul> 
+    </nav>
+    <head>
+        <% include partials/head.ejs %>
+        <h1 align="center">YOUR SHOPING CART</h1>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+    </head>
+
+    <body class="container-fluid">
+        <main>
+            <div class="container-fluid">
+                <!-- Beginning of the cart -->
+                <div class="row">
+                    <div class="col-xs-9 col-md-7">        
+                        <div class="jumbotron">  
+                            <div class="cart">  
+                                <% cart.forEach(cart => {%>  
+                                    <!-- main table --> 
+                                    <table style width="100%">
+                                        <tr>
+                                            <!-- Book title -->
+                                            <h5 class="title" >Title: <%= cart.Title %> </h5>
+                                            <th> 
+                                                <!-- Book price -->
+                                                <div class="product cartSection">
+                                                    <p class="price">Price: $<%= cart.Price %></p>
+                                                </div>
+                                                <!-- Book cover -->
+                                                <div class="Cover">
+                                                    <img src = <%= cart.Cover %> width="80" height="100" title="" />    
+                                                </div> 
+                                                <!-- Delete from cart -->
+                                                <div style=display:inline-block horizontal-align:right> 
+                                                    <form action="/deleteCart?_method=DELETE" method="POST">
+                                                        <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
+                                                        <button type="submit">Delete</button>
+                                                    </form>
+                                                </div> 
+                                                <!-- inner table quantity adjustment -->
+                                                <table style width="100%">
+                                                    <tr>
+                                                        <th>
+                                                            <div style=display:inline-block horizontal-align:right> 
+                                                                <a class="add" > + </a>
+                                                            </div> 
+                                                            <div style=display:inline-block horizontal-align:right> 
+                                                                <a class="remove"> - </a>
+                                                            </div> 
+                                                        </th> 
+                                                    </tr>
+                                                </table> 
+                                            </th> 
+                                            <th> 
+                                            <!-- Book description -->
+                                                <div class="item">
+                                                    <h3 class="description" >Description:</h3>
+                                                    <p class="description" > <%= cart.Description %></p>
+                                                </div>                            
+                                            </th> 
+                                        </tr>
+                                    </table> 
+                                    <hr> </hr>
+                                <% })%>
+                            </div> 
+                        </div>
+                        <!-- End of Cart -->
+                    </div>
+
+                    <!-- Review section -->
+                    <div class="col-xs-3 col-md-5">
+                        <div class="review">  
+                            <h3 class="Reviews">Reviews</h3>
+                            <hr> </hr>
+                            <p>Here will be reviews</p>
+                            <nav class= "bottom" aria-label="Page navigation" >
+                                <ul class="pagination" >
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav> 
+                        </div>
+                    </div>
+                </div> 
+        
+        <!-- Begining of Payment Section -->
+                <div class="row"> 
+                    <div class="col-xs-9 col-md-7">
+                        <div class="jumbotron">
+                            <div class= "subtotal" align="right">
+                                <table>     
+                                    <tr>
+                                        <th width="60%">
+                                            <p class="totalRow"><span class="label">Subtotal</span></p>
+                                            <p class="totalRow"><span class="label">Tax</span></p>
+                                            <p class="totalRow"><span class="label">Total</span></p>
+                                        </th>   
+                                        <th>
+                                            <p class="totalRow"><span class="value">$</span></p>
+                                            <p class="totalRow"><span class="value">$5.00</span></p>
+                                            <p class="totalRow"><span class="value">$39.00</span></p>
+                                        </th> 
+                                    </tr>  
+                                </table>
+                                <p class="totalRow"><a href="#" class="btn continue">Checkout</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Begining of wish list section -->
+                    <div class="col-xs-3 col-md-5">
+                        <div class="nav-item">  
+                            <a href="#">Wish List</a>
+                            <hr> </hr>
+                        </div>
+                    </div> 
+                </div>
+                                                        
+        </main>
+        <% include partials/footer.ejs %>
+    </body>
+</html>

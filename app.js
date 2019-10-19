@@ -8,6 +8,7 @@ const LocalStrategy = require('passport-local');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const flash = require('express-flash');
+var ObjectId = require('mongodb').ObjectID;
 var db;
 
 initialize(passport);
@@ -27,28 +28,46 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method')); // for delete and put requests
 
+
+
 //ROUTES
 app.get("/", checkAuthenticated, (req, res) => {
     console.log(req.user)
     res.render('pages/index.ejs');
 });
 
-app.get("/cart", checkAuthenticated,  function(req, res){
+//SHOPPING CART
+app.get('/cart',function(req, res){
+    db.collection('carts').find({User:"test2@fiu.edu"}).toArray(function(err, books)
+    {
+        if (err) { console.log(err); }
+        else{   
+            res.render("pages/cart.ejs", {cart: books});
+        }
+    });  
+});
+
+//TODO
+app.post('/add1', (req,res) => {
+    var id = req.body.id;
+    var new_qty = req.body.new_qty;
+
+    //insert 
+    db.collection('carts').update({_id: id}, {$set: {qty: new_qty}});
+
     res.render('pages/cart.ejs');
 });
 
-app.get("/review", checkAuthenticated, function(req, res){
-    res.render('pages/review.ejs', {email: req.user[0].Email});
-});
-
-app.get('/reviewsList', checkAuthenticated, function(req, res){
-    db.collection('Reviews').find({}).toArray(function(err, reviews){
-        if (err) { console.log(err); }
-        else {
-            //console.log(reviews);
-            res.render("pages/reviewsList.ejs", {reviews: reviews});  
-        };
-    });
+app.delete('/deleteCart', (req,res) => {
+    var id = req.body.id;
+    
+    try{
+        db.collection('carts').deleteOne({"_id": ObjectId(id)});
+    }catch(e){
+        console.log(e);
+    }
+    
+    res.redirect('/cart');
 });
 
 //LOGIN AND REGISTER
