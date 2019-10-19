@@ -17,15 +17,18 @@ app.get("/", function(req, res){
     res.render('pages/index.ejs');
 });
 
+app.get("/cart", function(req, res){
+    res.render('pages/cart.ejs');
+});
+
 app.get("/review", function(req, res){
     res.render('pages/review.ejs');
 });
-
 // Server
 app.timeout = 0;
 app.listen(3000, "localhost", function(){
-    console.log("Listening on port 3000...")
-})
+    console.log("Listening on port 3000...");
+});
 
 //Connecting to database
 MongoClient.connect(url,{ useNewUrlParser: true, useUnifiedTopology: true}, function(err, client) 
