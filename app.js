@@ -92,6 +92,7 @@ app.post("/register", (req, res) =>{
     var lastname = req.body.lastname;
     var email = req.body.email;
     var password = req.body.password;
+    var creditCard = req.body.creditCard;
 
     db.collection('User').find({"Email": email}).toArray(function(err, user){
         if (err) { console.log(err); }
@@ -106,7 +107,8 @@ app.post("/register", (req, res) =>{
                     First_Name: firstname,
                     Last_Name: lastname,
                     Email: email,
-                    Password: password
+                    Password: password,
+                    Credit_Card: creditCard
                 });
                 res.redirect('/login');
             }
