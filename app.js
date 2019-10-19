@@ -91,7 +91,7 @@ app.get('/cart', checkAuthenticated, function(req, res){
     {
         if (err) { console.log(err); }
         else{   
-            res.render("pages/cart.ejs", {cart: books});
+            res.render("pages/cart.ejs", {cart: books, user: req.user});
         }
     });  
 });
@@ -121,7 +121,7 @@ app.delete('/deleteCart', checkAuthenticated, (req,res) => {
 
 //REVIEWS
 app.get("/review", checkAuthenticated, function(req, res){
-    res.render('pages/review.ejs', {email: req.user[0].Email});
+    res.render('pages/review.ejs', {email: req.user[0].Email, user: req.user});
 });
 
 app.get('/reviewsList', checkAuthenticated, function(req, res){
@@ -129,7 +129,7 @@ app.get('/reviewsList', checkAuthenticated, function(req, res){
         if (err) { console.log(err); }
         else {
             //console.log(reviews);
-            res.render("pages/reviewsList.ejs", {reviews: reviews});  
+            res.render("pages/reviewsList.ejs", {reviews: reviews, user: req.user});  
         };
     });
 });
