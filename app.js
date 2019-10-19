@@ -67,18 +67,25 @@ app.post("/login", checkNotAuthenticated, passport.authenticate('local', {
     failureFlash: true
 }));
 
-app.post("/register", checkNotAuthenticated, (req, res) =>{
+app.post("/register", (req, res) =>{
+    var nickname = req.body.nickname;
+    var firstname = req.body.firstname;
+    var lastname = req.body.lastname;
     var email = req.body.email;
     var password = req.body.password;
 
     db.collection('User').find({"Email": email}).toArray(function(err, user){
         if (err) { console.log(err); }
-        else {
-            var userFound = user[0];
-            if(userFound){
+        else{
+            var emailFound = user[0];
+            if(emailFound){
                 res.render('pages/register.ejs', {message: 'User with this email already exists.'});
             }else{
+                // insert user profile into the database
                 db.collection('User').insertOne({
+                    Nickname: nickname,
+                    First_Name: firstname,
+                    Last_Name: lastname,
                     Email: email,
                     Password: password
                 });
@@ -177,7 +184,6 @@ function initialize(passport){
     passport.serializeUser((user, done) => done(null, user))
     passport.deserializeUser((user, done) => done(null, user))
 }
-
 
 //SERVER AND DATABASE 
 var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", { useNewUrlParser: true, useUnifiedTopology: true  }, function (err, client) {
