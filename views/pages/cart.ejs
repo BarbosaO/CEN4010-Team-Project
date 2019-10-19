@@ -8,7 +8,11 @@
         </ul> 
     </nav>
     <head>
+<<<<<<< HEAD
         <% include partials/header.ejs %>
+=======
+        <% include partials/head.ejs %>
+>>>>>>> origin/eka
         <h1 align="center">YOUR SHOPING CART</h1>
 
     <meta charset="utf-8">
@@ -43,10 +47,14 @@
                                                 </div> 
                                                 <!-- Delete from cart -->
                                                 <div style=display:inline-block horizontal-align:right> 
+<<<<<<< HEAD
                                                     <form action="/deleteCart?_method=DELETE" method="POST">
                                                         <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
                                                         <button type="submit">Delete</button>
                                                     </form>
+=======
+                                                    <a href= "/cart" action = "/delete" class="remove" id = "id">Delete</a>
+>>>>>>> origin/eka
                                                 </div> 
                                                 <!-- inner table quantity adjustment -->
                                                 <table style width="100%">
@@ -143,4 +151,8 @@
         </main>
         <% include partials/footer.ejs %>
     </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> origin/eka

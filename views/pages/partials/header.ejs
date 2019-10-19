@@ -15,6 +15,7 @@
         <a class="navbar-brand" href="/">Book Store</a>
         <% if(locals.user){%>
         <li class="nav-item">
+<<<<<<< HEAD
             <a class="nav-link" href="/cart">Shopping Cart</a>
         </li>
         <li class="nav-item dropdown">
@@ -31,6 +32,18 @@
             <form class="form-inline" action="/logout?_method=DELETE" method="POST">
                 <button id="logOutButton" type="submit">Log Out</button>
             </form>
+=======
+            <a class="nav-link active" href="#">Log In</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/review">Reviews</a>
+        </li>
+
+        <li class="nav-item"> 
+            <a class="navbar-brand" href="/cart">
+                <img src="https://www.goodfreephotos.com/cache/vector-images/big-shopping-cart-vector-clipart_800.png?cached=1522422556" width="20" height="20" alt="">
+            </a> 
+>>>>>>> origin/eka
         </li>
         <%}else{%>
             <li class="nav-item">
@@ -41,4 +54,14 @@
                 </li>
         <% } %>
     </ul>
+<<<<<<< HEAD
 </nav>
+=======
+    
+</nav>
+   
+    
+   
+    
+    
+>>>>>>> origin/eka
