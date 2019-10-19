@@ -1,0 +1,17 @@
+<h1>Books List</h1>
+<hr>
+<form action= "/book_filter/" method="post">
+	<label for="book_genre">Enter Genre: </label>
+	<input bGenre="book_genre" type="text" name="name_field" value="">
+	<input type="submit" value="OK">
+</form>
+<% docs.forEach(book => {%>
+	<p class = "Title">Title: <%= book.Title %></p>
+	<p class = "Author">Author: <%= book.Author %></p>
+	<p class = "Date Published">Date Published: <%= book.Date_Published %></p>
+	<p class = "Publisher">Publisher: <%= book.Publisher %></p>
+	<p class = "Genre">Genre: <%= book.Genre %></p>
+	<p class = "Description">Description: <%= book.Description %></p>
+	<p class = "Price">Price: <%= book.Price %></p>
+	<hr>
+<% })%>
