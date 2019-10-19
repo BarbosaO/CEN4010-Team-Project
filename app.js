@@ -31,43 +31,12 @@ app.use(methodOverride('_method')); // for delete and put requests
 
 
 //ROUTES
-app.get("/", checkAuthenticated, (req, res) => {
-    console.log(req.user)
-    res.render('pages/index.ejs');
-});
-
-//SHOPPING CART
-app.get('/cart',function(req, res){
-    db.collection('carts').find({User:"test2@fiu.edu"}).toArray(function(err, books)
-    {
-        if (err) { console.log(err); }
-        else{   
-            res.render("pages/cart.ejs", {cart: books});
-        }
-    });  
-});
-
-//TODO
-app.post('/add1', (req,res) => {
-    var id = req.body.id;
-    var new_qty = req.body.new_qty;
-
-    //insert 
-    db.collection('carts').update({_id: id}, {$set: {qty: new_qty}});
-
-    res.render('pages/cart.ejs');
-});
-
-app.delete('/deleteCart', (req,res) => {
-    var id = req.body.id;
-    
-    try{
-        db.collection('carts').deleteOne({"_id": ObjectId(id)});
-    }catch(e){
-        console.log(e);
+app.get("/", (req, res) => {
+    if(req.isAuthenticated()){
+        res.render('pages/index.ejs', {user: req.user});
+    }else{
+        res.render('pages/index.ejs');
     }
-    
-    res.redirect('/cart');
 });
 
 //LOGIN AND REGISTER
@@ -114,6 +83,40 @@ app.post("/register", (req, res) =>{
             }
         };
     });
+});
+
+//SHOPPING CART
+app.get('/cart', checkAuthenticated, function(req, res){
+    db.collection('carts').find({User:"test2@fiu.edu"}).toArray(function(err, books)
+    {
+        if (err) { console.log(err); }
+        else{   
+            res.render("pages/cart.ejs", {cart: books});
+        }
+    });  
+});
+
+//TODO
+app.post('/add1', checkAuthenticated, (req,res) => {
+    var id = req.body.id;
+    var new_qty = req.body.new_qty;
+
+    //insert 
+    db.collection('carts').update({_id: id}, {$set: {qty: new_qty}});
+
+    res.render('pages/cart.ejs');
+});
+
+app.delete('/deleteCart', checkAuthenticated, (req,res) => {
+    var id = req.body.id;
+    
+    try{
+        db.collection('carts').deleteOne({"_id": ObjectId(id)});
+    }catch(e){
+        console.log(e);
+    }
+    
+    res.redirect('/cart');
 });
 
 //REVIEWS
@@ -165,8 +168,6 @@ app.delete('/logout', function(req, res){
 //PASSPORT FUNCTIONS
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
-        console.log('check authenticated')
-        console.log(req.user);
         return next();
     }else{
         res.redirect('/login');
