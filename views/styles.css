@@ -1,0 +1,29 @@
+body{
+    padding-top:25px;
+}
+
+/* 5 star rating system */
+.checked {
+    transition: color 0.5s ease;
+    color: orange;
+}
+
+.center {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+    text-align: center;
+  }
+
+#logOutButton{
+    border:none;
+    color:rgb(144, 148, 150);
+    padding:0;
+    background-color:rgb(52, 58, 63);
+    text-align:baseline;
+    margin-top:8px;
+}
+
+#logOutButton:hover{
+    color:white;
+}
