@@ -37,7 +37,7 @@ app.get("/", (req,res) => {
 
 app.get("/bookList", checkAuthenticated2, (req, res) => {
     //This ling below gets all items in the Test collection, can filter it with input in the find({*filter elements*}) part
-	db.collection('Test').find({Author: "John Doe"}).toArray(function(err, docs) {
+	db.collection('Test').find({}).toArray(function(err, docs) {
 		//Print the documents returned on console in this commented 3 line part
 			//docs.forEach(function(doc) {
 			//console.log(doc.Title);
