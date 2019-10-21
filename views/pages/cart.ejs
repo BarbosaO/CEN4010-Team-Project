@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<<<<<<< HEAD
     <nav role="navigation">
         <ul class="nav justify-content-end">
             <li class="nav-item">
@@ -13,6 +14,11 @@
 =======
         <% include partials/head.ejs %>
 >>>>>>> origin/eka
+=======
+    
+    <head>
+        <% include partials/header.ejs %>
+>>>>>>> 324f33b8c561ee29d5f767a3bb0e4dc56db12cb1
         <h1 align="center">YOUR SHOPING CART</h1>
 
     <meta charset="utf-8">
@@ -27,7 +33,11 @@
             <div class="container-fluid">
                 <!-- Beginning of the cart -->
                 <div class="row">
+<<<<<<< HEAD
                     <div class="col-xs-9 col-md-7">        
+=======
+                    <div class="col-xs-10 col-md-7">        
+>>>>>>> 324f33b8c561ee29d5f767a3bb0e4dc56db12cb1
                         <div class="jumbotron">  
                             <div class="cart">  
                                 <% cart.forEach(cart => {%>  
@@ -48,13 +58,19 @@
                                                 <!-- Delete from cart -->
                                                 <div style=display:inline-block horizontal-align:right> 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 324f33b8c561ee29d5f767a3bb0e4dc56db12cb1
                                                     <form action="/deleteCart?_method=DELETE" method="POST">
                                                         <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
                                                         <button type="submit">Delete</button>
                                                     </form>
+<<<<<<< HEAD
 =======
                                                     <a href= "/cart" action = "/delete" class="remove" id = "id">Delete</a>
 >>>>>>> origin/eka
+=======
+>>>>>>> 324f33b8c561ee29d5f767a3bb0e4dc56db12cb1
                                                 </div> 
                                                 <!-- inner table quantity adjustment -->
                                                 <table style width="100%">
@@ -112,7 +128,11 @@
                                 </ul>
                             </nav> 
                         </div>
+<<<<<<< HEAD
                     </div>
+=======
+                    </div> 
+>>>>>>> 324f33b8c561ee29d5f767a3bb0e4dc56db12cb1
                 </div> 
         
         <!-- Begining of Payment Section -->
@@ -139,20 +159,32 @@
                         </div>
                     </div>
 
+<<<<<<< HEAD
                     <!-- Begining of wish list section -->
+=======
+                    <!-- Begining of wish list section 
+>>>>>>> 324f33b8c561ee29d5f767a3bb0e4dc56db12cb1
                     <div class="col-xs-3 col-md-5">
                         <div class="nav-item">  
                             <a href="#">Wish List</a>
                             <hr> </hr>
                         </div>
+<<<<<<< HEAD
                     </div> 
+=======
+                    </div> -->
+>>>>>>> 324f33b8c561ee29d5f767a3bb0e4dc56db12cb1
                 </div>
                                                         
         </main>
         <% include partials/footer.ejs %>
     </body>
 <<<<<<< HEAD
+<<<<<<< HEAD
 </html>
 =======
 </html>
 >>>>>>> origin/eka
+=======
+</html>
+>>>>>>> 324f33b8c561ee29d5f767a3bb0e4dc56db12cb1
