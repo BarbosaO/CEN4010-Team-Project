@@ -150,14 +150,13 @@ app.post('/submitReview', checkAuthenticated, (req,res) => {
     var date = req.body.date;
     var anonymous = false;
 
-    console.log(date);
-
     if (req.body.anonymous == 'on'){
         anonymous = true;
     }
 
     //insert 
     db.collection('Reviews').insertOne({
+        //TODO: get bookid from book details page
         BookId: "d8a9e774a8e050c38420630",
         UserId: 1,
         Date: date,
@@ -165,6 +164,8 @@ app.post('/submitReview', checkAuthenticated, (req,res) => {
         Comment: comment,
         Anonymous: anonymous
     });
+
+    //TODO: update book rating field
 
     res.render('pages/review.ejs');
 });
