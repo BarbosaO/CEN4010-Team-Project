@@ -31,12 +31,11 @@ app.use(methodOverride('_method')); // for delete and put requests
 
 //ROUTES
 //BOOK LIST
-// //don't need to be logged in
-// app.get("/", (req,res) => {
-//     res.render('/bookList');
-// })
+app.get("/", (req,res) => {
+    res.redirect('/bookList');
+})
 
-app.get("/bookList", checkNotAuthenticated, (req, res) => {
+app.get("/bookList", checkAuthenticated2, (req, res) => {
     //This ling below gets all items in the Test collection, can filter it with input in the find({*filter elements*}) part
 	db.collection('Test').find({Author: "John Doe"}).toArray(function(err, docs) {
 		//Print the documents returned on console in this commented 3 line part
@@ -185,6 +184,14 @@ function checkAuthenticated(req, res, next){
     }
 }
 
+//for home page,(and maybe shopping cart) user doesnt have to be logged in
+function checkAuthenticated2(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }else{
+        return next();
+    }
+}
 function checkNotAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return res.redirect('/')
