@@ -5,7 +5,6 @@ var passport = require('passport');
 var path = require("path");
 var assert = require('assert');
 var MongoClient = require('mongodb').MongoClient;
-<<<<<<< HEAD
 const LocalStrategy = require('passport-local');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
@@ -14,12 +13,6 @@ var ObjectId = require('mongodb').ObjectID;
 var db;
 
 initialize(passport);
-=======
-var url = "mongodb+srv://aagui:pw@cluster0-jdush.azure.mongodb.net/test";
-var db;
-//npm install request - for making http calls
-//var request = require("request");
->>>>>>> 324f33b8c561ee29d5f767a3bb0e4dc56db12cb1
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -95,11 +88,11 @@ app.post("/register", (req, res) =>{
 
 //SHOPPING CART
 app.get('/cart', checkAuthenticated, function(req, res){
-    db.collection('carts').find({User:"test2@fiu.edu"}).toArray(function(err, books)
+    db.collection('carts').find({User:req.user[0].email}).toArray(function(err, books)
     {
         if (err) { console.log(err); }
         else{   
-            res.render("pages/cart.ejs", {cart: books, user: req.user});
+            res.render("pages/cart.ejs", {cart: books, user: req.user[0].email});
         }
     });  
 });
@@ -115,7 +108,6 @@ app.post('/add1', checkAuthenticated, (req,res) => {
     res.render('pages/cart.ejs');
 });
 
-<<<<<<< HEAD
 app.delete('/deleteCart', checkAuthenticated, (req,res) => {
     var id = req.body.id;
     
@@ -127,6 +119,21 @@ app.delete('/deleteCart', checkAuthenticated, (req,res) => {
     
     res.redirect('/cart');
 });
+
+//BOOK LIST
+app.get('/booksList', function(req, res){
+	//This ling below gets all items in the Test collection, can filter it with input in the find({*filter elements*}) part
+	db.collection('Test').find({Author: "John Doe"}).toArray(function(err, docs) {
+		//Print the documents returned on console in this commented 3 line part
+			//docs.forEach(function(doc) {
+			//console.log(doc.Title);
+			//});
+		//Next line sends the list of items from collection accessed to the render
+		res.render("pages/bookList.ejs", {docs: docs});
+	});
+	//Declare success
+	console.log("Called find()");
+ });
 
 //REVIEWS
 app.get("/review", checkAuthenticated, function(req, res){
@@ -231,51 +238,3 @@ var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush
     });
 
 });
-=======
-app.get("/cart", function(req, res){
-    res.render('pages/cart.ejs');
-});
-
-app.get("/review", function(req, res){
-    res.render('pages/review.ejs');
-});
-// Server
-app.timeout = 0;
-app.listen(3000, "localhost", function(){
-    console.log("Listening on port 3000...");
-});
-
-//Connecting to database
-MongoClient.connect(url,{ useNewUrlParser: true, useUnifiedTopology: true}, function(err, client) 
-{
-	//Verify connection
-	assert.equal(null, err);
-	//Declare success
-	console.log("Successfully connected to server");
-	db = client.db('Test1');
-
-});
-
-//This line sets up url for this section .../booksList
-app.get('/booksList', function(req, res){
-	//This ling below gets all items in the Test collection, can filter it with input in the find({*filter elements*}) part
-	db.collection('Test').find({Author: "John Doe"}).toArray(function(err, docs) {
-		//Print the documents returned on console in this commented 3 line part
-			//docs.forEach(function(doc) {
-			//console.log(doc.Title);
-			//});
-		//Next line sends the list of items from collection accessed to the render
-		res.render("pages/bookList.ejs", {docs: docs});
-	});
-});
-/*
-app.post('/booksListSort', function(req, res){
-	var genre = req.body.book_genre;
-
-	db.collection("Test").find({Genre: genre}).toArray(function(err, docs){
-		res.render("pages/bookList.ejs", {docs: docs});
-	});
-});
-*/
- 
->>>>>>> 324f33b8c561ee29d5f767a3bb0e4dc56db12cb1
