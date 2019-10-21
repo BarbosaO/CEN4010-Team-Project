@@ -29,15 +29,25 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method')); // for delete and put requests
 
-
-
 //ROUTES
-app.get("/", (req, res) => {
-    if(req.isAuthenticated()){
-        res.render('pages/index.ejs', {user: req.user});
-    }else{
-        res.render('pages/index.ejs');
-    }
+//BOOK LIST
+// //don't need to be logged in
+// app.get("/", (req,res) => {
+//     res.render('/bookList');
+// })
+
+app.get("/bookList", checkNotAuthenticated, (req, res) => {
+    //This ling below gets all items in the Test collection, can filter it with input in the find({*filter elements*}) part
+	db.collection('Test').find({Author: "John Doe"}).toArray(function(err, docs) {
+		//Print the documents returned on console in this commented 3 line part
+			//docs.forEach(function(doc) {
+			//console.log(doc.Title);
+			//});
+		//Next line sends the list of items from collection accessed to the render
+		res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+	});
+	//Declare success
+	//console.log("Called find()");
 });
 
 //LOGIN AND REGISTER
@@ -92,7 +102,7 @@ app.get('/cart', checkAuthenticated, function(req, res){
     {
         if (err) { console.log(err); }
         else{   
-            res.render("pages/cart.ejs", {cart: books, user: req.user[0].email});
+            res.render("pages/cart.ejs", {cart: books, user: req.user});
         }
     });  
 });
@@ -119,21 +129,6 @@ app.delete('/deleteCart', checkAuthenticated, (req,res) => {
     
     res.redirect('/cart');
 });
-
-//BOOK LIST
-app.get('/booksList', function(req, res){
-	//This ling below gets all items in the Test collection, can filter it with input in the find({*filter elements*}) part
-	db.collection('Test').find({Author: "John Doe"}).toArray(function(err, docs) {
-		//Print the documents returned on console in this commented 3 line part
-			//docs.forEach(function(doc) {
-			//console.log(doc.Title);
-			//});
-		//Next line sends the list of items from collection accessed to the render
-		res.render("pages/bookList.ejs", {docs: docs});
-	});
-	//Declare success
-	console.log("Called find()");
- });
 
 //REVIEWS
 app.get("/review", checkAuthenticated, function(req, res){
