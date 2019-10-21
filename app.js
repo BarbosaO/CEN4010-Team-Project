@@ -49,6 +49,18 @@ app.get("/bookList", checkAuthenticated2, (req, res) => {
 	//console.log("Called find()");
 });
 
+app.post("/book_filter", checkAuthenticated2,(req, res) =>{
+	var genre = req.body.genre;
+	db.collection('Test').find({Genre: genre}).toArray(function(err, docs) {
+		//Print the documents returned on console in this commented 3 line part
+			//docs.forEach(function(doc) {
+			//console.log(doc.Title);
+			//});
+		//Next line sends the list of items from collection accessed to the render
+		res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+	});
+});
+
 //LOGIN AND REGISTER
 //WE DONT WANT AUTHENTICATED USERS TO GO TO THE REGISTER OR LOG IN PAGE SO CHECKNOTAUTHENTICATED
 app.get("/register", checkNotAuthenticated, function(req, res){
