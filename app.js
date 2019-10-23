@@ -36,7 +36,7 @@ app.get("/", (req,res) => {
 })
 
 app.get("/bookList", checkAuthenticated2, (req, res) => {
-    //This ling below gets all items in the Test collection, can filter it with input in the find({*filter elements*}) part
+    //This line below gets all items in the Test collection, can filter it with input in the find({*filter elements*}) part
 	db.collection('Test').find({}).toArray(function(err, docs) {
 		//Print the documents returned on console in this commented 3 line part
 			//docs.forEach(function(doc) {
@@ -51,12 +51,19 @@ app.get("/bookList", checkAuthenticated2, (req, res) => {
 
 app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 	var genre = req.body.genre;
-	db.collection('Test').find({Genre: genre}).toArray(function(err, docs) {
-		//Print the documents returned on console in this commented 3 line part
-			//docs.forEach(function(doc) {
-			//console.log(doc.Title);
-			//});
-		//Next line sends the list of items from collection accessed to the render
+	var author = req.body.author;
+	var title = req.body.title;
+	//Sends the list of items from collection accessed to the render
+	//Uses '$or' and '$and' to display all results that match one of the fields without doubling up results
+	//Allows for blank fields, unintended side effect is that it displays all books that match one field
+	//Combination of two or more field doesn't provide a stricter filter but actually displays more books since it only needs to match one field
+	db.collection('Test').find({
+		$or : [{ $and : [ {Title : title}]},
+			{ $and : [ {Author : author }]}, 
+            { $and : [ {Genre : genre}]}
+			]}
+    ).toArray(function(err, docs){
+
 		res.render("pages/bookList.ejs", {docs: docs, user: req.user});
 	});
 });
