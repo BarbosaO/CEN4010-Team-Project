@@ -20,15 +20,15 @@
   <label for="book_avgReview">Min Rating (0-5):</label>
   <input bAvgReview="book_avgReview" type="number" name="avgReview">
 	<input type="submit" value="OK">
+<hr></hr>
 
-    <hr></hr>
-</form action = "/book_detail/" method="post">
 <% docs.forEach(book => {%>
     <img src =" <%= book.Cover %>" width="240" height="300" title="" />
-	  <p class = "Title"><%= book.Title %></p>
-	  <p class = "Author">By: <%= book.Author %></p>
-	  <p class = "Genre">Genre: <%= book.Genre %></p>
-	  <p class = "Price">Price: $<%= book.Price %></p>
+	  <p class = "" ><%= book.Title %></p>
+	  <p class = "" >By: <%= book.Author %></p>
+	  <p class = "" >Genre: <%= book.Genre %></p>
+	  <p class = "" >Price: $<%= book.Price %></p>
+    <a class = "" href="/bookDetail/"> View Details</a>
     <hr>
 <% })%>
    <% include partials/footer.ejs %>
