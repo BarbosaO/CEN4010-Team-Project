@@ -241,35 +241,7 @@ app.post("/register", (req, res) =>{
 
 // TODO: EDIT PROFILE
 // text fields should be populated with user info that was already entered in the database
-app.post("/editProfile", (req, res) =>{
-    var nickname = req.body.nickname;
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
-    var email = req.body.email;
-    var password = req.body.password;
-    var creditCard = req.body.creditCard;
-
-    db.collection('User').find({"Email": email}).toArray(function(err, user){
-        if (err) { console.log(err); }
-        else{
-            var emailFound = user[0];
-            if(emailFound){
-                res.render('pages/register.ejs', {message: 'User with this email already exists.'});
-            }else{
-                // insert user profile into the database
-                db.collection('User').insertOne({
-                    Nickname: nickname,
-                    First_Name: firstname,
-                    Last_Name: lastname,
-                    Email: email,
-                    Password: password,
-                    Credit_Card: creditCard
-                });
-                res.redirect('/login');
-            }
-        };
-    });
-});
+// find user record by id and then update info to db
 
 //SHOPPING CART
 app.get('/cart', checkAuthenticated, function(req, res){
