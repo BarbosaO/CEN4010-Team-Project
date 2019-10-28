@@ -3,11 +3,13 @@ var app = express();
 var session = require("express-session");
 var passport = require('passport');
 var path = require("path");
+var assert = require('assert');
 var MongoClient = require('mongodb').MongoClient;
 const LocalStrategy = require('passport-local');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const flash = require('express-flash');
+var ObjectId = require('mongodb').ObjectID;
 var db;
 
 initialize(passport);
@@ -27,34 +29,48 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method')); // for delete and put requests
 
-app.get("/", function(req, res){
-    res.render('pages/index.ejs');
+//ROUTES
+//BOOK LIST
+app.get("/", (req,res) => {
+    res.redirect('/bookList');
+})
+
+app.get("/bookList", checkAuthenticated2, (req, res) => {
+    //This line below gets all items in the Test collection, can filter it with input in the find({*filter elements*}) part
+	db.collection('Test').find({}).toArray(function(err, docs) {
+		//Print the documents returned on console in this commented 3 line part
+			//docs.forEach(function(doc) {
+			//console.log(doc.Title);
+			//});
+		//Next line sends the list of items from collection accessed to the render
+		res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+	});
+	//Declare success
+	//console.log("Called find()");
 });
 
-app.get("/cart", function(req, res){
-    res.render('pages/cart.ejs');
+app.post("/book_filter", checkAuthenticated2,(req, res) =>{
+	var genre = req.body.genre;
+	var author = req.body.author;
+	var title = req.body.title;
+	//Sends the list of items from collection accessed to the render
+	//Uses '$or' and '$and' to display all results that match one of the fields without doubling up results
+	//Allows for blank fields, unintended side effect is that it displays all books that match one field
+	//Combination of two or more field doesn't provide a stricter filter but actually displays more books since it only needs to match one field
+	db.collection('Test').find({
+		$or : [{ $and : [ {Title : title}]},
+			{ $and : [ {Author : author }]}, 
+            { $and : [ {Genre : genre}]}
+			]}
+    ).toArray(function(err, docs){
+
+		res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+	});
 });
 
-app.get("/review", function(req, res){
-    res.render('pages/review.ejs');
-});
-
-app.get("/login", function(req, res){
-    res.render('pages/login.ejs');
-});
-
-app.get('/reviewsList', function(req, res){
-    db.collection('Reviews').find({}).toArray(function(err, reviews){
-        if (err) { console.log(err); }
-        else {
-            //console.log(reviews);
-            res.render("pages/reviewsList.ejs", {reviews: reviews});  
-        };
-    });
-});
-
-app.get("/register", checkNotAuthenticated, function(req, res)
-{
+//LOGIN AND REGISTER
+//WE DONT WANT AUTHENTICATED USERS TO GO TO THE REGISTER OR LOG IN PAGE SO CHECKNOTAUTHENTICATED
+app.get("/register", checkNotAuthenticated, function(req, res){
     res.render('pages/register.ejs', {message: null});
 });
 
@@ -74,6 +90,7 @@ app.post("/register", (req, res) =>{
     var lastname = req.body.lastname;
     var email = req.body.email;
     var password = req.body.password;
+    var creditCard = req.body.creditCard;
 
     db.collection('User').find({"Email": email}).toArray(function(err, user){
         if (err) { console.log(err); }
@@ -88,7 +105,8 @@ app.post("/register", (req, res) =>{
                     First_Name: firstname,
                     Last_Name: lastname,
                     Email: email,
-                    Password: password
+                    Password: password,
+                    Credit_Card: creditCard
                 });
                 res.redirect('/login');
             }
@@ -96,13 +114,92 @@ app.post("/register", (req, res) =>{
     });
 });
 
-app.post('/submitReview', (req,res) => {
+// TODO: EDIT PROFILE
+// text fields should be populated with user info that was already entered in the database
+app.post("/editProfile", (req, res) =>{
+    var nickname = req.body.nickname;
+    var firstname = req.body.firstname;
+    var lastname = req.body.lastname;
+    var email = req.body.email;
+    var password = req.body.password;
+    var creditCard = req.body.creditCard;
+
+    db.collection('User').find({"Email": email}).toArray(function(err, user){
+        if (err) { console.log(err); }
+        else{
+            var emailFound = user[0];
+            if(emailFound){
+                res.render('pages/register.ejs', {message: 'User with this email already exists.'});
+            }else{
+                // insert user profile into the database
+                db.collection('User').insertOne({
+                    Nickname: nickname,
+                    First_Name: firstname,
+                    Last_Name: lastname,
+                    Email: email,
+                    Password: password,
+                    Credit_Card: creditCard
+                });
+                res.redirect('/login');
+            }
+        };
+    });
+});
+
+//SHOPPING CART
+app.get('/cart', checkAuthenticated, function(req, res){
+    db.collection('carts').find({User:req.user[0].email}).toArray(function(err, books)
+    {
+        if (err) { console.log(err); }
+        else{   
+            res.render("pages/cart.ejs", {cart: books, user: req.user});
+        }
+    });  
+});
+
+//TODO
+app.post('/add1', checkAuthenticated, (req,res) => {
+    var id = req.body.id;
+    var new_qty = req.body.new_qty;
+
+    //insert 
+    db.collection('carts').update({_id: id}, {$set: {qty: new_qty}});
+
+    res.render('pages/cart.ejs');
+});
+
+app.delete('/deleteCart', checkAuthenticated, (req,res) => {
+    var id = req.body.id;
+    
+    try{
+        db.collection('carts').deleteOne({"_id": ObjectId(id)});
+    }catch(e){
+        console.log(e);
+    }
+    
+    res.redirect('/cart');
+});
+
+//REVIEWS
+app.get("/review", checkAuthenticated, function(req, res){
+    res.render('pages/review.ejs', {email: req.user[0].Email, user: req.user});
+});
+
+app.get('/reviewsList', checkAuthenticated, function(req, res){
+    db.collection('Reviews').find({}).toArray(function(err, reviews){
+        if (err) { console.log(err); }
+        else {
+            //console.log(reviews);
+            res.render("pages/reviewsList.ejs", {reviews: reviews, user: req.user});  
+        };
+    });
+});
+
+app.post('/submitReview', checkAuthenticated, (req,res) => {
     var comment = req.body.comment;
     var rating = req.body.rating;
     var date = req.body.date;
     var anonymous = false;
-
-    console.log(date);
 
     if (req.body.anonymous == 'on'){
         anonymous = true;
@@ -110,6 +207,7 @@ app.post('/submitReview', (req,res) => {
 
     //insert 
     db.collection('Reviews').insertOne({
+        //TODO: get bookid from book details page
         BookId: "d8a9e774a8e050c38420630",
         UserId: 1,
         Date: date,
@@ -117,6 +215,8 @@ app.post('/submitReview', (req,res) => {
         Comment: comment,
         Anonymous: anonymous
     });
+
+    //TODO: update book rating field
 
     res.render('pages/review.ejs');
 });
@@ -126,21 +226,8 @@ app.delete('/logout', function(req, res){
     res.redirect('/login')
 });
 
-var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test",{ useNewUrlParser: true, useUnifiedTopology: true  }, function (err, client) {
 
-    db = client.db("Test1");
-    if(err) 
-        return console.log(err);
-    else 
-        console.log('connected to database');
-
-    // Server
-    app.listen(3000, "localhost", function(){
-        console.log("Listening on port 3000...")
-    });
-
-});
-
+//PASSPORT FUNCTIONS
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return next();
@@ -149,6 +236,14 @@ function checkAuthenticated(req, res, next){
     }
 }
 
+//for home page,(and maybe shopping cart) user doesnt have to be logged in
+function checkAuthenticated2(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }else{
+        return next();
+    }
+}
 function checkNotAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return res.redirect('/')
@@ -159,26 +254,41 @@ function checkNotAuthenticated(req, res, next){
 
 function initialize(passport){
     const authenticateUser = (email, password, done) => {
+        db.collection('User').find({"Email": email}).toArray(function(err, user){
+            if (err) { console.log(err); }
+            else {
+                var userFound = user[0];
 
-            db.collection('User').find({"Email": email}).toArray(function(err, user){
-                if (err) { console.log(err); }
-                else {
-                    var userFound = user[0];
-
-                    if(userFound == null){
-                        return done(null, false, {message: 'No user found with that email.'})
-                    }
-        
-                    if(password.localeCompare(userFound.Password) == 0){ //equal
-                        return done(null, user)
-                    }else{
-                        return done(null, false, {message: 'Password incorrect'})
-                    }
-                };
-            });
+                if(userFound == null){
+                    return done(null, false, {message: 'No user found with that email.'})
+                }
+    
+                if(password.localeCompare(userFound.Password) == 0){ //equal
+                    return done(null, user)
+                }else{
+                    return done(null, false, {message: 'Password incorrect'})
+                }
+            };
+        });
     }
 
     passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser))
     passport.serializeUser((user, done) => done(null, user))
     passport.deserializeUser((user, done) => done(null, user))
 }
+
+//SERVER AND DATABASE 
+var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush.azure.mongodb.net/test", { useNewUrlParser: true, useUnifiedTopology: true  }, function (err, client) {
+
+    db = client.db("Test1");
+    if(err) 
+        return console.log(err);
+    else 
+        console.log('connected to database');
+
+    // Server
+    app.listen(3001, "localhost", function(){
+        console.log("Listening on port 3001...")
+    });
+
+});

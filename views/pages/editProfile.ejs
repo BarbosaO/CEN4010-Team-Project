@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <% include partials/header.ejs %>
+    <title>Edit Profile | WebApp</title>
+</head>
+<body>
+    
+    <div class="center">
+    <h1>Edit Profile</h1>
+    <% if(message){ %>
+        <%= message %>
+    <% } %>
+    <form  method="POST" onsubmit="return validate()">
+        Nickname:<br>
+        <input type="text" name="nickname" required><br>
+        First Name:<br>
+        <input type="text" name="firstname" required><br>
+        Last Name:<br>
+        <input type="text" name="lastname" required><br>
+        Email:<br>
+        <input type="email" name="email" required><br>
+        Password:<br>
+        <input type="text" name="password" required><br>
+        <div class="alert alert-danger" id="ccAlert" role="alert" style="display:none;">
+            Credit card number invalid.
+          </div>
+        Credit Card Number:<br>
+        <input type="number" name="creditCard" id="ccNum">
+        <br>
+        <button type="submit" class="btn btn-default" id="register">Register</button>
+    </form>
+    <footer>
+        <% include partials/footer %>
+    </footer>
+    <script>
+        function validate(){
+            var ccNum = document.getElementById("ccNum").value;
+            var numbers = /^[0-9]+$/;
+            if(ccNum.match(numbers)){
+                return true;
+            }else{
+                document.getElementById('ccAlert').style.display = 'block';
+                return false;
+            }
+        }
+    </script>
+</div>
+</body>
+</html>
