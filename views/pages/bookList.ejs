@@ -17,18 +17,19 @@
   <input bAuthor="book_author" type="text" name="author">
   <label for="book_title">Title: </label>
   <input bTitle="book_title" type="text" name="title">
+  <label for="book_avgReview">Min Rating (0-5):</label>
+  <input bAvgReview="book_avgReview" type="number" name="avgReview">
 	<input type="submit" value="OK">
 
     <hr></hr>
 </form action = "/book_detail/" method="post">
 <% docs.forEach(book => {%>
-	<p class = "Title">Title: <%= book.Title %></p>
-	<p class = "Author">Author: <%= book.Author %></p>
-	<p class = "Genre">Genre: <%= book.Genre %></p>
-	<p class = "Price">Price: $<%= book.Price %></p>
-  <img src =" <%= book.Cover %>" width="80" height="100" title="" />
-
-  <hr>
+    <img src =" <%= book.Cover %>" width="240" height="300" title="" />
+	  <p class = "Title"><%= book.Title %></p>
+	  <p class = "Author">By: <%= book.Author %></p>
+	  <p class = "Genre">Genre: <%= book.Genre %></p>
+	  <p class = "Price">Price: $<%= book.Price %></p>
+    <hr>
 <% })%>
    <% include partials/footer.ejs %>
 </body>

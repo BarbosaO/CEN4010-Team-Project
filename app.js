@@ -37,7 +37,7 @@ app.get("/", (req,res) => {
 
 app.get("/bookList", checkAuthenticated2, (req, res) => {
     //This line below gets all items in the Test collection, can filter it with input in the find({*filter elements*}) part
-	db.collection('Test').find({}).toArray(function(err, docs) {
+	db.collection('Books').find({}).toArray(function(err, docs) {
 		//Print the documents returned on console in this commented 3 line part
 			//docs.forEach(function(doc) {
 			//console.log(doc.Title);
@@ -53,19 +53,144 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 	var genre = req.body.genre;
 	var author = req.body.author;
 	var title = req.body.title;
+	var rating = req.body.avgReview;
+	if(rating == "")
+		rating = 0;
+	else
+		rating = parseInt(req.body.avgReview,10);
+	console.log("Genre " + genre);
+	console.log("Author " + author);
+	console.log("Title " + title);
+	console.log("Rating " + rating);
+
 	//Sends the list of items from collection accessed to the render
 	//Uses '$or' and '$and' to display all results that match one of the fields without doubling up results
-	//Allows for blank fields, unintended side effect is that it displays all books that match one field
-	//Combination of two or more field doesn't provide a stricter filter but actually displays more books since it only needs to match one field
-	db.collection('Test').find({
-		$or : [{ $and : [ {Title : title}]},
-			{ $and : [ {Author : author }]}, 
-            { $and : [ {Genre : genre}]}
-			]}
-    ).toArray(function(err, docs){
-
-		res.render("pages/bookList.ejs", {docs: docs, user: req.user});
-	});
+	if(genre == "" && author == "" && title == "")
+	{
+		db.collection('Books').find().filter(	
+			{AvgReview : {$gte : rating}}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+	else if(genre == "" && author == "")
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Title : title}
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+	else if(genre == "" && title == "")
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Author : author}
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+	else if(author == "" && title == "")
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Genre : genre}
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+	else if(title == "")
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Author : author}, 
+						{ Genre : genre}
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+		else if(genre == "")
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Title : title},
+						{ Author : author},
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+		else if(author == "")
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Title : title},
+						{ Genre : genre}
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+	else
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Title : title},
+						{ Author : author}, 
+						{ Genre : genre}
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
 });
 
 //LOGIN AND REGISTER
