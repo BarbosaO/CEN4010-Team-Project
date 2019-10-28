@@ -10,6 +10,7 @@
 <h1>Books List</h1>
 <hr>
 <form action= "/book_filter/" method="post">
+ 
 	<label for="book_genre">Genre: </label>
 	<input bGenre="book_genre" type="text" name="genre">
   <label for="book_author">Author: </label>
@@ -17,14 +18,18 @@
   <label for="book_title">Title: </label>
   <input bTitle="book_title" type="text" name="title">
 	<input type="submit" value="OK">
-    
-</form>
+
+    <hr></hr>
+</form action = "/book_detail/" method="post">
 <% docs.forEach(book => {%>
 	<p class = "Title">Title: <%= book.Title %></p>
 	<p class = "Author">Author: <%= book.Author %></p>
 	<p class = "Genre">Genre: <%= book.Genre %></p>
 	<p class = "Price">Price: $<%= book.Price %></p>
-	<hr>
+  <img src =" <%= book.Cover %>" width="80" height="100" title="" />
+
+  <hr>
 <% })%>
+   <% include partials/footer.ejs %>
 </body>
 </html>
