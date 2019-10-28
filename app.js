@@ -116,6 +116,10 @@ app.post("/register", (req, res) =>{
 
 // TODO: EDIT PROFILE
 // text fields should be populated with user info that was already entered in the database
+app.get("/editProfile", checkNotAuthenticated, function(req, res){
+    res.render('pages/editProfile.ejs', {message: null});
+});
+
 app.post("/editProfile", (req, res) =>{
     var nickname = req.body.nickname;
     var firstname = req.body.firstname;
