@@ -1,5 +1,4 @@
-
-<!-- views/pages/review.ejs -->
+<!-- views/pages/bookDetails.ejs -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,6 +8,19 @@
     </head>
     <body class="container-fluid">
         <main>
+            <h1>Book Details</h1>
+            <p>Book: 5db33704440f5c45987cfe48</p>
+
+            <h1>reviews list</h1>
+            <hr>
+            <% reviews.forEach(review => {%>
+                <p class="rating">Rating: <%= review.Rating %></p>
+                <p class="date">Date: <%= review.Date %></p>
+                <p class="comment">Comment: <%= review.Comment %> </p>
+                <p class="anon">Anonymous: <%= review.Anonymous %></p>
+                <hr>
+            <% })%>
+
             <div class="container">
                 <div class="row">
                     <div class="col-3"></div>

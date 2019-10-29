@@ -277,19 +277,54 @@ app.delete('/deleteCart', checkAuthenticated, (req,res) => {
     res.redirect('/cart');
 });
 
-//REVIEWS
-app.get("/review", checkAuthenticated, function(req, res){
-    res.render('pages/review.ejs', {email: req.user[0].Email, user: req.user});
-});
+//BOOK DETAILS
+app.get("/bookDetails", checkAuthenticated2, function(req,res){
+    if(req.user){ //if user logged in
+        userId = req.user[0]._id
+        //db query to check if user has bought book
+        //TODO: get bookID from book details
+        db.collection('Purchased').find({book:"5db33704440f5c45987cfe48", user: userId}).toArray(function(err, reviews){
+            if (err) { 
+                console.log(err); 
+                //not found
+                //render page with no review form
+                console.log("not found")
 
-app.get('/reviewsList', checkAuthenticated, function(req, res){
-    db.collection('Reviews').find({}).toArray(function(err, reviews){
-        if (err) { console.log(err); }
-        else {
-            //console.log(reviews);
-            res.render("pages/reviewsList.ejs", {reviews: reviews, user: req.user});  
-        };
-    });
+                //find reviews, and send them to the page
+                //TODO: get book id from book details
+                db.collection('Reviews').find({BookId:"5db33704440f5c45987cfe48"}).toArray(function(err, reviews){
+                    if (err) { console.log(err); }
+                    else {
+                        //console.log(reviews);
+                        res.render("pages/bookDetails2.ejs", {reviews: reviews, user: req.user});  
+                    };
+                });
+            }
+            else {
+                //user has bought book
+                //render page with review form
+                console.log("found")
+                //find reviews, and send them to the page
+                db.collection('Reviews').find({BookId:"5db33704440f5c45987cfe48"}).toArray(function(err, reviews){
+                    if (err) { console.log(err); }
+                    else {
+                        //console.log(reviews);
+                        res.render("pages/bookDetails1.ejs", {email: req.user[0].Email, reviews: reviews, user: req.user});  
+                    };
+                }); 
+            };
+        });
+    }else{
+        //find reviews, and send them to the page
+        //TODO: get book id from book details
+        db.collection('Reviews').find({BookId:"5db33704440f5c45987cfe48"}).toArray(function(err, reviews){
+            if (err) { console.log(err); }
+            else {
+                //console.log(reviews);
+                res.render("pages/bookDetails2.ejs", {reviews: reviews});  
+            };
+        });
+    }
 });
 
 app.post('/submitReview', checkAuthenticated, (req,res) => {
@@ -305,7 +340,7 @@ app.post('/submitReview', checkAuthenticated, (req,res) => {
     //insert 
     db.collection('Reviews').insertOne({
         //TODO: get bookid from book details page
-        BookId: "d8a9e774a8e050c38420630",
+        BookId: "5db33704440f5c45987cfe48",
         UserId: 1,
         Date: date,
         Rating: rating,
@@ -315,7 +350,7 @@ app.post('/submitReview', checkAuthenticated, (req,res) => {
 
     //TODO: update book rating field
 
-    res.render('pages/review.ejs');
+    res.render('pages/bookDetails2.ejs');
 });
 
 app.delete('/logout', function(req, res){
