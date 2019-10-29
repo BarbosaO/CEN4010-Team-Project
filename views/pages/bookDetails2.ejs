@@ -14,7 +14,12 @@
             <h1>reviews list</h1>
             <hr>
             <% reviews.forEach(review => {%>
-                <p class="rating">Rating: <%= review.Rating %></p>
+                <div class="row">
+                    <p class="rating">Rating: </p>
+                    <%for (i = 0; i < review.Rating; i++){%>
+                        <span class="fa fa-star" style="color:orange;"></span>
+                    <%}%>
+                </div>
                 <p class="date">Date: <%= review.Date %></p>
                 <p class="comment">Comment: <%= review.Comment %> </p>
                 <%if(review.Anonymous == true){%>
