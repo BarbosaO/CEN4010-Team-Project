@@ -108,13 +108,28 @@ app.post('/add1', checkAuthenticated, (req,res) => {
     res.render('pages/cart.ejs');
 });
 
-// BROWSE
-app.get('/browse', checkAuthenticated, function(req, res){
-    db.collection('carts').find({User:"test2@fiu.edu"}).toArray(function(err, books)
+// BOOK_DETAILS
+app.get('/details', checkAuthenticated, function(req, res){
+
+    var id = req.params.id;
+    console.log("id: " + id);
+    db.collection('Books').find({Title: "An Equal Justice"}).toArray(function(err, books)
     {
         if (err) { console.log(err); }
         else{   
-            res.render("pages/browse.ejs", {cart: books, user: req.user});
+            res.render("pages/details.ejs", {book: books, user: req.user});
+        }
+    });  
+});
+
+
+// BROWSE
+app.get('/browse', checkAuthenticated, function(req, res){
+    db.collection('Books').find().toArray(function(err, books)
+    {
+        if (err) { console.log(err); }
+        else{   
+            res.render("pages/browse.ejs", {browse: books, user: req.user});
         }
     });  
 });

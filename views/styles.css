@@ -27,3 +27,127 @@ body{
 #logOutButton:hover{
     color:white;
 }
+
+
+.about-sec {
+    margin-bottom: 80px;
+    background: #f7f4f0;
+    float: left;
+    width: 100%; }
+    .about-sec .about-img {
+      float: left;
+      width: 40%; }
+      .about-sec .about-img figure {
+        height: 550px;
+        width: 100%;
+        background-position: center bottom !important;
+        margin-bottom: 0; }
+    .about-sec .about-content {
+      max-width: 600px;
+      float: left;
+      padding: 60px 0;
+      padding-left: 60px; }
+      .about-sec .about-content h2 {
+        text-transform: uppercase;
+        font-size: 30px;
+        font-weight: 400;
+        margin-bottom: 25px; }
+      .about-sec .about-content p {
+        font-size: 16px;
+        line-height: 28px;
+        margin-bottom: 30px; }
+      .about-sec .about-content .btn-sec {
+        margin-top: 58px; }
+        .about-sec .about-content .btn-sec .btn {
+          margin-right: 10px; }
+        .about-sec .about-content .btn-sec .black {
+          background: #252525;
+          border: 2px solid #252525; }
+          .about-sec .about-content .btn-sec .black:hover {
+            background: transparent;
+            color: #252525; }
+
+
+
+.browse {
+text-align: center;
+margin-bottom: 130px;
+ }
+
+.browse h2{
+display: inline-block;
+padding: 0 15px;
+background: #fff;
+padding: 0 15px;
+position: relative;
+font-size: 30px;
+text-transform: uppercase;
+color: #363636; 
+
+}
+.browse hr {
+margin: 0;
+margin-top: -20px;
+border-top: 1px solid #999999;
+}
+
+.browse .title {
+margin-bottom: 80px;
+ }
+
+.browse .item {
+text-align: left;
+margin-bottom: 45px;
+ }
+
+.browse .item img {
+margin-bottom: 15px;
+cursor: pointer;
+ }
+
+.browse .item img:hover + h3 {
+text-decoration: underline;
+ }
+
+.browse .item h3 {
+font-size: 14px;
+line-height: 22px;
+font-weight: 200;
+margin-bottom: 10px;
+ }
+
+.browse .item h6 {
+font-size: 12px; 
+}
+
+.browse .item h6 span {
+color: #ff0000;
+ 
+}
+.browse .item h6 a {
+color: #000;
+border-bottom: 1px solid #d5d5d5;
+padding-bottom: 1px;
+ }
+
+.browse .item h6 a:hover {
+text-decoration: none;
+border-bottom: 0;
+color: #ff9700;
+ }
+
+.browse .row {
+margin: 0 -30px;
+ }
+
+.browse .row .col-lg-2 {
+padding: 0 30px;
+-ms-flex: 20%;
+flex: 20%;
+max-width: 20%;
+ }
+
+.browse .btn-sec {
+margin-top: 20px;
+ }
+  
