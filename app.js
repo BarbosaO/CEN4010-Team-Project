@@ -278,60 +278,57 @@ app.delete('/deleteCart', checkAuthenticated, (req,res) => {
 });
 
 //BOOK DETAILS
-app.get("/bookDetails", checkAuthenticated2, function(req,res){
+app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
+    bookId = req.params.id
     if(req.user){ //if user logged in
         userId = req.user[0]._id
         //db query to check if user has bought book
-        //TODO: get bookID from book details
-        db.collection('Purchased').find({book:"5db33704440f5c45987cfe48", user: userId}).toArray(function(err, reviews){
+        db.collection('Purchased').find({book:bookId, user: userId}).toArray(function(err, reviews){
             if (err) { 
                 console.log(err); 
-                //not found
+                //user did not buy book
                 //render page with no review form
-                console.log("not found")
 
                 //find reviews, and send them to the page
-                //TODO: get book id from book details
-                db.collection('Reviews').find({BookId:"5db33704440f5c45987cfe48"}).toArray(function(err, reviews){
+                db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
                     if (err) { console.log(err); }
                     else {
                         //console.log(reviews);
-                        res.render("pages/bookDetails2.ejs", {reviews: reviews, user: req.user});  
+                        res.render("pages/bookDetails2.ejs", {reviews: reviews, user: req.user, bookId:bookId});  
                     };
                 });
             }
             else {
                 //user has bought book
                 //render page with review form
-                console.log("found")
+
                 //find reviews, and send them to the page
-                db.collection('Reviews').find({BookId:"5db33704440f5c45987cfe48"}).toArray(function(err, reviews){
+                db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
                     if (err) { console.log(err); }
                     else {
                         //console.log(reviews);
-                        res.render("pages/bookDetails1.ejs", {email: req.user[0].Email, reviews: reviews, user: req.user});  
+                        res.render("pages/bookDetails1.ejs", {email: req.user[0].Email, reviews: reviews, user: req.user, bookId:bookId});  
                     };
                 }); 
             };
         });
     }else{
         //find reviews, and send them to the page
-        //TODO: get book id from book details
-        db.collection('Reviews').find({BookId:"5db33704440f5c45987cfe48"}).toArray(function(err, reviews){
+        db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
             if (err) { console.log(err); }
             else {
-                //console.log(reviews);
-                res.render("pages/bookDetails2.ejs", {reviews: reviews});  
+                res.render("pages/bookDetails2.ejs", {reviews: reviews, bookId: bookId});  
             };
         });
     }
 });
 
-app.post('/submitReview', checkAuthenticated, (req,res) => {
+app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
     var comment = req.body.comment;
     var rating = req.body.rating;
     var date = req.body.date;
     var anonymous = false;
+    var bookId = req.params.id;
 
     if (req.body.anonymous == 'on'){
         anonymous = true;
@@ -340,8 +337,9 @@ app.post('/submitReview', checkAuthenticated, (req,res) => {
     //insert 
     db.collection('Reviews').insertOne({
         //TODO: get bookid from book details page
-        BookId: "5db33704440f5c45987cfe48",
-        UserId: 1,
+        BookId: bookId,
+        UserId: req.user[0]._id,
+        Nickname: req.user[0].Nickname,
         Date: date,
         Rating: rating,
         Comment: comment,
@@ -350,7 +348,7 @@ app.post('/submitReview', checkAuthenticated, (req,res) => {
 
     //TODO: update book rating field
 
-    res.render('pages/bookDetails2.ejs');
+    res.redirect('/bookDetails/' + bookId);
 });
 
 app.delete('/logout', function(req, res){

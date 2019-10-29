@@ -28,7 +28,7 @@
 	  <p class = "" >By: <%= book.Author %></p>
 	  <p class = "" >Genre: <%= book.Genre %></p>
 	  <p class = "" >Price: $<%= book.Price %></p>
-    <a class = "" href="/bookDetails"> View Details</a>
+    <a class = "" href="/bookDetails/<%=book._id%>"> View Details </a>
     <hr>
 <% })%>
    <% include partials/footer.ejs %>
