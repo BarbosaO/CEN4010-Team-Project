@@ -58,10 +58,10 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 		rating = 0;
 	else
 		rating = parseInt(req.body.avgReview,10);
-	console.log("Genre " + genre);
-	console.log("Author " + author);
-	console.log("Title " + title);
-	console.log("Rating " + rating);
+	//console.log("Genre " + genre);
+	//console.log("Author " + author);
+	//console.log("Title " + title);
+	//console.log("Rating " + rating);
 
 	//Sends the list of items from collection accessed to the render
 	//Uses '$or' and '$and' to display all results that match one of the fields without doubling up results
