@@ -210,12 +210,34 @@ app.post("/login", checkNotAuthenticated, passport.authenticate('local', {
 }));
 
 app.post("/register", (req, res) =>{
-    var nickname = req.body.nickname;
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
-    var email = req.body.email;
-    var password = req.body.password;
-    var creditCard = req.body.creditCard;
+	// login credentials
+	var email = req.body.email;
+	var password = req.body.password;
+
+	// personal info
+	var firstname = req.body.firstname;
+	var lastname = req.body.lastname;
+	var homeaddr = req.body.homeaddr;
+	var city = req.body.city;
+	var state = req.body.state;
+	var zip = req.body.zip;
+	var country = req.body.country;
+
+	// nickname 
+	var nickname = req.body.nickname;
+
+	// cc info
+	var creditOwner = req.body.creditOwner;
+	var cvv = req.body.cvv;
+	var creditCard = req.body.creditCard;
+	var expDate = req.body.expDate;
+
+	// shipping info
+	// var shipaddr = req.body.shipaddr;
+	// var shipcity = req.body.shipcity;
+	// var shipstate = req.body.shipstate;
+	// var shipzip = req.body.shipzip;
+	// var shipcountry = req.body.shipcountry;
 
     db.collection('User').find({"Email": email}).toArray(function(err, user){
         if (err) { console.log(err); }
@@ -226,12 +248,25 @@ app.post("/register", (req, res) =>{
             }else{
                 // insert user profile into the database
                 db.collection('User').insertOne({
-                    Nickname: nickname,
-                    First_Name: firstname,
-                    Last_Name: lastname,
-                    Email: email,
-                    Password: password,
-                    Credit_Card: creditCard
+					Email: email,
+					Password: password,
+					First_Name: firstname,
+					Last_Name: lastname,
+					Home_Address: homeaddr,
+					Home_City: city,
+					Home_State: state,
+					Home_Zip: zip,
+					Home_Country: country,
+					Nickname: nickname,
+					Credit_Owner: creditOwner,
+					CVV: cvv,
+					Credit_Card: creditCard,
+					Exp_Date: expDate
+					// Ship_Address: shipaddr,
+					// Ship_City: shipcity,
+					// Ship_State: state,
+					// Ship_Zip: zip,
+					// Ship_Country: country
                 });
                 res.redirect('/login');
             }
@@ -240,8 +275,74 @@ app.post("/register", (req, res) =>{
 });
 
 // TODO: EDIT PROFILE
-// text fields should be populated with user info that was already entered in the database
-// find user record by id and then update info to db
+
+// app.get('/pages/editProfile/:id', (req, res) => {    
+// 	// var id = req.params.id;
+// 	// var o_id = new ObjectId(id);
+// 	// db.collection('User').find({_id:o_id}).toArray((err, result) => {
+// 	//    if (err) return console.log(err)
+// 	//    console.log(result);
+// 	//    res.render('pages/editProfile.ejs',{User: result});  
+// 	// });
+// 	// console.log(req.params.id);
+
+// 	const requestId = req.params.id
+// 	let userInfo = user.filter(userInfo => {
+// 		return userInfo.id == requestId;
+// 	});
+
+// 	if (!userInfo) {
+// 		res.status(404).json({ message: 'No email found'});
+// 	}
+
+// 	response.json(userInfo[0]);
+	
+// });
+
+app.get("/editProfile", checkNotAuthenticated, function(req, res){
+    res.render('pages/editProfile.ejs', {message: null});
+});
+	
+// app.post('/pages/editProfile',(req, res) => {
+// // 	 db.collection('User').updateOne({ _id: ObjectId(req.body._id) }, {$set: {
+// // 		username: req.body.username,
+// // 		//description: req.body.description
+// // 	 }
+// // 	 }, function (err, result) {
+// // 		  if (err) {
+// // 		  console.log(err);
+// // 		} else {
+// // 		 console.log("Post Updated successfully");
+// // 		 res.redirect('pages/editProfile.ejs');
+// // 	 }
+// // });
+
+// 	const userInfo = {
+// 		email: req.body.email
+// 	}
+
+// 	user.push(userInfo);
+// 	res.json(userInfo)
+// });
+
+// app.post('/pages/editProfile/:id',(req, res) => {
+// 	const requestId = req.params.id;
+
+// 	let userInfo = user.filter(userInfo => {
+// 		return userInfo.id == requestId;
+// 	})[0];
+
+// 	const index = user.indexOf(userInfo);
+
+// 	const keys = Object.keys(req.body);
+
+// 	keys.forEach(key => {
+// 		userInfo[key] = req.body[key];
+// 	});
+// 	user[index] = userInfo;
+
+// 	res.json(user[index]);
+// });
 
 //SHOPPING CART
 app.get('/cart', checkAuthenticated, function(req, res){
