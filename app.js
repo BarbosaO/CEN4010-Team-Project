@@ -276,23 +276,11 @@ app.post("/register", (req, res) =>{
 
 // TODO: EDIT PROFILE
 
-app.get('/editProfile', checkAuthenticated, (req, res) => {    
-    res.render('pages/editProfile.ejs',{User: req.user[0]});
+app.get('/editProfile', checkAuthenticated, (req, res) => {  
+    res.render('pages/editProfile.ejs',{user: req.user});
 });
-	
-// app.post('/updateProfile',(req, res) => {
-	
-// });
 
-// 	const userInfo = {
-// 		email: req.body.email
-// 	}
-
-// 	user.push(userInfo);
-// 	res.json(userInfo)
-// });
-
-app.put('/updateProfile',checkAuthenticated, (req, res) => {
+app.put('/updateProfile', checkAuthenticated, (req, res) => {
 	
 	user = req.user[0]
     email = user.email
@@ -302,16 +290,16 @@ app.put('/updateProfile',checkAuthenticated, (req, res) => {
 
 	db.collection('User').updateOne({"_id": ObjectId(id)}, {$set: {
 		Email: req.body.email,
-		//description: req.body.description
+		Password: req.body.password
 	 }
 	 }, function (err, result) {
 		  if (err) {
 		  console.log(err);
 		} else {
-			console.log("Post updated!");
-	 }
-	 res.render('pages/editProfile.ejs');
-});
+			console.log("User updated!");
+	 	}
+	 res.redirect('/editProfile');
+	});
 });
 
 
