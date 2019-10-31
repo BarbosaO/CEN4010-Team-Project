@@ -276,46 +276,13 @@ app.post("/register", (req, res) =>{
 
 // TODO: EDIT PROFILE
 
-// app.get('/pages/editProfile/:id', (req, res) => {    
-// 	// var id = req.params.id;
-// 	// var o_id = new ObjectId(id);
-// 	// db.collection('User').find({_id:o_id}).toArray((err, result) => {
-// 	//    if (err) return console.log(err)
-// 	//    console.log(result);
-// 	//    res.render('pages/editProfile.ejs',{User: result});  
-// 	// });
-// 	// console.log(req.params.id);
-
-// 	const requestId = req.params.id
-// 	let userInfo = user.filter(userInfo => {
-// 		return userInfo.id == requestId;
-// 	});
-
-// 	if (!userInfo) {
-// 		res.status(404).json({ message: 'No email found'});
-// 	}
-
-// 	response.json(userInfo[0]);
-	
-// });
-
-app.get("/editProfile", checkNotAuthenticated, function(req, res){
-    res.render('pages/editProfile.ejs', {message: null});
+app.get('/editProfile', checkAuthenticated, (req, res) => {    
+    res.render('pages/editProfile.ejs',{User: req.user[0]});
 });
 	
-// app.post('/pages/editProfile',(req, res) => {
-// // 	 db.collection('User').updateOne({ _id: ObjectId(req.body._id) }, {$set: {
-// // 		username: req.body.username,
-// // 		//description: req.body.description
-// // 	 }
-// // 	 }, function (err, result) {
-// // 		  if (err) {
-// // 		  console.log(err);
-// // 		} else {
-// // 		 console.log("Post Updated successfully");
-// // 		 res.redirect('pages/editProfile.ejs');
-// // 	 }
-// // });
+// app.post('/updateProfile',(req, res) => {
+	
+// });
 
 // 	const userInfo = {
 // 		email: req.body.email
@@ -325,26 +292,30 @@ app.get("/editProfile", checkNotAuthenticated, function(req, res){
 // 	res.json(userInfo)
 // });
 
-// app.post('/pages/editProfile/:id',(req, res) => {
-// 	const requestId = req.params.id;
+app.put('/updateProfile',checkAuthenticated, (req, res) => {
+	
+	user = req.user[0]
+    email = user.email
+	// nickname = user.nickname 
 
-// 	let userInfo = user.filter(userInfo => {
-// 		return userInfo.id == requestId;
-// 	})[0];
+	var id = user._id;
 
-// 	const index = user.indexOf(userInfo);
+	db.collection('User').updateOne({"_id": ObjectId(id)}, {$set: {
+		Email: req.body.email,
+		//description: req.body.description
+	 }
+	 }, function (err, result) {
+		  if (err) {
+		  console.log(err);
+		} else {
+			console.log("Post updated!");
+	 }
+	 res.render('pages/editProfile.ejs');
+});
+});
 
-// 	const keys = Object.keys(req.body);
 
-// 	keys.forEach(key => {
-// 		userInfo[key] = req.body[key];
-// 	});
-// 	user[index] = userInfo;
-
-// 	res.json(user[index]);
-// });
-
-//SHOPPING CART
+// SHOPPING CART
 app.get('/cart', checkAuthenticated, function(req, res){
     db.collection('carts').find({User:req.user[0].email}).toArray(function(err, books)
     {
