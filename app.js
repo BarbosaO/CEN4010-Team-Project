@@ -297,9 +297,26 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 		  console.log(err);
 		} else {
 			console.log("User updated!");
-	 	}
-	 res.redirect('/editProfile');
+		 }
 	});
+
+
+	//update the logged in user
+	db.collection('User').find({"_id": ObjectId(id)}).toArray(function(err, newUser)
+    {
+        if (err) { console.log(err); }
+        else{   
+            req.login(newUser[0], function(err) {
+				if (err) {
+					console.log(err);
+					res.redirect('/login');
+				}else{
+					res.render('pages/editProfile.ejs', {user: newUser});
+				}
+			});
+        }
+    });  
+
 });
 
 
