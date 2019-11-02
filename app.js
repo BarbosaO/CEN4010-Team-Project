@@ -11,6 +11,7 @@ const methodOverride = require('method-override');
 const flash = require('express-flash');
 var ObjectId = require('mongodb').ObjectID;
 var db;
+var em; //email
 
 initialize(passport);
 
@@ -119,7 +120,7 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 			}
 		).toArray(function(err, docs){
 	
-			xc
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
 		});
 	}
 	else if(title == "")
@@ -318,14 +319,16 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 
 });
 
+
 // SHOPPING CART 
-app.get('/cart', checkAuthenticated, (req, res) =>{
-    db.collection('carts').find({"Email": req.user[0].Email}).toArray(function(err, books)
+app.get('/cart', checkAuthenticated2, (req, res) =>{
+	//console.log(em);
+    db.collection('carts').find({"Email": em}).toArray(function(err, books)
     {
         if (err) { console.log(err); }
         else{  
            		db.collection('carts').aggregate([
-                {$match: {Email: req.user[0].Email}},
+                {$match: {Email: em}},
                 {$group: {_id:0, Subtotal:{$sum: {$multiply: ["$Price", "$qty"]}}}}
                 ]).toArray(function(err, price){
 					if (err) { console.log(err); }
@@ -333,7 +336,7 @@ app.get('/cart', checkAuthenticated, (req, res) =>{
             		{
 						
 						console.log(price.Subtotal);
-						res.render("pages/cart.ejs", {cart: books, user: req.user, name: req.user[0].First_Name, total:price});
+						res.render("pages/cart.ejs", {cart: books, user: req.user, total:price});
 					}
         		});   
         	}
@@ -346,8 +349,9 @@ app.post('/add1', checkAuthenticated, (req,res) => {
     var new_qty = parseInt(req.body.qty) + 1;
     
     try{
-    	db.collection('carts').updateOne({"_id": ObjectId(id)}, {$set: {qty: new_qty}});
-    }catch(e){console.log(e);}
+    db.collection('carts').updateOne({"_id": ObjectId(id)}, {$set: {qty: new_qty}});
+    }catch(e)
+    {console.log(e);}
 
     res.redirect('/cart');
 });
@@ -392,7 +396,8 @@ app.delete('/deleteCart', checkAuthenticated, (req,res) => {
 });
 
 //add book to cart from booklist
-app.post('/AddToCart', checkAuthenticated, (req,res) =>{
+app.post('/AddToCart', checkAuthenticated, (req,res) =>
+{
 	var bookTitle = req.body.title;
 	var bookAuth = req.body.author;
 	var bookDescr = req.body.descr;
@@ -401,20 +406,21 @@ app.post('/AddToCart', checkAuthenticated, (req,res) =>{
 	var qty = 1;
 	try{
 		db.collection('carts').insertOne({
-			Email: req.user[0].Email,
-			Title: bookTitle,
-			Author: bookAuth,
-			Description: bookDescr,
-			Price: bookPrice,
-			Cover: bookCover,
-			qty: qty
+		Email: req.user[0].Email,
+		Title: bookTitle,
+		Author: bookAuth,
+		Description: bookDescr,
+		Price: bookPrice,
+		Cover: bookCover,
+		qty: qty
 		});
 
-	}catch(e){
-		console.log(e);
-	}
+		}catch(e){
+			console.log(e);
+		}
 
-	res.redirect('/bookList')
+		res.redirect('/booklist');
+          
 });
 
 //BOOK DETAILS
@@ -430,11 +436,19 @@ app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
                 //render page with no review form
 
                 //find reviews, and send them to the page
-                db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
-                    if (err) { console.log(err); }
+				db.collection('Reviews'
+				).find({BookId:bookId}).toArray(function(err, reviews){
+                    if (err) {console.log(err); }
                     else {
-                        //console.log(reviews);
-                        res.render("pages/bookDetails2.ejs", {reviews: reviews, user: req.user, bookId:bookId});  
+						
+						// find the book details
+						db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
+						{
+							if (err) { console.log(err); }
+							else{   
+								res.render("pages/bookDetails2.ejs", {reviews: reviews, book: books, user: req.user, bookId:bookId});
+							}
+						});  
                     };
                 });
             }
@@ -446,8 +460,17 @@ app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
                 db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
                     if (err) { console.log(err); }
                     else {
+
+						// find the book details
+						db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
+						{
+							if (err) { console.log(err); }
+							else{   
+								res.render("pages/bookDetails1.ejs", {email: req.user[0].Email, reviews: reviews, book: books, user: req.user, bookId:bookId});
+							}
+						});  
                         //console.log(reviews);
-                        res.render("pages/bookDetails1.ejs", {email: req.user[0].Email, reviews: reviews, user: req.user, bookId:bookId});  
+                        //res.render("pages/bookDetails1.ejs", {email: req.user[0].Email, reviews: reviews, user: req.user, bookId:bookId});  
                     };
                 }); 
             };
@@ -457,11 +480,49 @@ app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
         db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
             if (err) { console.log(err); }
             else {
-                res.render("pages/bookDetails2.ejs", {reviews: reviews, bookId: bookId});  
+
+				// find the book details
+				db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
+				{
+					if (err) { console.log(err); }
+					else{
+						res.render("pages/bookDetails2.ejs", {reviews: reviews, book: books, bookId:bookId});
+					}
+				});  
             };
         });
     }
 });
+
+
+// AUTHOR
+app.get('/author/:id', checkAuthenticated, function(req, res){
+
+	if(req.user){
+
+		AuthorId = req.params.id
+		//console.log("id: " + AuthorId);
+		db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
+		{
+			if (err) { console.log(err); }
+			else{   
+				res.render("pages/author.ejs", {author: author, user: req.user});
+			}
+		});  
+	}
+	else{
+		AuthorId = req.params.id
+		//console.log("id: " + AuthorId);
+		db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
+		{
+			if (err) { console.log(err); }
+			else{   
+				res.render("pages/author.ejs", {author: author, user: req.user});
+			}
+		});  
+	}
+});
+
 
 //review post
 app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
@@ -517,7 +578,6 @@ function checkAuthenticated2(req, res, next){
         return next();
     }
 }
-
 function checkNotAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return res.redirect('/')
@@ -532,6 +592,7 @@ function initialize(passport){
             if (err) { console.log(err); }
             else {
                 var userFound = user[0];
+				em = email;// when user is logged in saves the email, used is cart.
 
                 if(userFound == null){
                     return done(null, false, {message: 'No user found with that email.'})

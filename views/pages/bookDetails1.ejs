@@ -8,9 +8,66 @@
     </head>
     <body class="container-fluid">
         <main>
-            <h1>Book Details</h1>
-            <p>Book: <%= bookId %></p>
-
+            <h1 align="center">BOOK DETAILS</h1>
+            <div class="container-fluid">
+                <!-- Beginning of the cart -->
+                <div class="row">
+                    <div class="col-xs-9 col-md-7">        
+                        <div class="jumbotron">  
+                            <div class="book">  
+                                <% book.forEach(book => {%>  
+                                    <!-- main table --> 
+                                    <table style width="100%">
+                                        <tr>
+                                            <!-- Book title -->
+                                            <h5 class="title" >Title: <%= book.Title %> </h5>
+                                            <th> 
+                                                <!-- Book Author -->
+                                                <div class="product-author">
+                                                    <p class="author">Author: <a href="/author/<%=book.AuthorID%>"> <%= book.Author %></a></p>
+                                                </div>
+                                                <!-- Book cover -->
+                                                <div class="product-cover">
+                                                    <img src = <%= book.Cover %> width="140" height="200" title="" />    
+												</div> 
+												 <!-- Book price -->
+												 <div class="product-price">
+                                                    <p class="price">Price: $<%= book.Price %></p>
+												</div>
+												<!-- Book Description -->
+												<div class="product-description">
+                                                    <h3 class="description" >Description:</h3>
+                                                    <p class="description" > <%= book.Description %></p>
+												</div>
+												 <!-- Book ISBN -->
+												 <div class="product-ISBN">
+                                                    <p class="ISBN">ISBN: <%= book.ISBN %></p>
+												</div> 
+												 <!-- Book Genre -->
+												 <div class="product-genre">
+                                                    <p class="genre">Genre: <%= book.Genre %></p>
+												</div>
+												 <!-- Book AvgReview -->
+												 <div class="product-rating">
+                                                    <p class="AvgReview">Average Rating: <%= book.AvgReview %></p>
+												</div>
+												<!-- Book Publisher -->
+												<div class="product-publisher">
+                                                    <p class="publisher">Publisher: <%= book.Publisher %></p>
+												</div>
+												<!-- Book Publication Date -->
+												<div class="product-publication-date">
+                                                    <p class="publication-date">Date Published: <%= book.PublicationDate %></p>
+												</div>                                    
+											</th>
+                                        </tr>
+                                    </table> 
+                                <% })%>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>                         
             <h1>reviews list</h1>
             <hr>
             <% reviews.forEach(review => {%>

@@ -15,6 +15,8 @@ body{
     text-align: center;
   }
 
+<<<<<<< HEAD
+=======
 .button {
  
   border: none;
@@ -59,6 +61,7 @@ body{
   
   .button4 {background-color: #e7e7e7;}/* Grey */
 
+>>>>>>> 860bf281e38cb14a2b4edbe94f9d97786b25ac70
 #logOutButton{
     border:none;
     color:rgb(144, 148, 150);
