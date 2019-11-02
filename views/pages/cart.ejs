@@ -107,38 +107,39 @@
                     </div> 
                 </div> 
         
-        <!-- Begining of Payment Section -->
+                <!-- Begining of Payment Section -->
+            
                 <div class="row"> 
-                    <div class="col-xs-9 col-md-7">
-                        <div class="jumbotron">
-                            <div class= "subtotal" align="right">
-                                <table>     
-                                    <tr>
-                                        <th width="60%">
-                                            <p class="totalRow"><span class="label">Subtotal</span></p>
-                                            <p class="totalRow"><span class="label">Tax</span></p>
-                                            <p class="totalRow"><span class="label">Total</span></p>
-                                        </th>   
-                                        <th>
-                                            <p class="totalRow"><span class="value">$</span></p>
-                                            <p class="totalRow"><span class="value">$5.00</span></p>
-                                            <p class="totalRow"><span class="value">$39.00</span></p>
-                                        </th> 
-                                    </tr>  
-                                </table>
-                                <p class="totalRow"><a href="#" class="btn continue">Checkout</a></p>
-                            </div>
-                        </div>
+                    <div class="container">
+                        <h2>Order Summary</h2>
+                        <table>  
+                            <tr>
+                                <th width="60%">
+                                    <div class="container">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">Subtotal</div>
+                                            <div class="panel-body">Tax</div>
+                                            <div class="panel-heading">Total</div>
+                                        </div>
+                                    </div>                
+                                </th>   
+                                <th>
+                                    <div class="container">
+                                         
+                                        <div class="panel panel-default">
+                                            <% total.forEach(total => {%>
+                                            <div class="panel-body" >$<%= (total.Subtotal).toFixed(2)%></div>
+                                            <div class="panel-body" >$<%= (total.Subtotal * 0.07).toFixed(2) %></div>
+                                            <div class="panel-heading" >$<%= (total.Subtotal + (total.Subtotal * 0.07)).toFixed(2) %></div>
+                                            <% })%>
+                                        </div>                
+                                    </div>
+                                </th> 
+                            </tr> 
+                        </table>  
                     </div>
-
-                    <!-- Begining of wish list section 
-                    <div class="col-xs-3 col-md-5">
-                        <div class="nav-item">  
-                            <a href="#">Wish List</a>
-                            <hr> </hr>
-                        </div>
-                    </div> -->
                 </div>
+            </div>
                                                         
         </main>
         <% include partials/footer.ejs %>
