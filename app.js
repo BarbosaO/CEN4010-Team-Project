@@ -11,6 +11,7 @@ const methodOverride = require('method-override');
 const flash = require('express-flash');
 var ObjectId = require('mongodb').ObjectID;
 var db;
+var em; //email
 
 initialize(passport);
 
@@ -300,7 +301,6 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 		 }
 	});
 
-
 	//update the logged in user
 	db.collection('User').find({"_id": ObjectId(id)}).toArray(function(err, newUser)
     {
@@ -320,28 +320,71 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 });
 
 
-// SHOPPING CART
-app.get('/cart', checkAuthenticated, function(req, res){
-    db.collection('carts').find({User:req.user[0].email}).toArray(function(err, books)
+// SHOPPING CART 
+app.get('/cart', checkAuthenticated2, (req, res) =>{
+	//console.log(em);
+    db.collection('carts').find({"Email": em}).toArray(function(err, books)
     {
         if (err) { console.log(err); }
-        else{   
-            res.render("pages/cart.ejs", {cart: books, user: req.user});
-        }
+        else{  
+           		db.collection('carts').aggregate([
+                {$match: {Email: em}},
+                {$group: {_id:0, Subtotal:{$sum: {$multiply: ["$Price", "$qty"]}}}}
+                ]).toArray(function(err, price){
+					if (err) { console.log(err); }
+            		else
+            		{
+						var sub = 0;
+						sub = price;
+						
+						console.log(price.Subtotal);
+						res.render("pages/cart.ejs", {cart: books, user: req.user, total:price});
+					}
+        		});   
+        	}
     });  
 });
 
-//TODO
+//increases book qty by one in cart
 app.post('/add1', checkAuthenticated, (req,res) => {
     var id = req.body.id;
-    var new_qty = req.body.new_qty;
+    var new_qty = parseInt(req.body.qty) + 1;
+    
+    try{
+    db.collection('carts').updateOne({"_id": ObjectId(id)}, {$set: {qty: new_qty}});
+    }catch(e)
+    {console.log(e);}
 
-    //insert 
-    db.collection('carts').update({_id: id}, {$set: {qty: new_qty}});
-
-    res.render('pages/cart.ejs');
+    res.redirect('/cart');
 });
 
+//decreases book qty by one in cart
+app.post('/minus1', checkAuthenticated, (req,res) => {
+    var id = req.body.id;
+    var new_qty = parseInt(req.body.qty);
+    if(new_qty == 1)
+    {
+        try{
+            db.collection('carts').deleteOne({"_id": ObjectId(id)});
+        }catch(e){
+            console.log(e);
+        }
+        
+        res.redirect('/cart');
+    }
+
+    else{
+        new_qty -= 1;
+        try{
+            db.collection('carts').updateOne({"_id": ObjectId(id)}, {$set: {qty: new_qty}});
+            }catch(e)
+            {console.log(e);}
+        
+            res.redirect('/cart');
+    }
+});
+
+//deletes book from cart
 app.delete('/deleteCart', checkAuthenticated, (req,res) => {
     var id = req.body.id;
     
@@ -352,6 +395,34 @@ app.delete('/deleteCart', checkAuthenticated, (req,res) => {
     }
     
     res.redirect('/cart');
+});
+
+//add book to cart from booklist
+app.post('/AddToCart', checkAuthenticated, (req,res) =>
+{
+	var bookTitle = req.body.title;
+	var bookAuth = req.body.author;
+	var bookDescr = req.body.descr;
+	var bookPrice = parseFloat(req.body.price);
+	var bookCover = req.body.cover;
+	var qty = 1;
+	try{
+		db.collection('carts').insertOne({
+		Email: req.user[0].Email,
+		Title: bookTitle,
+		Author: bookAuth,
+		Description: bookDescr,
+		Price: bookPrice,
+		Cover: bookCover,
+		qty: qty
+		});
+
+		}catch(e){
+			console.log(e);
+		}
+
+		res.redirect('/booklist');
+          
 });
 
 //BOOK DETAILS
@@ -400,6 +471,7 @@ app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
     }
 });
 
+//review post
 app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
     var comment = req.body.comment;
     var rating = req.body.rating;
@@ -428,9 +500,11 @@ app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
     res.redirect('/bookDetails/' + bookId);
 });
 
+//log out
 app.delete('/logout', function(req, res){
     req.logOut()
-    res.redirect('/login')
+	res.redirect('/login')
+	em = ""; // clearing the email variable (used for shopping cart only)
 });
 
 
@@ -443,7 +517,7 @@ function checkAuthenticated(req, res, next){
     }
 }
 
-//for home page,(and maybe shopping cart) user doesnt have to be logged in
+//for home page,shopping cart user doesnt have to be logged in
 function checkAuthenticated2(req, res, next){
     if(req.isAuthenticated()){
         return next();
@@ -465,6 +539,7 @@ function initialize(passport){
             if (err) { console.log(err); }
             else {
                 var userFound = user[0];
+				em = email;// when user is logged in saves the email, used is cart.
 
                 if(userFound == null){
                     return done(null, false, {message: 'No user found with that email.'})
