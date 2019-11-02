@@ -18,7 +18,8 @@
       <input bTitle="book_title" type="text" name="title">
       <label for="book_avgReview">Min Rating (0-5):</label>
       <input bAvgReview="book_avgReview" type="number" name="avgReview">
-  	  <input type="submit" value="OK">
+      <input type="submit" value="OK">
+</form>
     <hr></hr>
     <main>
   <% docs.forEach(book => {%>
@@ -28,9 +29,19 @@
 	    <p class = "" >Genre: <%= book.Genre %></p>
 	    <p class = "" >Price: $<%= book.Price %></p>
       <a class = "" href="/bookDetails/<%=book._id%>"> View Details </a>
-      <a class = "" href="/AddToCartPlaceholder/<%=book._id%>"> Add to Cart </a>
+      <% if(user){ %>
+        <form action="/AddToCart?_method=ADD" method="POST">
+          <input type="text" name="id" value="<%= book._id %>" style="display:none;">
+          <input type="text" name ="title" value = "<%= book.Title %>" style="display:none;">
+          <input type="text" name ="author" value = "<%= book.Author %>" style="display:none;">
+          <input type="text" name ="price" value = "<%= book.Price %>" style="display:none;">
+          <input type="text" name ="descr" value = "<%= book.Description%>" style="display:none;">
+          <input type="text" name ="cover" value = "<%= book.Cover %>" style="display:none;">
+          <button class="button button5" type="submit"> Add to Cart </button>
+        </form>
+      <% } %>
      <hr>
-    <% })%>
+  <% })%>
   </main>
    <% include partials/footer.ejs %>
      

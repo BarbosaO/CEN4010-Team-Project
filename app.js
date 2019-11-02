@@ -284,21 +284,6 @@ app.get('/editProfile', checkAuthenticated, (req, res) => {
 app.put('/updateProfile', checkAuthenticated, (req, res) => {
 	
 	user = req.user[0];
-	
-    // email = user.email;
-	// password = user.password;
-	// firstname = user.firstname;
-	// lastname = user.lastname;
-	// homeaddr = user.homeaddr;
-	// city = user.city;
-	// state = user.state;
-	// zip = user.zip; 
-	// country = user.country;
-	// nickname = user.nickname; 
-	// creditOwner = user.creditOwner; 
-	// cvv = user.cvv; 
-	// creditCard = user.creditCard;
-	// expDate = user.expDate;  
 
 	var id = user._id;
 
@@ -336,8 +321,6 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 					console.log(err);
 					res.redirect('/login');
 				}else{
-					console.log(newUser);
-					console.log(newUser[0]);
 					res.render('pages/editProfile.ejs', {user: newUser});
 				}
 			});
@@ -433,13 +416,13 @@ app.post('/AddToCart', checkAuthenticated, (req,res) =>
 	var qty = 1;
 	try{
 		db.collection('carts').insertOne({
-		Email: req.user[0].Email,
-		Title: bookTitle,
-		Author: bookAuth,
-		Description: bookDescr,
-		Price: bookPrice,
-		Cover: bookCover,
-		qty: qty
+			Email: req.user[0].Email,
+			Title: bookTitle,
+			Author: bookAuth,
+			Description: bookDescr,
+			Price: bookPrice,
+			Cover: bookCover,
+			qty: qty
 		});
 
 		}catch(e){
@@ -650,8 +633,8 @@ var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush
         console.log('connected to database');
 
     // Server
-    app.listen(3001, "localhost", function(){
-        console.log("Listening on port 3001...")
+    app.listen(3000, "localhost", function(){
+        console.log("Listening on port 3000...")
     });
 
 });
