@@ -1,56 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="styles.css">
     <% include partials/header.ejs %>
-    <title>Register | WebApp</title>
+    <title>Edit Profile | WebApp</title>
 </head>
 <body>
     
     <div class="center">
-    <h1>Register</h1>
-    <% if(message){ %>
-        <%= message %>
-    <% } %>
-    <form  method="POST" onsubmit="return validate()">
+    <h1>Edit Profile</h1>
+    
+    <form action="/updateProfile?_method=PUT" method="POST">
         <h5><strong>Login Credentials</strong></h5>
         Email:<br>
-        <input type="email" name="email" required><br>
+        <input type="email" name="email" value="<%= user[0].Email %>"><br>
         Password:<br>
-        <input type="text" name="password" required><br>
+        <input type="text" name="password" value="<%= user[0].Password %>"><br>
 
         <h5><strong>Personal Information</strong></h5>
         First Name:<br>
-        <input type="text" name="firstname" required><br>
+        <input type="text" name="firstname" value="<%= user[0].First_Name %>"><br>
         Last Name:<br>
-        <input type="text" name="lastname" required><br>
+        <input type="text" name="lastname"><br>
         Home Address Line 1:<br>
-        <input type="text" name="homeaddr" required><br>
+        <input type="text" name="homeaddr"><br>
         City:<br>
-        <input type="text" name="city" required><br>
+        <input type="text" name="city"><br>
         State/Province/Region:<br>
-        <input type="text" name="state" required><br>
+        <input type="text" name="state"><br>
         ZIP/Postal Code:<br>
-        <input type="number" name="zip" required><br>
+        <input type="number" name="zip"><br>
         Country:<br>
-        <input type="text" name="country" required><br>
+        <input type="text" name="country"><br>
 
         <h5><strong>Nickname (for Book Rating and Commenting)</strong></h5>
-        <input type="text" name="nickname" required><br>
+        <input type="text" name="nickname"><br>
 
         <div class="alert alert-danger" id="ccAlert" role="alert" style="display:none;">
             Credit card number invalid.
         </div>
         <h5><strong>Credit Card Information:</strong></h5>
         Owner:<br>
-        <input type="text" name="creditOwner" required><br>
+        <input type="text" name="creditOwner"><br>
         CVV:<br>
-        <input type="number" name="cvv" required><br>
+        <input type="number" name="cvv"><br>
         Card Number:<br>
-        <input type="number" name="creditCard" id="ccNum" required><br>
+        <input type="number" name="creditCard" id="ccNum"><br>
         Expiration Date:<br>
         <input type="date" name="expDate">
 
@@ -67,7 +61,7 @@
         Country:<br>
         <input type="text" name="shipcountry" required><br> -->
         <br>
-        <button type="submit" class="btn btn-default" id="register">Register</button>
+        <button type="submit" class="btn btn-default" id="saveChanges">Save Changes</button>
     </form>
 
     

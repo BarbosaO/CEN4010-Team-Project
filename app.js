@@ -3,6 +3,7 @@ var app = express();
 var session = require("express-session");
 var passport = require('passport');
 var path = require("path");
+var assert = require('assert');
 var MongoClient = require('mongodb').MongoClient;
 const LocalStrategy = require('passport-local');
 const bodyParser = require('body-parser');
@@ -10,6 +11,7 @@ const methodOverride = require('method-override');
 const flash = require('express-flash');
 var ObjectId = require('mongodb').ObjectID;
 var db;
+var em; //email
 
 initialize(passport);
 
@@ -28,15 +30,168 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method')); // for delete and put requests
 
-
-
 //ROUTES
-app.get("/", (req, res) => {
-    if(req.isAuthenticated()){
-        res.render('pages/index.ejs', {user: req.user});
-    }else{
-        res.render('pages/index.ejs');
-    }
+//BOOK LIST
+app.get("/", (req,res) => {
+    res.redirect('/bookList');
+})
+
+app.get("/bookList", checkAuthenticated2, (req, res) => {
+    //This line below gets all items in the Test collection, can filter it with input in the find({*filter elements*}) part
+	db.collection('Books').find({}).toArray(function(err, docs) {
+		//Print the documents returned on console in this commented 3 line part
+			//docs.forEach(function(doc) {
+			//console.log(doc.Title);
+			//});
+		//Next line sends the list of items from collection accessed to the render
+		res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+	});
+	//Declare success
+	//console.log("Called find()");
+});
+
+app.post("/book_filter", checkAuthenticated2,(req, res) =>{
+	var genre = req.body.genre;
+	var author = req.body.author;
+	var title = req.body.title;
+	var rating = req.body.avgReview;
+	if(rating == "")
+		rating = 0;
+	else
+		rating = parseInt(req.body.avgReview,10);
+	//console.log("Genre " + genre);
+	//console.log("Author " + author);
+	//console.log("Title " + title);
+	//console.log("Rating " + rating);
+
+	//Sends the list of items from collection accessed to the render
+	//Uses '$or' and '$and' to display all results that match one of the fields without doubling up results
+	if(genre == "" && author == "" && title == "")
+	{
+		db.collection('Books').find().filter(	
+			{AvgReview : {$gte : rating}}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+	else if(genre == "" && author == "")
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Title : title}
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+	else if(genre == "" && title == "")
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Author : author}
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+	else if(author == "" && title == "")
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Genre : genre}
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+	else if(title == "")
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Author : author}, 
+						{ Genre : genre}
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+		else if(genre == "")
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Title : title},
+						{ Author : author},
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+		else if(author == "")
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Title : title},
+						{ Genre : genre}
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
+	else
+	{
+		db.collection('Books').find().filter(
+			{	$and :	
+				[
+					{$and : [
+						{ Title : title},
+						{ Author : author}, 
+						{ Genre : genre}
+					]},
+					{$and : [ {AvgReview : {$gte : rating}}]}
+				]
+			}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+		});
+	}
 });
 
 //LOGIN AND REGISTER
@@ -56,12 +211,34 @@ app.post("/login", checkNotAuthenticated, passport.authenticate('local', {
 }));
 
 app.post("/register", (req, res) =>{
-    var nickname = req.body.nickname;
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
-    var email = req.body.email;
-    var password = req.body.password;
-    var creditCard = req.body.creditCard;
+	// login credentials
+	var email = req.body.email;
+	var password = req.body.password;
+
+	// personal info
+	var firstname = req.body.firstname;
+	var lastname = req.body.lastname;
+	var homeaddr = req.body.homeaddr;
+	var city = req.body.city;
+	var state = req.body.state;
+	var zip = req.body.zip;
+	var country = req.body.country;
+
+	// nickname 
+	var nickname = req.body.nickname;
+
+	// cc info
+	var creditOwner = req.body.creditOwner;
+	var cvv = req.body.cvv;
+	var creditCard = req.body.creditCard;
+	var expDate = req.body.expDate;
+
+	// shipping info
+	// var shipaddr = req.body.shipaddr;
+	// var shipcity = req.body.shipcity;
+	// var shipstate = req.body.shipstate;
+	// var shipzip = req.body.shipzip;
+	// var shipcountry = req.body.shipcountry;
 
     db.collection('User').find({"Email": email}).toArray(function(err, user){
         if (err) { console.log(err); }
@@ -72,12 +249,25 @@ app.post("/register", (req, res) =>{
             }else{
                 // insert user profile into the database
                 db.collection('User').insertOne({
-                    Nickname: nickname,
-                    First_Name: firstname,
-                    Last_Name: lastname,
-                    Email: email,
-                    Password: password,
-                    Credit_Card: creditCard
+					Email: email,
+					Password: password,
+					First_Name: firstname,
+					Last_Name: lastname,
+					Home_Address: homeaddr,
+					Home_City: city,
+					Home_State: state,
+					Home_Zip: zip,
+					Home_Country: country,
+					Nickname: nickname,
+					Credit_Owner: creditOwner,
+					CVV: cvv,
+					Credit_Card: creditCard,
+					Exp_Date: expDate
+					// Ship_Address: shipaddr,
+					// Ship_City: shipcity,
+					// Ship_State: state,
+					// Ship_Zip: zip,
+					// Ship_Country: country
                 });
                 res.redirect('/login');
             }
@@ -85,55 +275,114 @@ app.post("/register", (req, res) =>{
     });
 });
 
-//SHOPPING CART
-app.get('/cart', checkAuthenticated, function(req, res){
-    db.collection('carts').find({User:"test2@fiu.edu"}).toArray(function(err, books)
+// TODO: EDIT PROFILE
+
+app.get('/editProfile', checkAuthenticated, (req, res) => {  
+    res.render('pages/editProfile.ejs',{user: req.user});
+});
+
+app.put('/updateProfile', checkAuthenticated, (req, res) => {
+	
+	user = req.user[0]
+    email = user.email
+	// nickname = user.nickname 
+
+	var id = user._id;
+
+	db.collection('User').updateOne({"_id": ObjectId(id)}, {$set: {
+		Email: req.body.email,
+		Password: req.body.password
+	 }
+	 }, function (err, result) {
+		  if (err) {
+		  console.log(err);
+		} else {
+			console.log("User updated!");
+		 }
+	});
+
+	//update the logged in user
+	db.collection('User').find({"_id": ObjectId(id)}).toArray(function(err, newUser)
     {
         if (err) { console.log(err); }
         else{   
-            res.render("pages/cart.ejs", {cart: books, user: req.user});
+            req.login(newUser[0], function(err) {
+				if (err) {
+					console.log(err);
+					res.redirect('/login');
+				}else{
+					res.render('pages/editProfile.ejs', {user: newUser});
+				}
+			});
         }
     });  
+
 });
 
 
-//TODO
+// SHOPPING CART 
+app.get('/cart', checkAuthenticated2, (req, res) =>{
+	//console.log(em);
+    db.collection('carts').find({"Email": em}).toArray(function(err, books)
+    {
+        if (err) { console.log(err); }
+        else{  
+           		db.collection('carts').aggregate([
+                {$match: {Email: em}},
+                {$group: {_id:0, Subtotal:{$sum: {$multiply: ["$Price", "$qty"]}}}}
+                ]).toArray(function(err, price){
+					if (err) { console.log(err); }
+            		else
+            		{
+						
+						console.log(price.Subtotal);
+						res.render("pages/cart.ejs", {cart: books, user: req.user, total:price});
+					}
+        		});   
+        	}
+    });  
+});
+
+//increases book qty by one in cart
 app.post('/add1', checkAuthenticated, (req,res) => {
     var id = req.body.id;
-    var new_qty = req.body.new_qty;
+    var new_qty = parseInt(req.body.qty) + 1;
+    
+    try{
+    db.collection('carts').updateOne({"_id": ObjectId(id)}, {$set: {qty: new_qty}});
+    }catch(e)
+    {console.log(e);}
 
-    //insert 
-    db.collection('carts').update({_id: id}, {$set: {qty: new_qty}});
-
-    res.render('pages/cart.ejs');
+    res.redirect('/cart');
 });
 
-// BOOK_DETAILS
-app.get('/details', checkAuthenticated, function(req, res){
-
-    var id = req.params.id;
-    console.log("id: " + id);
-    db.collection('Books').find({Title: "An Equal Justice"}).toArray(function(err, books)
+//decreases book qty by one in cart
+app.post('/minus1', checkAuthenticated, (req,res) => {
+    var id = req.body.id;
+    var new_qty = parseInt(req.body.qty);
+    if(new_qty == 1)
     {
-        if (err) { console.log(err); }
-        else{   
-            res.render("pages/details.ejs", {book: books, user: req.user});
+        try{
+            db.collection('carts').deleteOne({"_id": ObjectId(id)});
+        }catch(e){
+            console.log(e);
         }
-    });  
+        
+        res.redirect('/cart');
+    }
+
+    else{
+        new_qty -= 1;
+        try{
+            db.collection('carts').updateOne({"_id": ObjectId(id)}, {$set: {qty: new_qty}});
+            }catch(e)
+            {console.log(e);}
+        
+            res.redirect('/cart');
+    }
 });
 
-
-// BROWSE
-app.get('/browse', checkAuthenticated, function(req, res){
-    db.collection('Books').find().toArray(function(err, books)
-    {
-        if (err) { console.log(err); }
-        else{   
-            res.render("pages/browse.ejs", {browse: books, user: req.user});
-        }
-    });  
-});
-
+//deletes book from cart
 app.delete('/deleteCart', checkAuthenticated, (req,res) => {
     var id = req.body.id;
     
@@ -146,28 +395,142 @@ app.delete('/deleteCart', checkAuthenticated, (req,res) => {
     res.redirect('/cart');
 });
 
-//REVIEWS
-app.get("/review", checkAuthenticated, function(req, res){
-    res.render('pages/review.ejs', {email: req.user[0].Email, user: req.user});
+//add book to cart from booklist
+app.post('/AddToCart', checkAuthenticated, (req,res) =>
+{
+	var bookTitle = req.body.title;
+	var bookAuth = req.body.author;
+	var bookDescr = req.body.descr;
+	var bookPrice = parseFloat(req.body.price);
+	var bookCover = req.body.cover;
+	var qty = 1;
+	try{
+		db.collection('carts').insertOne({
+		Email: req.user[0].Email,
+		Title: bookTitle,
+		Author: bookAuth,
+		Description: bookDescr,
+		Price: bookPrice,
+		Cover: bookCover,
+		qty: qty
+		});
+
+		}catch(e){
+			console.log(e);
+		}
+
+		res.redirect('/booklist');
+          
 });
 
-app.get('/reviewsList', checkAuthenticated, function(req, res){
-    db.collection('Reviews').find({}).toArray(function(err, reviews){
-        if (err) { console.log(err); }
-        else {
-            //console.log(reviews);
-            res.render("pages/reviewsList.ejs", {reviews: reviews, user: req.user});  
-        };
-    });
+//BOOK DETAILS
+app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
+    bookId = req.params.id
+    if(req.user){ //if user logged in
+        userId = req.user[0]._id
+        //db query to check if user has bought book
+        db.collection('Purchased').find({book:bookId, user: userId}).toArray(function(err, reviews){
+            if (err) { 
+                console.log(err); 
+                //user did not buy book
+                //render page with no review form
+
+                //find reviews, and send them to the page
+				db.collection('Reviews'
+				).find({BookId:bookId}).toArray(function(err, reviews){
+                    if (err) {console.log(err); }
+                    else {
+						
+						// find the book details
+						db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
+						{
+							if (err) { console.log(err); }
+							else{   
+								res.render("pages/bookDetails2.ejs", {reviews: reviews, book: books, user: req.user, bookId:bookId});
+							}
+						});  
+                    };
+                });
+            }
+            else {
+                //user has bought book
+                //render page with review form
+
+                //find reviews, and send them to the page
+                db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
+                    if (err) { console.log(err); }
+                    else {
+
+						// find the book details
+						db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
+						{
+							if (err) { console.log(err); }
+							else{   
+								res.render("pages/bookDetails1.ejs", {email: req.user[0].Email, reviews: reviews, book: books, user: req.user, bookId:bookId});
+							}
+						});  
+                        //console.log(reviews);
+                        //res.render("pages/bookDetails1.ejs", {email: req.user[0].Email, reviews: reviews, user: req.user, bookId:bookId});  
+                    };
+                }); 
+            };
+        });
+    }else{
+        //find reviews, and send them to the page
+        db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
+            if (err) { console.log(err); }
+            else {
+
+				// find the book details
+				db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
+				{
+					if (err) { console.log(err); }
+					else{
+						res.render("pages/bookDetails2.ejs", {reviews: reviews, book: books, bookId:bookId});
+					}
+				});  
+            };
+        });
+    }
 });
 
-app.post('/submitReview', checkAuthenticated, (req,res) => {
+
+// AUTHOR
+app.get('/author/:id', checkAuthenticated, function(req, res){
+
+	if(req.user){
+
+		AuthorId = req.params.id
+		//console.log("id: " + AuthorId);
+		db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
+		{
+			if (err) { console.log(err); }
+			else{   
+				res.render("pages/author.ejs", {author: author, user: req.user});
+			}
+		});  
+	}
+	else{
+		AuthorId = req.params.id
+		//console.log("id: " + AuthorId);
+		db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
+		{
+			if (err) { console.log(err); }
+			else{   
+				res.render("pages/author.ejs", {author: author, user: req.user});
+			}
+		});  
+	}
+});
+
+
+//review post
+app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
     var comment = req.body.comment;
     var rating = req.body.rating;
     var date = req.body.date;
     var anonymous = false;
-
-    console.log(date);
+    var bookId = req.params.id;
 
     if (req.body.anonymous == 'on'){
         anonymous = true;
@@ -175,20 +538,26 @@ app.post('/submitReview', checkAuthenticated, (req,res) => {
 
     //insert 
     db.collection('Reviews').insertOne({
-        BookId: "d8a9e774a8e050c38420630",
-        UserId: 1,
+        //TODO: get bookid from book details page
+        BookId: bookId,
+        UserId: req.user[0]._id,
+        Nickname: req.user[0].Nickname,
         Date: date,
         Rating: rating,
         Comment: comment,
         Anonymous: anonymous
     });
 
-    res.render('pages/review.ejs');
+    //TODO: update book rating field
+
+    res.redirect('/bookDetails/' + bookId);
 });
 
+//log out
 app.delete('/logout', function(req, res){
     req.logOut()
-    res.redirect('/login')
+	res.redirect('/login')
+	em = ""; // clearing the email variable (used for shopping cart only)
 });
 
 
@@ -201,6 +570,14 @@ function checkAuthenticated(req, res, next){
     }
 }
 
+//for home page,shopping cart user doesnt have to be logged in
+function checkAuthenticated2(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }else{
+        return next();
+    }
+}
 function checkNotAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return res.redirect('/')
@@ -215,6 +592,7 @@ function initialize(passport){
             if (err) { console.log(err); }
             else {
                 var userFound = user[0];
+				em = email;// when user is logged in saves the email, used is cart.
 
                 if(userFound == null){
                     return done(null, false, {message: 'No user found with that email.'})

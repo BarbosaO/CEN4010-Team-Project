@@ -1,25 +1,14 @@
+<!-- views/pages/bookDetails.ejs -->
 <!DOCTYPE html>
-<html>
-    <nav role="navigation">
-        <ul class="nav justify-content-end">
-            <li class="nav-item">
-                <a href="/">Home</a>
-            </li>
-        </ul> 
-    </nav>
+<html lang="en">
     <head>
         <% include partials/header.ejs %>
-        <h1 align="center">BOOK DETAILS</h1>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+        <script type="text/javascript" src="../scripts/stars.js"></script>
+        <script type="text/javascript" src="../scripts/validateReview.js"></script>
     </head>
-
     <body class="container-fluid">
         <main>
+            <h1 align="center">BOOK DETAILS</h1>
             <div class="container-fluid">
                 <!-- Beginning of the cart -->
                 <div class="row">
@@ -35,11 +24,11 @@
                                             <th> 
                                                 <!-- Book Author -->
                                                 <div class="product-author">
-                                                    <p class="author">Author: <%= book.Author %></p>
+                                                    <p class="author">Author: <a href="/author/<%=book.AuthorID%>"> <%= book.Author %></a></p>
                                                 </div>
                                                 <!-- Book cover -->
                                                 <div class="product-cover">
-                                                    <img src = <%= book.Cover %> width="80" height="100" title="" />    
+                                                    <img src = <%= book.Cover %> width="140" height="200" title="" />    
 												</div> 
 												 <!-- Book price -->
 												 <div class="product-price">
@@ -76,8 +65,33 @@
                                 <% })%>
                             </div> 
                         </div>
-                    </div>                              
+                    </div>
+                </div>
+            </div>
+            <h1>reviews list</h1>
+            <hr>
+            <% reviews.forEach(review => {%>
+                <div class="row">
+                    <p class="rating">Rating: </p>
+                    <%for (i = 0; i < review.Rating; i++){%>
+                        <span class="fa fa-star" style="color:orange;"></span>
+                    <%}%>
+                </div>
+                <p class="date">Date: <%= review.Date %></p>
+                <p class="comment">Comment: <%= review.Comment %> </p>
+                <%if(review.Anonymous == true){%>
+                    <p class="anon">Anonymous</p>
+                <%}else{%>
+                    <p><%= review.Nickname %></p>
+                <%}%>
+                <hr>
+            <% })%>
+                   
         </main>
-        <% include partials/footer.ejs %>
+
+        <footer class="footer">
+            <% include partials/footer.ejs %>
+        </footer>
+
     </body>
 </html>

@@ -12,7 +12,11 @@
     <ul class="navbar-nav col-12" style="margin-right:0;">
         <a class="navbar-brand" href="/bookList">Book Store</a>
         <% if(locals.user){%>
-        <li class="nav-item dropdown">
+        
+        <li>
+            <a class="nav-link" >Welcome, <%= user[0].First_Name %>!</a>
+        </li>
+        <li class="nav-item dropdown" aligh="right">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Wish Lists
             </a>
@@ -28,6 +32,7 @@
             </a> 
         </li>
         <li class="nav-item">
+            
             <a class="nav-link" href="/editProfile">Profile</a>
         </li>
         <li class="nav-item">
@@ -41,6 +46,11 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/login">Log In</a>
+                </li>
+                <li class="nav-item"> 
+                    <a class="navbar-brand" href="/cart">
+                        <img src="https://www.goodfreephotos.com/cache/vector-images/big-shopping-cart-vector-clipart_800.png?cached=1522422556" width="20" height="20" alt="">
+                    </a> 
                 </li>
         <% } %>
     </ul>

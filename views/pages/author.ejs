@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <nav role="navigation">
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a href="/">Home</a>
+            </li>
+        </ul> 
+    </nav>
+    <head>
+        <% include partials/header.ejs %>
+        <h1 align="center">AUTHOR DETAILS</h1>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+    </head>
+
+    <body class="container-fluid">
+        <main>
+            <div class="container-fluid">
+                <!-- Beginning of the cart -->
+                <div class="row">
+                    <div class="col-xs-9 col-md-7">        
+                        <div class="jumbotron">  
+                            <div class="book">  
+                                <% author.forEach(author => {%>  
+                                    <!-- main table --> 
+                                    <table style width="100%">
+                                        <tr>
+                                            <!-- Book title -->
+                                            <h5 class="name" ><%= author.Name %> </h5>
+                                            <th> 
+                                                <!-- Author Picture -->
+                                                <div class="author-picture">
+                                                    <img src = <%= author.Picture %> width="140" height="200" title="" />    
+												</div> 
+												 <!-- Author-Bio -->
+												 <div class="author-bio">
+                                                    <p class="bio">Bio: <%= author.Bio %></p>
+												</div>
+												<!-- Author-Born -->
+												<div class="author-born">
+                                                    <p class="born" > Born: <%= author.Born %></p>
+												</div>
+												 <!-- Author-Website -->
+												 <div class="author-website">
+                                                    <p class="website">Website: <a href="<%= author.Website %>"><%= author.Website %> </a></p>
+												</div> 
+											</th>
+                                        </tr>
+                                    </table> 
+                                <% })%>
+                            </div> 
+                        </div>
+                    </div>                              
+        </main>
+        <% include partials/footer.ejs %>
+    </body>
+</html>
