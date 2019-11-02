@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <% include partials/header.ejs %>
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+	</head>
+	<body class ="container-fluid">
+<h1 align="center">Books List</h1>
+  <hr>
+<form align="center" action= "/book_filter" method="post">
+    	<label for="book_genre">Genre: </label>
+    	<input bGenre="book_genre" type="text" name="genre">
+      <label for="book_author">Author: </label>
+      <input bAuthor="book_author" type="text" name="author">
+      <label for="book_title">Title: </label>
+      <input bTitle="book_title" type="text" name="title">
+      <label for="book_avgReview">Min Rating (0-5):</label>
+      <input bAvgReview="book_avgReview" type="number" name="avgReview">
+      <input type="submit" value="Filter Books">
+</form>
+    <hr></hr>
+    <main>
+  <% docs.forEach(book => {%>
+      <img src =" <%= book.Cover %>" width="180" height="225" title="" />
+	    <p class = "" ><%= book.Title %></p>
+  	  <p class = "" >By: <%= book.Author %></p>
+	    <p class = "" >Genre: <%= book.Genre %></p>
+	    <p class = "" >Price: $<%= book.Price %></p>
+      <a class = "" href="/bookDetails/<%=book._id%>"> View Details </a>
+      <% if(user){%>
+        <form action="/AddToCart" method="POST">
+          <input type="text" name="id" value="<%= book._id %>" style="display:none;">
+          <input type="text" name ="title" value = "<%= book.Title %>" style="display:none;">
+          <input type="text" name ="author" value = "<%= book.Author %>" style="display:none;">
+          <input type="text" name ="price" value = "<%= book.Price %>" style="display:none;">
+          <input type="text" name ="descr" value = "<%= book.Description%>" style="display:none;">
+          <input type="text" name ="cover" value = "<%= book.Cover %>" style="display:none;">
+          <input type="submit" value="Add To Cart">
+        </form>
+      <% } %>
+     <hr>
+    <% })%>
+  </main>
+   <% include partials/footer.ejs %>
+     
+</body>
+</html>

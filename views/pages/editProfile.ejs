@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include partials/header.ejs %>
+    <title>Edit Profile | WebApp</title>
+</head>
+<body>
+    
+    <div class="center">
+    <h1>Edit Profile</h1>
+    
+    <form action="/updateProfile?_method=PUT" method="POST">
+        <h5><strong>Login Credentials</strong></h5>
+        Email:<br>
+        <input type="email" name="email" value="<%= user[0].Email %>"><br>
+        Password:<br>
+        <input type="text" name="password" value="<%= user[0].Password %>"><br>
+
+        <h5><strong>Personal Information</strong></h5>
+        First Name:<br>
+        <input type="text" name="firstname" value="<%= user[0].First_Name %>"><br>
+        Last Name:<br>
+        <input type="text" name="lastname"><br>
+        Home Address Line 1:<br>
+        <input type="text" name="homeaddr"><br>
+        City:<br>
+        <input type="text" name="city"><br>
+        State/Province/Region:<br>
+        <input type="text" name="state"><br>
+        ZIP/Postal Code:<br>
+        <input type="number" name="zip"><br>
+        Country:<br>
+        <input type="text" name="country"><br>
+
+        <h5><strong>Nickname (for Book Rating and Commenting)</strong></h5>
+        <input type="text" name="nickname"><br>
+
+        <div class="alert alert-danger" id="ccAlert" role="alert" style="display:none;">
+            Credit card number invalid.
+        </div>
+        <h5><strong>Credit Card Information:</strong></h5>
+        Owner:<br>
+        <input type="text" name="creditOwner"><br>
+        CVV:<br>
+        <input type="number" name="cvv"><br>
+        Card Number:<br>
+        <input type="number" name="creditCard" id="ccNum"><br>
+        Expiration Date:<br>
+        <input type="date" name="expDate">
+
+        <!-- <h5><strong>Shipping:</strong></h5>
+        <input type="checkbox" onclick="SetBilling(this.checked);"/> Same as Home Address<br>
+        Shipping Address Line 1:<br>
+        <input type="text" name="shipaddr" required><br>
+        City:<br>
+        <input type="text" name="shipcity" required><br>
+        State/Province/Region:<br>
+        <input type="text" name="shipstate" required><br>
+        ZIP/Postal Code:<br>
+        <input type="number" name="shipzip" required><br>
+        Country:<br>
+        <input type="text" name="shipcountry" required><br> -->
+        <br>
+        <button type="submit" class="btn btn-default" id="saveChanges">Save Changes</button>
+    </form>
+
+    
+    <footer>
+        <% include partials/footer %>
+    </footer>
+    <script>
+        function validate(){
+            var ccNum = document.getElementById("ccNum").value;
+            var numbers = /^[0-9]+$/;
+            if(ccNum.match(numbers)){
+                return true;
+            }else{
+                //alert('please input numeric characters only');
+                document.getElementById('ccAlert').style.display = 'block';
+                return false;
+            }
+        }
+        function SetBilling(checked) {  
+          if (checked) {  
+                    document.getElementById('homeaddr').value = document.getElementById('shipaddr').value;   
+                    document.getElementById('city').value = document.getElementById('shipcity').value;   
+                    document.getElementById('state').value = document.getElementById('shipstate').value;   
+                    document.getElementById('zip').value = document.getElementById('shipzip').value;   
+                    document.getElementById('country').value = document.getElementById('shipcountry').value;   
+          } else {  
+                    document.getElementById('homeaddr').value = '';   
+                    document.getElementById('city').value = '';   
+                    document.getElementById('state').value = '';   
+                    document.getElementById('zip').value = '';   
+                    document.getElementById('country').value = '';   
+          }  
+}
+    </script>
+</div>
+</body>
+</html>
