@@ -456,50 +456,51 @@ app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
     if(req.user){ //if user logged in
         userId = req.user[0]._id
         //db query to check if user has bought book
-        db.collection('Purchased').find({book:bookId, user: userId}).toArray(function(err, reviews){
-            if (err) { 
-                console.log(err); 
-                //user did not buy book
-                //render page with no review form
-
-                //find reviews, and send them to the page
-				db.collection('Reviews'
-				).find({BookId:bookId}).toArray(function(err, reviews){
-                    if (err) {console.log(err); }
-                    else {
-						
-						// find the book details
-						db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
-						{
-							if (err) { console.log(err); }
-							else{   
-								res.render("pages/bookDetails2.ejs", {reviews: reviews, book: books, user: req.user, bookId:bookId});
-							}
-						});  
-                    };
-                });
-            }
+        db.collection('Purchased').find({book:bookId, user: userId}).toArray(function(err, purchased){
+            if (err) { console.log(err); }
             else {
-                //user has bought book
-                //render page with review form
+				if(purchased.length == 0){
+					//user did not buy book
+					//render page with no review form
 
-                //find reviews, and send them to the page
-                db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
-                    if (err) { console.log(err); }
-                    else {
+					//find reviews, and send them to the page
+					db.collection('Reviews'
+					).find({BookId:bookId}).toArray(function(err, reviews){
+						if (err) {console.log(err); }
+						else {
+							
+							// find the book details
+							db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
+							{
+								if (err) { console.log(err); }
+								else{   
+									res.render("pages/bookDetails2.ejs", {reviews: reviews, book: books, user: req.user, bookId:bookId});
+								}
+							});  
+						};
+					});
+				
+				}else{
 
-						// find the book details
-						db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
-						{
-							if (err) { console.log(err); }
-							else{   
-								res.render("pages/bookDetails1.ejs", {email: req.user[0].Email, reviews: reviews, book: books, user: req.user, bookId:bookId});
-							}
-						});  
-                        //console.log(reviews);
-                        //res.render("pages/bookDetails1.ejs", {email: req.user[0].Email, reviews: reviews, user: req.user, bookId:bookId});  
-                    };
-                }); 
+					//user has bought book
+					//render page with review form
+
+					//find reviews, and send them to the page
+					db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
+						if (err) { console.log(err); }
+						else {
+
+							// find the book details
+							db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
+							{
+								if (err) { console.log(err); }
+								else{   
+									res.render("pages/bookDetails1.ejs", {email: req.user[0].Email, reviews: reviews, book: books, user: req.user, bookId:bookId});
+								}
+							});  
+						};
+					}); 
+				}
             };
         });
     }else{
