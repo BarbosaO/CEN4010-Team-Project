@@ -11,7 +11,6 @@ const methodOverride = require('method-override');
 const flash = require('express-flash');
 var ObjectId = require('mongodb').ObjectID;
 var db;
-var em; //email
 
 initialize(passport);
 
@@ -120,7 +119,7 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 			}
 		).toArray(function(err, docs){
 	
-			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
+			xc
 		});
 	}
 	else if(title == "")
@@ -319,16 +318,14 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 
 });
 
-
 // SHOPPING CART 
-app.get('/cart', checkAuthenticated2, (req, res) =>{
-	//console.log(em);
-    db.collection('carts').find({"Email": em}).toArray(function(err, books)
+app.get('/cart', checkAuthenticated, (req, res) =>{
+    db.collection('carts').find({"Email": req.user[0].Email}).toArray(function(err, books)
     {
         if (err) { console.log(err); }
         else{  
            		db.collection('carts').aggregate([
-                {$match: {Email: em}},
+                {$match: {Email: req.user[0].Email}},
                 {$group: {_id:0, Subtotal:{$sum: {$multiply: ["$Price", "$qty"]}}}}
                 ]).toArray(function(err, price){
 					if (err) { console.log(err); }
@@ -336,7 +333,7 @@ app.get('/cart', checkAuthenticated2, (req, res) =>{
             		{
 						
 						console.log(price.Subtotal);
-						res.render("pages/cart.ejs", {cart: books, user: req.user, total:price});
+						res.render("pages/cart.ejs", {cart: books, user: req.user, name: req.user[0].First_Name, total:price});
 					}
         		});   
         	}
@@ -349,9 +346,8 @@ app.post('/add1', checkAuthenticated, (req,res) => {
     var new_qty = parseInt(req.body.qty) + 1;
     
     try{
-    db.collection('carts').updateOne({"_id": ObjectId(id)}, {$set: {qty: new_qty}});
-    }catch(e)
-    {console.log(e);}
+    	db.collection('carts').updateOne({"_id": ObjectId(id)}, {$set: {qty: new_qty}});
+    }catch(e){console.log(e);}
 
     res.redirect('/cart');
 });
@@ -396,8 +392,7 @@ app.delete('/deleteCart', checkAuthenticated, (req,res) => {
 });
 
 //add book to cart from booklist
-app.post('/AddToCart', checkAuthenticated, (req,res) =>
-{
+app.post('/AddToCart', checkAuthenticated, (req,res) =>{
 	var bookTitle = req.body.title;
 	var bookAuth = req.body.author;
 	var bookDescr = req.body.descr;
@@ -406,21 +401,20 @@ app.post('/AddToCart', checkAuthenticated, (req,res) =>
 	var qty = 1;
 	try{
 		db.collection('carts').insertOne({
-		Email: req.user[0].Email,
-		Title: bookTitle,
-		Author: bookAuth,
-		Description: bookDescr,
-		Price: bookPrice,
-		Cover: bookCover,
-		qty: qty
+			Email: req.user[0].Email,
+			Title: bookTitle,
+			Author: bookAuth,
+			Description: bookDescr,
+			Price: bookPrice,
+			Cover: bookCover,
+			qty: qty
 		});
 
-		}catch(e){
-			console.log(e);
-		}
+	}catch(e){
+		console.log(e);
+	}
 
-		res.redirect('/booklist');
-          
+	res.redirect('/bookList')
 });
 
 //BOOK DETAILS
@@ -523,6 +517,7 @@ function checkAuthenticated2(req, res, next){
         return next();
     }
 }
+
 function checkNotAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return res.redirect('/')
@@ -537,7 +532,6 @@ function initialize(passport){
             if (err) { console.log(err); }
             else {
                 var userFound = user[0];
-				em = email;// when user is logged in saves the email, used is cart.
 
                 if(userFound == null){
                     return done(null, false, {message: 'No user found with that email.'})

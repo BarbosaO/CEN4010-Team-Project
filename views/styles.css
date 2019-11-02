@@ -1,5 +1,5 @@
 body{
-    padding-top:25px;
+    padding:0;
 }
 
 /* 5 star rating system */
@@ -14,6 +14,50 @@ body{
     padding: 10px;
     text-align: center;
   }
+
+.button {
+ 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button5 {background-color: #555555;} /* Black */
+
+.button2 {
+ 
+    border: none;
+    color: white;
+    padding: 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+.button1 {
+ 
+    border: none;
+    color: rgb(7, 7, 7);
+    padding: 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 1px 1px;
+    cursor: pointer;
+  }
+  
+  .button4 {background-color: #e7e7e7;}/* Grey */
 
 #logOutButton{
     border:none;
