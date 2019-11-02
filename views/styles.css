@@ -1,5 +1,5 @@
 body{
-    padding-top:25px;
+    padding:0;
 }
 
 /* 5 star rating system */
@@ -15,6 +15,53 @@ body{
     text-align: center;
   }
 
+<<<<<<< HEAD
+=======
+.button {
+ 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button5 {background-color: #555555;} /* Black */
+
+.button2 {
+ 
+    border: none;
+    color: white;
+    padding: 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+.button1 {
+ 
+    border: none;
+    color: rgb(7, 7, 7);
+    padding: 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 1px 1px;
+    cursor: pointer;
+  }
+  
+  .button4 {background-color: #e7e7e7;}/* Grey */
+
+>>>>>>> 860bf281e38cb14a2b4edbe94f9d97786b25ac70
 #logOutButton{
     border:none;
     color:rgb(144, 148, 150);
