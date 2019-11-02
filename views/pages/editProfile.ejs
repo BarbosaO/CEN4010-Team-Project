@@ -20,33 +20,33 @@
         First Name:<br>
         <input type="text" name="firstname" value="<%= user[0].First_Name %>"><br>
         Last Name:<br>
-        <input type="text" name="lastname"><br>
+        <input type="text" name="lastname" value="<%= user[0].Last_Name %>"><br>
         Home Address Line 1:<br>
-        <input type="text" name="homeaddr"><br>
+        <input type="text" name="homeaddr" value="<%= user[0].Home_Address %>"><br>
         City:<br>
-        <input type="text" name="city"><br>
+        <input type="text" name="city" value="<%= user[0].Home_City %>"><br>
         State/Province/Region:<br>
-        <input type="text" name="state"><br>
+        <input type="text" name="state" value="<%= user[0].Home_State %>"><br>
         ZIP/Postal Code:<br>
-        <input type="number" name="zip"><br>
+        <input type="number" name="zip" value="<%= user[0].Home_Zip %>"><br>
         Country:<br>
-        <input type="text" name="country"><br>
+        <input type="text" name="country" value="<%= user[0].Home_Country %>"><br>
 
         <h5><strong>Nickname (for Book Rating and Commenting)</strong></h5>
-        <input type="text" name="nickname"><br>
+        <input type="text" name="nickname" value="<%= user[0].Nickname %>"><br>
 
         <div class="alert alert-danger" id="ccAlert" role="alert" style="display:none;">
             Credit card number invalid.
         </div>
         <h5><strong>Credit Card Information:</strong></h5>
         Owner:<br>
-        <input type="text" name="creditOwner"><br>
+        <input type="text" name="creditOwner" value="<%= user[0].Credit_Owner %>"><br>
         CVV:<br>
-        <input type="number" name="cvv"><br>
+        <input type="number" name="cvv" value="<%= user[0].CVV %>"><br>
         Card Number:<br>
-        <input type="number" name="creditCard" id="ccNum"><br>
+        <input type="number" name="creditCard" id="ccNum" value="<%= user[0].Credit_Card %>"><br>
         Expiration Date:<br>
-        <input type="date" name="expDate">
+        <input type="date" name="expDate" value="<%= user[0].Exp_Date %>">
 
         <!-- <h5><strong>Shipping:</strong></h5>
         <input type="checkbox" onclick="SetBilling(this.checked);"/> Same as Home Address<br>

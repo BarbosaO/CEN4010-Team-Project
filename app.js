@@ -282,15 +282,40 @@ app.get('/editProfile', checkAuthenticated, (req, res) => {
 
 app.put('/updateProfile', checkAuthenticated, (req, res) => {
 	
-	user = req.user[0]
-    email = user.email
-	// nickname = user.nickname 
+	user = req.user[0];
+	
+    // email = user.email;
+	// password = user.password;
+	// firstname = user.firstname;
+	// lastname = user.lastname;
+	// homeaddr = user.homeaddr;
+	// city = user.city;
+	// state = user.state;
+	// zip = user.zip; 
+	// country = user.country;
+	// nickname = user.nickname; 
+	// creditOwner = user.creditOwner; 
+	// cvv = user.cvv; 
+	// creditCard = user.creditCard;
+	// expDate = user.expDate;  
 
 	var id = user._id;
 
 	db.collection('User').updateOne({"_id": ObjectId(id)}, {$set: {
 		Email: req.body.email,
-		Password: req.body.password
+		Password: req.body.password,
+		First_Name: req.body.firstname,
+		Last_Name: req.body.lastname,
+		Home_Address: req.body.homeaddr,
+		Home_City: req.body.city,
+		Home_State: req.body.state,
+		Home_Zip: req.body.zip,
+		Home_Country: req.body.country,
+		Nickname: req.body.nickname,
+		Credit_Owner: req.body.creditOwner,
+		CVV: req.body.cvv,
+		Credit_Card: req.body.creditCard,
+		Exp_Date: req.body.expDate
 	 }
 	 }, function (err, result) {
 		  if (err) {
@@ -310,6 +335,8 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 					console.log(err);
 					res.redirect('/login');
 				}else{
+					console.log(newUser);
+					console.log(newUser[0]);
 					res.render('pages/editProfile.ejs', {user: newUser});
 				}
 			});
