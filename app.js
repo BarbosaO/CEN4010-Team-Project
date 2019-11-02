@@ -334,8 +334,6 @@ app.get('/cart', checkAuthenticated2, (req, res) =>{
 					if (err) { console.log(err); }
             		else
             		{
-						var sub = 0;
-						sub = price;
 						
 						console.log(price.Subtotal);
 						res.render("pages/cart.ejs", {cart: books, user: req.user, total:price});
