@@ -329,6 +329,10 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 
 });
 
+// TODO: PROFILE PAGE
+app.get('/profile', checkAuthenticated, (req, res) => {  
+    res.render('pages/profile.ejs',{user: req.user});
+});
 
 // SHOPPING CART 
 app.get('/cart', checkAuthenticated2, (req, res) =>{
