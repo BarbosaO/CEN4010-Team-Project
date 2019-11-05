@@ -30,6 +30,7 @@ app.use(passport.session());
 app.use(methodOverride('_method')); // for delete and put requests
 
 //ROUTES
+
 //BOOK LIST
 app.get("/", (req,res) => {
     res.redirect('/bookList');
@@ -275,9 +276,13 @@ app.post("/register", (req, res) =>{
 });
 
 // TODO: EDIT PROFILE
+app.get('/profile', checkAuthenticated, (req, res) => {  
+    res.render('pages/profile.ejs', {user: req.user});
+});
+
 
 app.get('/editProfile', checkAuthenticated, (req, res) => {  
-    res.render('pages/editProfile.ejs',{user: req.user});
+    res.render('pages/editProfile.ejs', {user: req.user});
 });
 
 app.put('/updateProfile', checkAuthenticated, (req, res) => {
@@ -317,9 +322,9 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 			req.login(newUser[0], function(err) {
 				if (err) {
 					console.log(err);
-					res.redirect('/editProfile', {message: "user not updated"});
+					res.render('/pages/editProfile.ejs', {user: req.user, message: "user not updated"});
 				}else{
-					res.redirect('/editProfile', {message: "user updated"});
+					res.render('pages/editProfile.ejs', {user: req.user, message: "user updated"});
 				}
 			});
     	}  
