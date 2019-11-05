@@ -14,8 +14,7 @@
                 <div class="row">
                     <div class="col-xs-9 col-md-7">        
                         <div class="jumbotron">  
-                            <div class="book">  
-                                <% book.forEach(book => {%>  
+                            <div class="book"> 
                                     <!-- main table --> 
                                     <table style width="100%">
                                         <tr>
@@ -62,12 +61,11 @@
 											</th>
                                         </tr>
                                     </table> 
-                                <% })%>
                             </div> 
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>                         
             <h1>reviews list</h1>
             <hr>
             <% reviews.forEach(review => {%>
@@ -86,12 +84,73 @@
                 <%}%>
                 <hr>
             <% })%>
-                   
+
+            <%if(purchased == true){ %>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-6">
+                            <form action="/submitReview/<%= bookId %>" method="POST">
+                                <div class="form-group">
+                                    <div class="form-inline row">
+                                        <div class="col-5"></div>
+                                        <div class="col-7">
+                                            <p id="invisibleNickname"style="display:none"><%= nickname %></p>
+                                            <p id="nickname"style="margin-bottom:0; text-align:right;">Comment as: <%= nickname %></p>
+                                        </div>
+                                    </div>
+                                    <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                                </div>
+
+                                <!-- input will hold value for date -->
+                                <input type="text" class="d-none" id="date" name="date">
+
+                                <!-- this input will hold the value for rating to send to backend -->
+                                <input type="number" class="d-none" id="rating" name="rating">
+
+                                <!-- Star Rating -->
+                                <div class="form-inline row">
+                                    <div class="col-3">
+                                        <span class="fa fa-star" id="star1"></span>
+                                        <span class="fa fa-star" id="star2"></span>
+                                        <span class="fa fa-star" id="star3"></span>
+                                        <span class="fa fa-star" id="star4"></span>
+                                        <span class="fa fa-star" id="star5"></span>
+                                    </div>
+                                    <div class="col-6"></div>
+                                    <div class="form-check col-3">
+                                        <input class="form-check-input" type="checkbox" id="anonymous" name="anonymous" onclick="toggleAnon()">
+                                        <label class="form-check-label" style="color:grey;" for="anonymous">Anonymous</label>
+                                    </div> 
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-9"></div>
+                                    <div class="col-3">
+                                        <button  onclick="validateReview()" class="btn btn-success btn-md" type="submit">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-3"></div>
+                    </div>    
+                </div>
+            <% } %>
         </main>
 
         <footer class="footer">
             <% include partials/footer.ejs %>
         </footer>
 
+        <script>
+                function toggleAnon(){
+                    if(document.getElementById('anonymous').checked == true){
+                        console.log('anon')
+                        document.getElementById('nickname').innerHTML = 'Comment as: Anonymous';
+                    }else{
+                        document.getElementById('nickname').innerHTML = 'Comment as: ' + document.getElementById('invisibleNickname').innerHTML;
+                    }
+                }
+            </script>
     </body>
 </html>

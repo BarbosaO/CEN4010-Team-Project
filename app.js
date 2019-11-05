@@ -11,7 +11,6 @@ const methodOverride = require('method-override');
 const flash = require('express-flash');
 var ObjectId = require('mongodb').ObjectID;
 var db;
-var em; //email
 
 initialize(passport);
 
@@ -312,23 +311,20 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 	});
 
 	//update the logged in user
-	db.collection('User').find({"_id": ObjectId(id)}).toArray(function(err, newUser)
-    {
+	db.collection('User').find({"_id": ObjectId(id)}).toArray(function(err, newUser){
         if (err) { console.log(err); }
         else{   
-            req.login(newUser[0], function(err) {
+			req.login(newUser[0], function(err) {
 				if (err) {
 					console.log(err);
-					res.redirect('/login');
+					res.redirect('/editProfile', {message: "user not updated"});
 				}else{
-					res.render('pages/editProfile.ejs', {user: newUser});
+					res.redirect('/editProfile', {message: "user updated"});
 				}
 			});
-        }
-    });  
-
+    	}  
+	});
 });
-
 
 // SHOPPING CART 
 app.get('/cart', checkAuthenticated2, (req, res) =>{
@@ -435,74 +431,36 @@ app.post('/AddToCart', checkAuthenticated, (req,res) =>
 
 //BOOK DETAILS
 app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
-    bookId = req.params.id
-    if(req.user){ //if user logged in
-        userId = req.user[0]._id
-        //db query to check if user has bought book
-        db.collection('Purchased').find({book:bookId, user: userId}).toArray(function(err, purchased){
-            if (err) { console.log(err); }
-            else {
-				if(purchased.length == 0){
-					//user did not buy book
-					//render page with no review form
+	var bookId = req.params.id
 
-					//find reviews, and send them to the page
-					db.collection('Reviews'
-					).find({BookId:bookId}).toArray(function(err, reviews){
-						if (err) {console.log(err); }
-						else {
-							
-							// find the book details
-							db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
-							{
-								if (err) { console.log(err); }
-								else{   
-									res.render("pages/bookDetails2.ejs", {reviews: reviews, book: books, user: req.user, bookId:bookId});
-								}
-							});  
-						};
-					});
-				
-				}else{
-
-					//user has bought book
-					//render page with review form
-
-					//find reviews, and send them to the page
-					db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
+	//find reviews, and send them to the page
+	db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
+		if (err) {console.log(err); }
+		else {
+			// find the book details
+			db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, book){
+				if(req.user){ //if user logged in
+					var userId = req.user[0]._id
+					db.collection('Purchased').find({book:bookId, user: userId}).toArray(function(err, purchased){
 						if (err) { console.log(err); }
 						else {
-
-							// find the book details
-							db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
-							{
-								if (err) { console.log(err); }
-								else{   
-									res.render("pages/bookDetails1.ejs", {email: req.user[0].Email, reviews: reviews, book: books, user: req.user, bookId:bookId});
-								}
-							});  
-						};
-					}); 
+							if(purchased.length == 0){
+								//user did not buy book
+								//render page with no review form
+								res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, bookId:bookId, purchased:false});
+							}else{
+								//user did buy book
+								//render page with review form
+								res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, nickname:req.user[0].Nickname, bookId:bookId, purchased:true});
+							}	
+						}  
+					});
+				}else{
+					res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], bookId:bookId, purchased:false});
 				}
-            };
-        });
-    }else{
-        //find reviews, and send them to the page
-        db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
-            if (err) { console.log(err); }
-            else {
-
-				// find the book details
-				db.collection('Books').find({_id: ObjectId(bookId)}).toArray(function(err, books)
-				{
-					if (err) { console.log(err); }
-					else{
-						res.render("pages/bookDetails2.ejs", {reviews: reviews, book: books, bookId:bookId});
-					}
-				});  
-            };
-        });
-    }
+			});
+		}
+	});
 });
 
 
@@ -559,7 +517,26 @@ app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
         Anonymous: anonymous
     });
 
-    //TODO: update book rating field
+	var averageReview = 0;
+	//find reviews
+	db.collection('Reviews').find({"BookId":bookId}).toArray(function(err, reviews){
+		if (err) { console.log(err); }
+		else {
+			var i = 0;
+			var sum = 0;
+			for(i = 0; i < reviews.length; i++){
+				sum = sum + parseInt(reviews[i].Rating);
+			}
+			averageReview = sum / reviews.length;
+
+			//update book rating field
+			db.collection('Books').updateOne({"_id": ObjectId(bookId)}, {$set: {AvgReview: averageReview}
+				}, function (err, result) {
+						if (err) { console.log(err)}
+				}
+			);
+		};
+	}); 
 
     res.redirect('/bookDetails/' + bookId);
 });
@@ -568,7 +545,6 @@ app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
 app.delete('/logout', function(req, res){
     req.logOut()
 	res.redirect('/login')
-	em = ""; // clearing the email variable (used for shopping cart only)
 });
 
 
