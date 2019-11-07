@@ -473,36 +473,6 @@ app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
 	});
 });
 
-
-// AUTHOR
-app.get('/author/:id', checkAuthenticated, function(req, res){
-
-	if(req.user){
-
-		AuthorId = req.params.id
-		//console.log("id: " + AuthorId);
-		db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
-		{
-			if (err) { console.log(err); }
-			else{   
-				res.render("pages/author.ejs", {author: author, user: req.user});
-			}
-		});  
-	}
-	else{
-		AuthorId = req.params.id
-		//console.log("id: " + AuthorId);
-		db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
-		{
-			if (err) { console.log(err); }
-			else{   
-				res.render("pages/author.ejs", {author: author, user: req.user});
-			}
-		});  
-	}
-});
-
-
 //review post
 app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
     var comment = req.body.comment;
@@ -549,6 +519,34 @@ app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
 	}); 
 
     res.redirect('/bookDetails/' + bookId);
+});
+
+// AUTHOR
+app.get('/author/:id', checkAuthenticated, function(req, res){
+
+	if(req.user){
+
+		AuthorId = req.params.id
+		//console.log("id: " + AuthorId);
+		db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
+		{
+			if (err) { console.log(err); }
+			else{   
+				res.render("pages/author.ejs", {author: author, user: req.user});
+			}
+		});  
+	}
+	else{
+		AuthorId = req.params.id
+		//console.log("id: " + AuthorId);
+		db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
+		{
+			if (err) { console.log(err); }
+			else{   
+				res.render("pages/author.ejs", {author: author, user: req.user});
+			}
+		});  
+	}
 });
 
 //log out

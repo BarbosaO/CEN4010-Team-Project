@@ -7,17 +7,25 @@ function validateReview(){
     var formRating = document.getElementById('rating');
     formRating.value = rating;
 
-    // console.log('comment: ' + comment);
-    // console.log('anonymous: ' + anonymous);
-    // console.log('rating: ' + rating);
-
     if(rating == 0){
-        alertRating();
-        if(comment == "" || comment == " " ){
-            return alertMessage();
+        //if rating warning is already visible - then user wants to leave rating 0
+        if(!document.getElementById('ratingWarning').classList.contains("d-none")){
+            if(comment == "" || comment == " " ){
+                document.getElementById('commentWarning').classList.remove('d-none');
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            document.getElementById('ratingWarning').classList.remove('d-none');
+            if(comment == "" || comment == " " ){
+                document.getElementById('commentWarning').classList.remove('d-none');
+            }
+            return false;
         }
     }else if(comment == "" || comment == " " ){
-        return alertComment();
+        document.getElementById('commentWarning').classList.remove('d-none');
+        return false;
     }
 }
 
@@ -41,20 +49,6 @@ function getRating(){
     }else{
         return 0;
     }
-}
-
-function alertRating(){
-    var retVal = confirm("Are you sure you want to give this book 0 stars?");
-    return retVal;
-}
-
-function alertComment(){
-    var retVal = confirm("Are you sure you want to leave an empty comment?");
-    return retVal;
-}
-
-function alertMessage(){
-    alert("Please explain why you're leaving 0 stars.");
 }
 
 function getDate(){
