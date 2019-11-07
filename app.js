@@ -460,8 +460,17 @@ app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
 								res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, bookId:bookId, purchased:false});
 							}else{
 								//user did buy book
-								//render page with review form
-								res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, nickname:req.user[0].Nickname, bookId:bookId, purchased:true});
+								//render page with review form(if user has not already left a review)
+								db.collection('Reviews').find({BookId:bookId, UserId: userId}).toArray(function(err, reviewsByUser){
+								    if (err) { console.log(err); }
+									else {
+										if(reviewsByUser.length > 0){
+											res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, bookId:bookId, purchased:false});
+										}else{
+											res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, nickname:req.user[0].Nickname, bookId:bookId, purchased:true});
+										}
+									}
+								});
 							}	
 						}  
 					});
