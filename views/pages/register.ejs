@@ -27,7 +27,7 @@
         <input type="text" name="firstname" required><br>
         Last Name:<br>
         <input type="text" name="lastname" required><br>
-        Home Address Line 1:<br>
+        Home Address:<br>
         <input type="text" name="homeaddr" required><br>
         City:<br>
         <input type="text" name="city" required><br>
@@ -52,11 +52,10 @@
         Card Number:<br>
         <input type="number" name="creditCard" id="ccNum" required><br>
         Expiration Date:<br>
-        <input type="date" name="expDate">
+        <input type="date" name="expDate" required>
 
-        <!-- <h5><strong>Shipping:</strong></h5>
-        <input type="checkbox" onclick="SetBilling(this.checked);"/> Same as Home Address<br>
-        Shipping Address Line 1:<br>
+        <h5><strong>Shipping:</strong></h5>
+        Shipping Address:<br>
         <input type="text" name="shipaddr" required><br>
         City:<br>
         <input type="text" name="shipcity" required><br>
@@ -65,43 +64,28 @@
         ZIP/Postal Code:<br>
         <input type="number" name="shipzip" required><br>
         Country:<br>
-        <input type="text" name="shipcountry" required><br> -->
+        <input type="text" name="shipcountry" required><br>
         <br>
         <button type="submit" class="btn btn-default" id="register">Register</button>
     </form>
 
-    
     <footer>
         <% include partials/footer %>
     </footer>
-    <script>
-        function validate(){
-            var ccNum = document.getElementById("ccNum").value;
-            var numbers = /^[0-9]+$/;
-            if(ccNum.match(numbers)){
-                return true;
-            }else{
-                //alert('please input numeric characters only');
-                document.getElementById('ccAlert').style.display = 'block';
-                return false;
+
+        <script>
+            function validate(){
+                var ccNum = document.getElementById("ccNum").value;
+                var numbers = /^[0-9]+$/;
+                if(ccNum.match(numbers)){
+                    return true;
+                }else{
+                    //alert('please input numeric characters only');
+                    document.getElementById('ccAlert').style.display = 'block';
+                    return false;
+                }
             }
-        }
-        function SetBilling(checked) {  
-          if (checked) {  
-                    document.getElementById('homeaddr').value = document.getElementById('shipaddr').value;   
-                    document.getElementById('city').value = document.getElementById('shipcity').value;   
-                    document.getElementById('state').value = document.getElementById('shipstate').value;   
-                    document.getElementById('zip').value = document.getElementById('shipzip').value;   
-                    document.getElementById('country').value = document.getElementById('shipcountry').value;   
-          } else {  
-                    document.getElementById('homeaddr').value = '';   
-                    document.getElementById('city').value = '';   
-                    document.getElementById('state').value = '';   
-                    document.getElementById('zip').value = '';   
-                    document.getElementById('country').value = '';   
-          }  
-}
-    </script>
-</div>
+        </script>
+    </div>
 </body>
 </html>

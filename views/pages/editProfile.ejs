@@ -48,23 +48,20 @@
         Expiration Date:<br>
         <input type="date" name="expDate" value="<%= user[0].Exp_Date %>">
 
-        <!-- <h5><strong>Shipping:</strong></h5>
-        <input type="checkbox" onclick="SetBilling(this.checked);"/> Same as Home Address<br>
-        Shipping Address Line 1:<br>
-        <input type="text" name="shipaddr" required><br>
+        <h5><strong>Shipping:</strong></h5>
+        Shipping Address:<br>
+        <input type="text" name="shipaddr" value="<%= user[0].Ship_Address %>"><br>
         City:<br>
-        <input type="text" name="shipcity" required><br>
+        <input type="text" name="shipcity" value="<%= user[0].Ship_City %>"><br>
         State/Province/Region:<br>
-        <input type="text" name="shipstate" required><br>
+        <input type="text" name="shipstate" value="<%= user[0].Ship_State %>"><br>
         ZIP/Postal Code:<br>
-        <input type="number" name="shipzip" required><br>
+        <input type="number" name="shipzip" value="<%= user[0].Ship_Zip %>"><br>
         Country:<br>
-        <input type="text" name="shipcountry" required><br> -->
+        <input type="text" name="shipcountry" value="<%= user[0].Ship_Country %>"><br>
         <br>
         <button type="submit" class="btn btn-default" id="saveChanges">Save Changes</button>
     </form>
-
-    
     <footer>
         <% include partials/footer %>
     </footer>
@@ -80,21 +77,6 @@
                 return false;
             }
         }
-        function SetBilling(checked) {  
-          if (checked) {  
-                    document.getElementById('homeaddr').value = document.getElementById('shipaddr').value;   
-                    document.getElementById('city').value = document.getElementById('shipcity').value;   
-                    document.getElementById('state').value = document.getElementById('shipstate').value;   
-                    document.getElementById('zip').value = document.getElementById('shipzip').value;   
-                    document.getElementById('country').value = document.getElementById('shipcountry').value;   
-          } else {  
-                    document.getElementById('homeaddr').value = '';   
-                    document.getElementById('city').value = '';   
-                    document.getElementById('state').value = '';   
-                    document.getElementById('zip').value = '';   
-                    document.getElementById('country').value = '';   
-          }  
-}
     </script>
 </div>
 </body>
