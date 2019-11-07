@@ -234,11 +234,11 @@ app.post("/register", (req, res) =>{
 	var expDate = req.body.expDate;
 
 	// shipping info
-	// var shipaddr = req.body.shipaddr;
-	// var shipcity = req.body.shipcity;
-	// var shipstate = req.body.shipstate;
-	// var shipzip = req.body.shipzip;
-	// var shipcountry = req.body.shipcountry;
+	var shipaddr = req.body.shipaddr;
+	var shipcity = req.body.shipcity;
+	var shipstate = req.body.shipstate;
+	var shipzip = req.body.shipzip;
+	var shipcountry = req.body.shipcountry;
 
     db.collection('User').find({"Email": email}).toArray(function(err, user){
         if (err) { console.log(err); }
@@ -262,12 +262,12 @@ app.post("/register", (req, res) =>{
 					Credit_Owner: creditOwner,
 					CVV: cvv,
 					Credit_Card: creditCard,
-					Exp_Date: expDate
-					// Ship_Address: shipaddr,
-					// Ship_City: shipcity,
-					// Ship_State: state,
-					// Ship_Zip: zip,
-					// Ship_Country: country
+					Exp_Date: expDate,
+					Ship_Address: shipaddr,
+					Ship_City: shipcity,
+					Ship_State: shipstate,
+					Ship_Zip: shipzip,
+					Ship_Country: shipcountry
                 });
                 res.redirect('/login');
             }
@@ -275,12 +275,12 @@ app.post("/register", (req, res) =>{
     });
 });
 
-// TODO: EDIT PROFILE
+// profile page
 app.get('/profile', checkAuthenticated, (req, res) => {  
     res.render('pages/profile.ejs', {user: req.user});
 });
 
-
+// edit profile
 app.get('/editProfile', checkAuthenticated, (req, res) => {  
     res.render('pages/editProfile.ejs', {user: req.user});
 });
@@ -305,7 +305,12 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 		Credit_Owner: req.body.creditOwner,
 		CVV: req.body.cvv,
 		Credit_Card: req.body.creditCard,
-		Exp_Date: req.body.expDate
+		Exp_Date: req.body.expDate,
+		Ship_Address: req.body.shipaddr,
+		Ship_City: req.body.shipcity,
+		Ship_State: req.body.shipstate,
+		Ship_Zip: req.body.shipzip,
+		Ship_Country: req.body.shipcountry
 	 }
 	 }, function (err, result) {
 		  if (err) {

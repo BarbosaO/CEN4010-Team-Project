@@ -20,7 +20,7 @@
         <p><%= user[0].First_Name %></p>
         Last Name:<br>
         <p><%= user[0].Last_Name %></p>
-        Home Address Line 1:<br>
+        Home Address:<br>
         <p><%= user[0].Home_Address %></p>
         City:<br>
         <p><%= user[0].Home_City %></p>
@@ -44,22 +44,21 @@
         Expiration Date:<br>
         <p><%= user[0].Exp_Date %></p>
 
-        <!-- <h5><strong>Shipping:</strong></h5>
-        <input type="checkbox" onclick="SetBilling(this.checked);"/> Same as Home Address<br>
-        Shipping Address Line 1:<br>
-        <input type="text" name="shipaddr" required><br>
+        <h5><strong>Shipping:</strong></h5>
+        Shipping Address:<br>
+        <p><%= user[0].Ship_Address %></p>
         City:<br>
-        <input type="text" name="shipcity" required><br>
+        <p><%= user[0].Ship_City %></p>
         State/Province/Region:<br>
-        <input type="text" name="shipstate" required><br>
+        <p><%= user[0].Ship_State %></p>
         ZIP/Postal Code:<br>
-        <input type="number" name="shipzip" required><br>
+        <p><%= user[0].Ship_Zip %></p>
         Country:<br>
-        <input type="text" name="shipcountry" required><br> -->
+        <p><%= user[0].Ship_Country %></p>
         <br>
+        
         <button class="btn btn-default" id="edit_profile"><a href="/editProfile">Edit Profile</a></button>
 
-    
     <footer>
         <% include partials/footer %>
     </footer>
