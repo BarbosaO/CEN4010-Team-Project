@@ -8,24 +8,34 @@ function validateReview(){
     formRating.value = rating;
 
     if(rating == 0){
-        //if rating warning is already visible - then user wants to leave rating 0
+        console.log('0 rating')
+        document.getElementById('ratingWarning').classList.remove('d-none');
+        if(comment == "" || comment == " " ){
+            document.getElementById('commentWarning').classList.remove('d-none');
+        }else{
+            if(!document.getElementById('commentWarning').classList.contains("d-none")){
+                document.getElementById('commentWarning').classList.add("d-none")
+            }
+        }
+        return false;
+    }else{
         if(!document.getElementById('ratingWarning').classList.contains("d-none")){
+            document.getElementById('ratingWarning').classList.add('d-none');
             if(comment == "" || comment == " " ){
                 document.getElementById('commentWarning').classList.remove('d-none');
                 return false;
             }else{
+                if(!document.getElementById('commentWarning').classList.contains("d-none")){
+                    document.getElementById('commentWarning').classList.add("d-none");
+                }
                 return true;
             }
         }else{
-            document.getElementById('ratingWarning').classList.remove('d-none');
             if(comment == "" || comment == " " ){
                 document.getElementById('commentWarning').classList.remove('d-none');
+                return false;
             }
-            return false;
         }
-    }else if(comment == "" || comment == " " ){
-        document.getElementById('commentWarning').classList.remove('d-none');
-        return false;
     }
 }
 
