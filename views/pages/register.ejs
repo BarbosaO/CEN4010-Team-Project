@@ -44,6 +44,7 @@
         <div class="alert alert-danger" id="ccAlert" role="alert" style="display:none;">
             Credit card number invalid.
         </div>
+
         <h5><strong>Credit Card Information:</strong></h5>
         Owner:<br>
         <input type="text" name="creditOwner" required><br>
@@ -65,7 +66,9 @@
         <input type="number" name="shipzip" required><br>
         Country:<br>
         <input type="text" name="shipcountry" required><br>
-        <br>
+        <div id="container">
+            <a href="#" id="addShipping" onclick="addFields()">Add More (up to 2)</a><br>
+        </div>
         <button type="submit" class="btn btn-default" id="register">Register</button>
     </form>
 
@@ -74,16 +77,81 @@
     </footer>
 
         <script>
+            // used to validate credit card input
             function validate(){
                 var ccNum = document.getElementById("ccNum").value;
                 var numbers = /^[0-9]+$/;
                 if(ccNum.match(numbers)){
                     return true;
                 }else{
-                    //alert('please input numeric characters only');
                     document.getElementById('ccAlert').style.display = 'block';
                     return false;
                 }
+            }
+            // could also use same function as above for addresses?
+
+            // used to add more fields for extra credit cards and shipping addresses
+            function addFields(){
+                // Container <div> where dynamic content will be placed
+                var container = document.getElementById("container");
+                
+                // Append node with new text
+                container.appendChild(document.createTextNode("Shipping Address: "));
+
+                // Append a line break 
+                container.appendChild(document.createElement("br"));
+                
+                // Create an <input> element, set its type and name attributes for each field
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "shipping_addr";
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+                
+                container.appendChild(document.createTextNode("City: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "shipping_city";
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+
+                container.appendChild(document.createTextNode("State/Province/Region: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "shipping_state";
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+
+                container.appendChild(document.createTextNode("ZIP/Postal Code: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "shipping_zip";
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+
+                container.appendChild(document.createTextNode("Country: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "shipping_country";
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
             }
         </script>
     </div>
