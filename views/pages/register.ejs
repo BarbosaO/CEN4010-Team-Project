@@ -54,6 +54,9 @@
         <input type="number" name="creditCard" id="ccNum" required><br>
         Expiration Date:<br>
         <input type="date" name="expDate" required>
+        <div id="container">
+            <a href="#" id="addCredit" onclick="addCreditFields()">Add More</a><br>
+        </div>
 
         <h5><strong>Shipping:</strong></h5>
         Shipping Address:<br>
@@ -67,7 +70,7 @@
         Country:<br>
         <input type="text" name="shipcountry" required><br>
         <div id="container">
-            <a href="#" id="addShipping" onclick="addFields()">Add More (up to 2)</a><br>
+            <a href="#" id="addShipping" onclick="addFields()">Add More</a><br>
         </div>
         <button type="submit" class="btn btn-default" id="register">Register</button>
     </form>
@@ -91,7 +94,7 @@
             // could also use same function as above for addresses?
 
             // used to add more fields for extra credit cards and shipping addresses
-            function addFields(){
+            function addShippingFields(){
                 // Container <div> where dynamic content will be placed
                 var container = document.getElementById("container");
                 
@@ -152,8 +155,67 @@
                 container.appendChild(input);
 
                 container.appendChild(document.createElement("br"));
+                container.appendChild(document.createElement("br"));
+                
+                // document.getElementById('addShipping').setAttribute("disabled", "disabled"); 
+            }
+
+                
+            function addCreditFields(){
+                // Container <div> where dynamic content will be placed
+                var container = document.getElementById("container");
+                
+                // Append node with new text
+                container.appendChild(document.createTextNode("Owner: "));
+
+                // Append a line break 
+                container.appendChild(document.createElement("br"));
+                
+                // Create an <input> element, set its type and name attributes for each field
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "credit_owner";
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+                
+                container.appendChild(document.createTextNode("CVV: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "number";
+                input.name = "credit_cvv";
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+
+                container.appendChild(document.createTextNode("Card Number: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "number";
+                input.name = "credit_num";
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+
+                container.appendChild(document.createTextNode("Expiration Date: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "date";
+                input.name = "credit_exp_date";
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+                container.appendChild(document.createElement("br"));
+                // document.getElementById('addShipping').setAttribute("disabled", "disabled");
             }
         </script>
+        
     </div>
 </body>
 </html>
