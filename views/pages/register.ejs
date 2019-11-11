@@ -58,8 +58,8 @@
         <input type="number" name="creditCard" id="ccNum" required><br>
         Expiration Date:<br>
         <input type="date" name="expDate" required>
-        <div id="container">
-            <a href="#" id="addCredit" onclick="addCreditFields(this)">Add More</a><br>
+        <div id="container_credit">
+            <a href="#" id="addCredit" onclick="addCreditFields()">Add More (2)</a><br>
         </div>
 
         <h5><strong>Shipping:</strong></h5>
@@ -73,8 +73,8 @@
         <input type="number" name="shipzip" required><br>
         Country:<br>
         <input type="text" name="shipcountry" required><br>
-        <div id="container">
-            <a href="#" id="addShipping">Add More</a><br>
+        <div id="container_shipping">
+            <a href="#" id="addShipping" onclick="addShippingFields()">Add More (2)</a><br>
         </div>
         
         <button type="submit" class="btn btn-default" id="register">Register</button>
@@ -108,12 +108,15 @@
             //     }
             // }
             
-            // used to add more fields for extra credit cards
-            function addCreditFields(link){
+            
+            // used to register number of clicks for more credit cards
+            var clicks_credit = 0;
+
+            function addCreditFields(){
                 // Container <div> where dynamic content will be placed
-                var container = document.getElementById("container");
+                var container = document.getElementById("container_credit");
                 
-                // Append node with new text
+                // Append node with new text for new owner
                 container.appendChild(document.createTextNode("Owner: "));
 
                 // Append a line break 
@@ -161,20 +164,22 @@
                 container.appendChild(document.createElement("br"));
                 container.appendChild(document.createElement("br"));
                 
-                // link.onclick = function(event) {
-                //     event.preventDefault();
-                // }
-
-                // link disappears after first click 
-                document.getElementById(link.id).style.display = 'none';
+                clicks_credit += 1;
+                document.getElementById("addCredit").innerHTML = "Add More (1)";
+                
+                // link disappears after two clicks 
+                if (clicks_credit == 2)
+                    document.getElementById("addCredit").style.display = 'none';
             }
 
-            // used to add more fields for extra shipping addresses
-            function addShippingFields(link){
+            // used to register number of clicks for more shipping addresses
+            var clicks_shipping = 0;
+            
+            function addShippingFields(){
                 // Container <div> where dynamic content will be placed
-                var container = document.getElementById("container");
+                var container = document.getElementById("container_shipping");
                 
-                // Append node with new text
+                // Append node with new text for new address
                 container.appendChild(document.createTextNode("Shipping Address: "));
 
                 // Append a line break 
@@ -233,12 +238,12 @@
                 container.appendChild(document.createElement("br"));
                 container.appendChild(document.createElement("br"));
                 
-                // link.onclick = function(event) {
-                //     event.preventDefault();
-                // }
-
-                // link disappears after first click 
-                // document.getElementById(link.id).style.display = 'none';
+                clicks_shipping += 1;
+                document.getElementById("addShipping").innerHTML = "Add More (1)";
+                
+                // link disappears after two clicks 
+                if (clicks_shipping == 2)
+                    document.getElementById("addShipping").style.display = 'none';
             }
         </script>
     </div>
