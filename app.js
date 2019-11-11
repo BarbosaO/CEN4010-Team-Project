@@ -11,6 +11,7 @@ const methodOverride = require('method-override');
 const flash = require('express-flash');
 var ObjectId = require('mongodb').ObjectID;
 var db;
+var em;
 
 initialize(passport);
 
@@ -337,14 +338,15 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 });
 
 // SHOPPING CART 
-app.get('/cart', checkAuthenticated2, (req, res) =>{
+app.get('/cart', checkAuthenticated, (req, res) =>{
 	//console.log(em);
-    db.collection('carts').find({"Email": em}).toArray(function(err, books)
+	
+    db.collection('carts').find({"Email": req.user[0].Email}).toArray(function(err, books)
     {
         if (err) { console.log(err); }
         else{  
            		db.collection('carts').aggregate([
-                {$match: {Email: em}},
+                {$match: {Email: req.user[0].Email}},
                 {$group: {_id:0, Subtotal:{$sum: {$multiply: ["$Price", "$qty"]}}}}
                 ]).toArray(function(err, price){
 					if (err) { console.log(err); }
@@ -441,7 +443,7 @@ app.post('/AddToCart', checkAuthenticated, (req,res) =>
 
 //BOOK DETAILS
 app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
-	var bookId = req.params.id
+	var bookId = req.params.id;
 
 	//find reviews, and send them to the page
 	db.collection('Reviews').find({BookId:bookId}).toArray(function(err, reviews){
@@ -560,8 +562,9 @@ app.get('/author/:id', checkAuthenticated, function(req, res){
 
 //log out
 app.delete('/logout', function(req, res){
-    req.logOut()
-	res.redirect('/login')
+    req.logOut();
+	res.redirect('/login');
+	//em = "";
 });
 
 
@@ -596,7 +599,7 @@ function initialize(passport){
             if (err) { console.log(err); }
             else {
                 var userFound = user[0];
-				em = email;// when user is logged in saves the email, used is cart.
+				//em = email;// when user is logged in saves the email, used is cart.
 
                 if(userFound == null){
                     return done(null, false, {message: 'No user found with that email.'})
