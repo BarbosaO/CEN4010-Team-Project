@@ -339,7 +339,6 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 
 // SHOPPING CART 
 app.get('/cart', checkAuthenticated, (req, res) =>{
-	//console.log(em);
 	
     db.collection('carts').find({"Email": req.user[0].Email}).toArray(function(err, books)
     {
@@ -352,13 +351,17 @@ app.get('/cart', checkAuthenticated, (req, res) =>{
 					if (err) { console.log(err); }
             		else
             		{
-						
-						console.log(price.Subtotal);
-						res.render("pages/cart.ejs", {cart: books, user: req.user, total:price});
+						db.collection('saved').find({"Email": req.user[0].Email}).toArray(function(err, saved)
+						{			
+							if (err) { console.log(err); }
+							else{
+								res.render("pages/cart.ejs", {cart: books, user: req.user, total: price, saved: saved});
+							}
+						});
 					}
         		});   
         	}
-    });  
+	});  
 });
 
 //increases book qty by one in cart
@@ -438,6 +441,37 @@ app.post('/AddToCart', checkAuthenticated, (req,res) =>
 		}
 
 		res.redirect('/booklist');
+          
+});
+
+//add book to save for later list from cart
+app.post('/AddToSaved', checkAuthenticated, (req,res) =>
+{   
+	var id = req.body.id;
+	var bookTitle = req.body.title;
+	var bookPrice = parseFloat(req.body.price);
+	var bookCover = req.body.cover;
+
+	try{
+		db.collection('carts').deleteOne({"_id": ObjectId(id)});
+	}catch(e){
+		console.log(e);
+	}
+
+	try{
+		
+			db.collection('saved').insertOne({
+				Email: req.user[0].Email,
+				Title: bookTitle,
+				Price: bookPrice,
+				Cover: bookCover,
+			});
+
+		}catch(e){
+			console.log(e);
+		}
+
+		res.redirect('/cart');
           
 });
 
