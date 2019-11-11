@@ -5,117 +5,123 @@
   <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+  
     </head>
-
+    
     <body class="container-fluid">
-            <h1 align="center"><%= user[0].First_Name %>'s Shopping Cart</h1>
-            <main>
-                <div class="container-fluid">
-                    <!-- Beginning of the cart -->
-                    <div class="row">
-                        <div class="col-xs-10 col-md-7">        
-                            <div class="jumbotron">  
-                                <div class="cart"> 
-                                    <% cart.forEach(cart => {%>  
-                                    <div class="container">
-                                        <div class="panel panel-default">
-                                            <!-- Book title -->
-                                            <div class="panel-body">
-                                                <h5 class="title" align="center">Title: <%= cart.Title %> </h5>
-                                            </div>
-                                            <!-- Book price -->
-                                            <div class="panel-body">
-                                                <p class="price" >Price: $<%= cart.Price %></p>
-                                            </div>
-                                            <!-- Book qty-->
-                                            <div class="panel-body">
-                                                <p class="price" name ="qty" value ="<%= cart.qty %>">Qty: <%= cart.qty %></p>
-                                            </div>
-                                             <!-- Book cover -->
-                                            <div class="panel-body">
+        <% if(cart[0]!=null){%>
+        <h1 align="center" style="padding: 20px;">My Shopping Cart</h1>
+        <main>
+            
+            <div class="container-fluid">
+                <!-- Beginning of the cart -->
+                <div class="row">
+                    <div class ="scroll2">
+                    <div class="col-xs-10 col-md-8">        
+                        <div class="jumbotron" style="width: 1200px;">  
+                            <div class="cart"> 
+                                
+                                <% cart.forEach(cart => {%>  
+                                <div class="container">
+                                    <div class="panel panel-default">
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <!-- Book price -->
+                                                <div class="panel-body">
+                                                    <p class="price" >Price: $<%= cart.Price %></p>
+                                                </div>
+                                                <!-- Book qty-->
+                                                <div class="panel-body">
+                                                    <p class="price" name ="qty" value ="<%= cart.qty %>">Qty: <%= cart.qty %></p>
+                                                </div>
+                                                <!-- Book cover -->
+                                                <div class="panel-body">
+                                                    <img src = <%= cart.Cover %> width="80" height="100" title="" </img>
+                                                </div>
+                                                <!-- Delete from cart -->
+                                                <div class="panel-body">
+                                                    <form action="/deleteCart?_method=DELETE" method="POST">
+                                                        <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
+                                                        <button class="button2 button5" type="submit">Delete</button>
+                                                    </form>
+                                                </div>
+                                                <!-- table quantity adjustment -->
                                                 <table style width="100%">
                                                     <tr>
                                                         <th>
-                                                            <div class="panel panel-default">
-                                                                <div class="panel-body">
-                                                                    <img src = <%= cart.Cover %> width="80" height="100" title="" </img>
-                                                                </div>
-                                                            </div>
-                                                        </th>
-                                                        <th>
-                                                            <div class="panel panel-default">
-                                                                <div class="panel-body">
-                                                                    <p class="" align="center">Description:</p>
-                                                                </div>
-                                                                <div class="panel-body">
-                                                                    <a align="center"><%= cart.Description %></a>
-                                                                </div>
-                                                            </div>
-                                                        </th>
+                                                            <div style=display:inline-block horizontal-align:right> 
+                                                                <form action="/add1?_method=UPDATEONE" method="POST">
+                                                                    <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
+                                                                    <input type="text" name = "qty" value = "<%= cart.qty %>" style="display:none;">
+                                                                    <button class="button1 button4" type="submit">+</button>
+                                                                </form>
+                                                            </div> 
+                                                            <div style=display:inline-block horizontal-align:right> 
+                                                                <form action="/minus1?_method=UPDATEONE" method="POST">
+                                                                    <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
+                                                                    <input type="text" name ="qty" value = "<%= cart.qty %>" style="display:none;">
+                                                                    <button class="button1 button4" type="submit">-</button>
+                                                                </form>
+                                                            </div> 
+                                                        </th> 
                                                     </tr>
-                                                </table>
+                                                </table> 
                                             </div>
-                                            <!-- Delete from cart -->
-                                            <div class="panel-body">
-                                                <form action="/deleteCart?_method=DELETE" method="POST">
-                                                    <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
-                                                    <button class="button2 button5" type="submit">Delete</button>
-                                                </form>
+
+                                            <div class="col-md-10">
+                                                <!-- Book title -->
+                                                <div class="panel-body">
+                                                    <h5 class="title" align="center">Title: <%= cart.Title %> </h5>
+                                                    <p class="" align="center">Description:</p>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <p align="center"><%= cart.Description %></p>
+                                                </div>
+                                                <div class="panel-body" align="center">
+                                                    <form action="/AddToSaved?_method=UPDATEONE" method="POST">
+                                                        <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
+                                                        <input type="text" name="title" value="<%= cart.Title %>" style="display:none;">
+                                                        <input type="text" name = "price" value = "<%= cart.Price %>" style="display:none;">
+                                                        <input type="text" name = "cover" value = "<%= cart.Cover %>" style="display:none;">
+                                                        <button class="button1 button4" type="submit" style="margin: 4px 2px;">save for later</button>
+                                                    </form>
+                                                </div>
                                             </div>
-                                            <!-- table quantity adjustment -->
-                                            <table style width="100%">
-                                                <tr>
-                                                    <th>
-                                                        <div style=display:inline-block horizontal-align:right> 
-                                                            <form action="/add1?_method=UPDATEONE" method="POST">
-                                                                <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
-                                                                <input type="text" name = "qty" value = "<%= cart.qty %>" style="display:none;">
-                                                                <button class="button1 button4" type="submit">+</button>
-                                                            </form>
-                                                        </div> 
-                                                        <div style=display:inline-block horizontal-align:right> 
-                                                            <form action="/minus1?_method=UPDATEONE" method="POST">
-                                                                <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
-                                                                <input type="text" name ="qty" value = "<%= cart.qty %>" style="display:none;">
-                                                                <button class="button1 button4" type="submit">-</button>
-                                                            </form>
-                                                        </div> 
-                                                    </th> 
-                                                </tr>
-                                            </table> 
                                         </div>
                                     </div>
-                                    <hr> </hr>
-                                    <% })%>
-                                </div> 
-                            </div>
-                            <!-- End of Cart -->
+                                </div>
+                                <hr> </hr>
+                                <% })%>
+                            </div> 
                         </div>
+                        <!-- End of Cart -->
+                    </div>
+                    </div>
     
-                        <!-- Begining of Payment Section -->
+                    <!-- Begining of Payment Section -->
                 
-                        <div class="row"> 
-                            <div class="container">
-                                <h2>Order Summary</h2>
-                                <table>  
+                    <div class="col-sm-4">
+                        <div class = "row">
+                            <div class="col-12">
+                                <h2 align="center">Order Summary</h2>
+                                <table align = "center">  
                                     <tr>
-                                        <th width="60%">
+                                        <th width="70%">
                                             <div class="container">
                                                 <div class="panel panel-default">
-                                                    <div class="panel-body">Subtotal</div>
-                                                    <div class="panel-body">Tax</div>
-                                                    <div class="panel-heading">Total</div>
+                                                    <div class="panel-body" >Subtotal</div>
+                                                    <div class="panel-body" >Tax</div>
+                                                    <div class="panel-body">Total</div>
                                                 </div>
                                             </div>                
                                         </th>   
                                         <th>
                                             <div class="container">
-                                                 
                                                 <div class="panel panel-default">
                                                     <% total.forEach(total => {%>
                                                     <div class="panel-body" >$<%= (total.Subtotal).toFixed(2)%></div>
                                                     <div class="panel-body" >$<%= (total.Subtotal * 0.07).toFixed(2) %></div>
-                                                    <div class="panel-heading" >$<%= (total.Subtotal + (total.Subtotal * 0.07)).toFixed(2) %></div>
+                                                    <div class="panel-heading" style="font: bold;">$<%= (total.Subtotal + (total.Subtotal * 0.07)).toFixed(2) %></div>
                                                     <% })%>
                                                 </div>                
                                             </div>
@@ -123,11 +129,60 @@
                                     </tr> 
                                 </table>  
                             </div>
+                            <div class = "col-12" align = "center">
+                                <hr></hr>
+                                    <button class="button2 button5" type="submit">Check Out</button>
+                            </div>
+                        </div>
+
+                        <div class = "row">
+                            <div class = "col-12">
+                                <h2 align="center">Saved for later</h2>
+                                <div class="scroll" align ="center">
+                                        <% saved.forEach(saved => {%>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body" ><%= saved.Title%></div>
+
+                                            <img src = <%= saved.Cover%> width="80" height="100" title="" </img>
+                                            
+                                            <div class="panel-body" >$<%= saved.Price%></div>
+                                        </div> 
+                                        <hr></hr>
+                                        <% })%>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div> 
-                                                 
-            </main>
-            <% include partials/footer.ejs %>
-        </body>
-    </html>
+                </div>
+            </div>                                
+        </main>
+
+        <%}else{%>
+            <h1 align="center" style="padding: 20px;">Your Shopping Cart is Empty</h1>
+            <% if(saved[0]!=null){%>
+
+                <div class = "row" align ="center">
+                        <div class = "col-12">
+                            <h2 align="center">Saved for later</h2>
+                            <div class="scroll" align ="center">
+                                    <% saved.forEach(saved => {%>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body" ><%= saved.Title%></div>
+
+                                        <img src = <%= saved.Cover%> width="80" height="100" title="" </img>
+                                        
+                                        <div class="panel-body" >$<%= saved.Price%></div>
+                                    </div> 
+                                    <hr></hr>
+                                    <% })%>
+                            </div>
+                        </div>
+                    </div>
+            <%}else{%>
+            <% } %>    
+
+        <% } %> 
+        <% include partials/footer.ejs %>
+    </body>
+   
+</html>
