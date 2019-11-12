@@ -111,13 +111,15 @@
             
             // used to register number of clicks for more credit cards
             var clicks_credit = 0;
-
+            // used to keep track of number of cards
+            var counter_credit = 1;
             function addCreditFields(){
+                counter_credit += 1;
                 // Container <div> where dynamic content will be placed
                 var container = document.getElementById("container_credit");
                 
                 // Append node with new text for new owner
-                container.appendChild(document.createTextNode("Owner: "));
+                container.appendChild(document.createTextNode("Owner "+(counter_credit)+":"));
 
                 // Append a line break 
                 container.appendChild(document.createElement("br"));
@@ -174,13 +176,15 @@
 
             // used to register number of clicks for more shipping addresses
             var clicks_shipping = 0;
-            
+            // used to keep track of number of shipping addresses
+            var counter_shipping = 1;
             function addShippingFields(){
+                counter_shipping += 1;
                 // Container <div> where dynamic content will be placed
                 var container = document.getElementById("container_shipping");
                 
                 // Append node with new text for new address
-                container.appendChild(document.createTextNode("Shipping Address: "));
+                container.appendChild(document.createTextNode("Shipping Address "+(counter_shipping)+":"));
 
                 // Append a line break 
                 container.appendChild(document.createElement("br"));
@@ -239,6 +243,7 @@
                 container.appendChild(document.createElement("br"));
                 
                 clicks_shipping += 1;
+                
                 document.getElementById("addShipping").innerHTML = "Add More (1)";
                 
                 // link disappears after two clicks 
