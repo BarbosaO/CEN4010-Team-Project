@@ -241,6 +241,13 @@ app.post("/register", (req, res) =>{
 	var shipzip = req.body.shipzip;
 	var shipcountry = req.body.shipcountry;
 
+	// second shipping address
+	var shipping_addr = req.body.shipping_addr;
+	var shipping_city = req.body.shipping_city;
+	var shipping_state = req.body.shipping_state;
+	var shipping_zip = req.body.shipping_zip;
+	var shipping_country = req.body.shipping_country;
+
     db.collection('User').find({"Email": email}).toArray(function(err, user){
         if (err) { console.log(err); }
         else{
@@ -268,7 +275,12 @@ app.post("/register", (req, res) =>{
 					Ship_City: shipcity,
 					Ship_State: shipstate,
 					Ship_Zip: shipzip,
-					Ship_Country: shipcountry
+					Ship_Country: shipcountry,
+					Ship_Address2: shipping_addr,
+					Ship_City2: shipping_city,
+					Ship_State2: shipping_state,
+					Ship_Zip2: shipping_zip,
+					Ship_Country2: shipping_country
                 });
                 res.redirect('/login');
             }
@@ -311,7 +323,12 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 		Ship_City: req.body.shipcity,
 		Ship_State: req.body.shipstate,
 		Ship_Zip: req.body.shipzip,
-		Ship_Country: req.body.shipcountry
+		Ship_Country: req.body.shipcountry,
+		Ship_Address2: shipping_addr,
+		Ship_City2: shipping_city,
+		Ship_State2: shipping_state,
+		Ship_Zip2: shipping_zip,
+		Ship_Country2: shipping_country
 	 }
 	 }, function (err, result) {
 		  if (err) {
