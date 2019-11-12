@@ -234,6 +234,18 @@ app.post("/register", (req, res) =>{
 	var creditCard = req.body.creditCard;
 	var expDate = req.body.expDate;
 
+	// second cc info
+	var credit_owner2 = req.body.credit_owner2;
+	var credit_cvv2 = req.body.credit_cvv2;
+	var credit_num2 = req.body.credit_num2;
+	var credit_exp_date2 = req.body.credit_exp_date2;
+
+	// third cc info
+	var credit_owner3 = req.body.credit_owner3;
+	var credit_cvv3 = req.body.credit_cvv3;
+	var credit_num3 = req.body.credit_num3;
+	var credit_exp_date3 = req.body.credit_exp_date3;
+
 	// shipping info
 	var shipaddr = req.body.shipaddr;
 	var shipcity = req.body.shipcity;
@@ -266,6 +278,7 @@ app.post("/register", (req, res) =>{
                 db.collection('User').insertOne({
 					Email: email,
 					Password: password,
+
 					First_Name: firstname,
 					Last_Name: lastname,
 					Home_Address: homeaddr,
@@ -273,21 +286,36 @@ app.post("/register", (req, res) =>{
 					Home_State: state,
 					Home_Zip: zip,
 					Home_Country: country,
+
 					Nickname: nickname,
+
 					Credit_Owner: creditOwner,
 					CVV: cvv,
 					Credit_Card: creditCard,
 					Exp_Date: expDate,
+
+					Credit_Owner2: credit_owner2,
+					CVV2: credit_cvv2,
+					Credit_Card2: credit_num2,
+					Exp_Date2: credit_exp_date2,
+
+					Credit_Owner3: credit_owner3,
+					CVV3: credit_cvv3,
+					Credit_Card3: credit_num3,
+					Exp_Date3: credit_exp_date3,
+
 					Ship_Address: shipaddr,
 					Ship_City: shipcity,
 					Ship_State: shipstate,
 					Ship_Zip: shipzip,
 					Ship_Country: shipcountry,
+
 					Ship_Address2: shipping_addr2,
 					Ship_City2: shipping_city2,
 					Ship_State2: shipping_state2,
 					Ship_Zip2: shipping_zip2,
 					Ship_Country2: shipping_country2,
+
 					Ship_Address3: shipping_addr3,
 					Ship_City3: shipping_city3,
 					Ship_State3: shipping_state3,
@@ -306,6 +334,7 @@ app.get('/profile', checkAuthenticated, (req, res) => {
 });
 
 // edit profile
+// TODO
 app.get('/editProfile', checkAuthenticated, (req, res) => {  
     res.render('pages/editProfile.ejs', {user: req.user});
 });
