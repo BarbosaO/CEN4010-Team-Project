@@ -242,11 +242,18 @@ app.post("/register", (req, res) =>{
 	var shipcountry = req.body.shipcountry;
 
 	// second shipping address
-	var shipping_addr = req.body.shipping_addr;
-	var shipping_city = req.body.shipping_city;
-	var shipping_state = req.body.shipping_state;
-	var shipping_zip = req.body.shipping_zip;
-	var shipping_country = req.body.shipping_country;
+	var shipping_addr2 = req.body.shipping_addr2;
+	var shipping_city2 = req.body.shipping_city2;
+	var shipping_state2 = req.body.shipping_state2;
+	var shipping_zip2 = req.body.shipping_zip2;
+	var shipping_country2 = req.body.shipping_country2;
+
+	// third shipping address
+	var shipping_addr3 = req.body.shipping_addr3;
+	var shipping_city3 = req.body.shipping_city3;
+	var shipping_state3 = req.body.shipping_state3;
+	var shipping_zip3 = req.body.shipping_zip3;
+	var shipping_country3 = req.body.shipping_country3;
 
     db.collection('User').find({"Email": email}).toArray(function(err, user){
         if (err) { console.log(err); }
@@ -276,11 +283,16 @@ app.post("/register", (req, res) =>{
 					Ship_State: shipstate,
 					Ship_Zip: shipzip,
 					Ship_Country: shipcountry,
-					Ship_Address2: shipping_addr,
-					Ship_City2: shipping_city,
-					Ship_State2: shipping_state,
-					Ship_Zip2: shipping_zip,
-					Ship_Country2: shipping_country
+					Ship_Address2: shipping_addr2,
+					Ship_City2: shipping_city2,
+					Ship_State2: shipping_state2,
+					Ship_Zip2: shipping_zip2,
+					Ship_Country2: shipping_country2,
+					Ship_Address3: shipping_addr3,
+					Ship_City3: shipping_city3,
+					Ship_State3: shipping_state3,
+					Ship_Zip3: shipping_zip3,
+					Ship_Country3: shipping_country3
                 });
                 res.redirect('/login');
             }
