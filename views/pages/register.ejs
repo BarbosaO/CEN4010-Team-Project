@@ -129,7 +129,7 @@
                 // Create an <input> element, set its type and name attributes for each field
                 var input = document.createElement("input");
                 input.type = "text";
-                input.name = "credit_owner";
+                input.name = "credit_owner" + counter_credit;
                 container.appendChild(input);
 
                 container.appendChild(document.createElement("br"));
@@ -140,7 +140,7 @@
                 
                 var input = document.createElement("input");
                 input.type = "number";
-                input.name = "credit_cvv";
+                input.name = "credit_cvv" + counter_credit;
                 container.appendChild(input);
 
                 container.appendChild(document.createElement("br"));
@@ -151,7 +151,7 @@
                 
                 var input = document.createElement("input");
                 input.type = "number";
-                input.name = "credit_num";
+                input.name = "credit_num" + counter_credit;
                 container.appendChild(input);
 
                 container.appendChild(document.createElement("br"));
@@ -162,7 +162,7 @@
                 
                 var input = document.createElement("input");
                 input.type = "date";
-                input.name = "credit_exp_date";
+                input.name = "credit_exp_date" + counter_credit;
                 container.appendChild(input);
 
                 container.appendChild(document.createElement("br"));
@@ -196,7 +196,7 @@
                 // Create an <input> element, set its type and name attributes for each field
                 var input = document.createElement("input");
                 input.type = "text";
-                input.name = "shipping_addr";
+                input.name = "shipping_addr" + counter_shipping;
                 container.appendChild(input);
 
                 container.appendChild(document.createElement("br"));
@@ -207,7 +207,7 @@
                 
                 var input = document.createElement("input");
                 input.type = "text";
-                input.name = "shipping_city"
+                input.name = "shipping_city" + counter_shipping;
                 container.appendChild(input);
 
                 container.appendChild(document.createElement("br"));
@@ -218,7 +218,7 @@
                 
                 var input = document.createElement("input");
                 input.type = "text";
-                input.name = "shipping_state";
+                input.name = "shipping_state" + counter_shipping;
                 container.appendChild(input);
 
                 container.appendChild(document.createElement("br"));
@@ -229,7 +229,7 @@
                 
                 var input = document.createElement("input");
                 input.type = "text";
-                input.name = "shipping_zip";
+                input.name = "shipping_zip" + counter_shipping;
                 container.appendChild(input);
 
                 container.appendChild(document.createElement("br"));
@@ -240,7 +240,7 @@
                 
                 var input = document.createElement("input");
                 input.type = "text";
-                input.name = "shipping_country";
+                input.name = "shipping_country" + counter_shipping;
                 container.appendChild(input);
 
                 container.appendChild(document.createElement("br"));
