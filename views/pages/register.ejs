@@ -113,7 +113,9 @@
             var clicks_credit = 0;
             // used to keep track of number of cards
             var counter_credit = 1;
+
             function addCreditFields(){
+                
                 counter_credit += 1;
                 // Container <div> where dynamic content will be placed
                 var container = document.getElementById("container_credit");
@@ -178,7 +180,9 @@
             var clicks_shipping = 0;
             // used to keep track of number of shipping addresses
             var counter_shipping = 1;
+            
             function addShippingFields(){
+                
                 counter_shipping += 1;
                 // Container <div> where dynamic content will be placed
                 var container = document.getElementById("container_shipping");
@@ -203,7 +207,7 @@
                 
                 var input = document.createElement("input");
                 input.type = "text";
-                input.name = "shipping_city";
+                input.name = "shipping_city"
                 container.appendChild(input);
 
                 container.appendChild(document.createElement("br"));
