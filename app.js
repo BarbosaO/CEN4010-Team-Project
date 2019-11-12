@@ -346,30 +346,51 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 	var id = user._id;
 
 	db.collection('User').updateOne({"_id": ObjectId(id)}, {$set: {
-		Email: req.body.email,
-		Password: req.body.password,
-		First_Name: req.body.firstname,
-		Last_Name: req.body.lastname,
-		Home_Address: req.body.homeaddr,
-		Home_City: req.body.city,
-		Home_State: req.body.state,
-		Home_Zip: req.body.zip,
-		Home_Country: req.body.country,
-		Nickname: req.body.nickname,
-		Credit_Owner: req.body.creditOwner,
-		CVV: req.body.cvv,
-		Credit_Card: req.body.creditCard,
-		Exp_Date: req.body.expDate,
-		Ship_Address: req.body.shipaddr,
-		Ship_City: req.body.shipcity,
-		Ship_State: req.body.shipstate,
-		Ship_Zip: req.body.shipzip,
-		Ship_Country: req.body.shipcountry,
-		Ship_Address2: shipping_addr,
-		Ship_City2: shipping_city,
-		Ship_State2: shipping_state,
-		Ship_Zip2: shipping_zip,
-		Ship_Country2: shipping_country
+		Email: email,
+		Password: password,
+
+		First_Name: firstname,
+		Last_Name: lastname,
+		Home_Address: homeaddr,
+		Home_City: city,
+		Home_State: state,
+		Home_Zip: zip,
+		Home_Country: country,
+
+		Nickname: nickname,
+
+		Credit_Owner: creditOwner,
+		CVV: cvv,
+		Credit_Card: creditCard,
+		Exp_Date: expDate,
+
+		Credit_Owner2: credit_owner2,
+		CVV2: credit_cvv2,
+		Credit_Card2: credit_num2,
+		Exp_Date2: credit_exp_date2,
+
+		Credit_Owner3: credit_owner3,
+		CVV3: credit_cvv3,
+		Credit_Card3: credit_num3,
+		Exp_Date3: credit_exp_date3,
+
+		Ship_Address: shipaddr,
+		Ship_City: shipcity,
+		Ship_State: shipstate,
+		Ship_Zip: shipzip,
+		Ship_Country: shipcountry,
+
+		Ship_Address2: shipping_addr2,
+		Ship_City2: shipping_city2,
+		Ship_State2: shipping_state2,
+		Ship_Zip2: shipping_zip2,
+		Ship_Country2: shipping_country2,
+
+		Ship_Address3: shipping_addr3,
+		Ship_City3: shipping_city3,
+		Ship_State3: shipping_state3,
+		Ship_Zip3: shipping_zip3,
+		Ship_Country3: shipping_country3
 	 }
 	 }, function (err, result) {
 		  if (err) {
