@@ -51,6 +51,14 @@ app.get("/bookList", checkAuthenticated2, (req, res) => {
 	//console.log("Called find()");
 });
 
+app.get("/bestsellers", checkAuthenticated2, (req, res) =>{
+	db.collection('Books').find().filter(	
+			{AvgReview : {$gte : 4}}
+		).toArray(function(err, docs){
+	
+			res.render("pages/bestsellers.ejs", {docs: docs, user: req.user});
+		});
+})
 app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 	var genre = req.body.genre;
 	var author = req.body.author;
@@ -629,8 +637,12 @@ app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
 			var i = 0;
 			var sum = 0;
 			for(i = 0; i < reviews.length; i++){
-				sum = sum + parseInt(reviews[i].Rating);
+			if(reviews[i].Rating == "")
+				sum = sum + 0;
+			else
+				sum = sum + parseInt(reviews[i].Rating, 10);
 			}
+			if(reviews.length != 0)
 			averageReview = sum / reviews.length;
 
 			//update book rating field
