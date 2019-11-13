@@ -64,21 +64,33 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 	var author = req.body.author;
 	var title = req.body.title;
 	var rating = req.body.avgReview;
+	var date = req.body.date;
+	var price = req.body.price;
 	if(rating == "")
 		rating = 0;
 	else
 		rating = parseInt(req.body.avgReview,10);
+	if(price == "")
+		price = 0;
+	else
+		price = parseInt(req.body.price,10);
+	if(date == "")
+		date = 0;
+	
 	//console.log("Genre " + genre);
 	//console.log("Author " + author);
 	//console.log("Title " + title);
 	//console.log("Rating " + rating);
+	//console.log("Price " + price);
+	//console.log("Date " + date);
 
 	//Sends the list of items from collection accessed to the render
 	//Uses '$or' and '$and' to display all results that match one of the fields without doubling up results
 	if(genre == "" && author == "" && title == "")
 	{
-		db.collection('Books').find().filter(	
-			{AvgReview : {$gte : rating}}
+		db.collection('Books').find({DateAdded:{"$lte": new Date(date)}}).filter(	
+			{$and : [ {AvgReview : {$gte : rating}},
+					{Price : {$gte : price}}]}
 		).toArray(function(err, docs){
 	
 			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
@@ -86,13 +98,14 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 	}
 	else if(genre == "" && author == "")
 	{
-		db.collection('Books').find().filter(
+		db.collection('Books').find({DateAdded:{"$lte": new Date(date)}}).filter(
 			{	$and :	
 				[
 					{$and : [
 						{ Title : title}
 					]},
-					{$and : [ {AvgReview : {$gte : rating}}]}
+					{$and : [ {AvgReview : {$gte : rating}},
+					{Price : {$gte : price}}]}
 				]
 			}
 		).toArray(function(err, docs){
@@ -102,13 +115,14 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 	}
 	else if(genre == "" && title == "")
 	{
-		db.collection('Books').find().filter(
+		db.collection('Books').find({DateAdded:{"$lte": new Date(date)}}).filter(
 			{	$and :	
 				[
 					{$and : [
 						{ Author : author}
 					]},
-					{$and : [ {AvgReview : {$gte : rating}}]}
+					{$and : [ {AvgReview : {$gte : rating}},
+					{Price : {$gte : price}}]}
 				]
 			}
 		).toArray(function(err, docs){
@@ -118,13 +132,14 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 	}
 	else if(author == "" && title == "")
 	{
-		db.collection('Books').find().filter(
+		db.collection('Books').find({DateAdded:{"$lte": new Date(date)}}).filter(
 			{	$and :	
 				[
 					{$and : [
 						{ Genre : genre}
 					]},
-					{$and : [ {AvgReview : {$gte : rating}}]}
+					{$and : [ {AvgReview : {$gte : rating}},
+					{Price : {$gte : price}}]}
 				]
 			}
 		).toArray(function(err, docs){
@@ -134,14 +149,15 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 	}
 	else if(title == "")
 	{
-		db.collection('Books').find().filter(
+		db.collection('Books').find({DateAdded:{"$lte": new Date(date)}}).filter(
 			{	$and :	
 				[
 					{$and : [
 						{ Author : author}, 
 						{ Genre : genre}
 					]},
-					{$and : [ {AvgReview : {$gte : rating}}]}
+					{$and : [ {AvgReview : {$gte : rating}},
+					{Price : {$gte : price}}]}
 				]
 			}
 		).toArray(function(err, docs){
@@ -149,16 +165,17 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
 		});
 	}
-		else if(genre == "")
+	else if(genre == "")
 	{
-		db.collection('Books').find().filter(
+		db.collection('Books').find({DateAdded:{"$lte": new Date(date)}}).filter(
 			{	$and :	
 				[
 					{$and : [
 						{ Title : title},
 						{ Author : author},
 					]},
-					{$and : [ {AvgReview : {$gte : rating}}]}
+					{$and : [ {AvgReview : {$gte : rating}},
+					{Price : {$gte : price}}]}
 				]
 			}
 		).toArray(function(err, docs){
@@ -166,16 +183,17 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 			res.render("pages/bookList.ejs", {docs: docs, user: req.user});
 		});
 	}
-		else if(author == "")
+	else if(author == "")
 	{
-		db.collection('Books').find().filter(
+		db.collection('Books').find({DateAdded:{"$lte": new Date(date)}}).filter(
 			{	$and :	
 				[
 					{$and : [
 						{ Title : title},
 						{ Genre : genre}
 					]},
-					{$and : [ {AvgReview : {$gte : rating}}]}
+					{$and : [ {AvgReview : {$gte : rating}},
+					{Price : {$gte : price}}]}
 				]
 			}
 		).toArray(function(err, docs){
@@ -185,7 +203,7 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 	}
 	else
 	{
-		db.collection('Books').find().filter(
+		db.collection('Books').find({DateAdded:{"$lte": new Date(date)}}).filter(
 			{	$and :	
 				[
 					{$and : [
@@ -193,7 +211,8 @@ app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 						{ Author : author}, 
 						{ Genre : genre}
 					]},
-					{$and : [ {AvgReview : {$gte : rating}}]}
+					{$and : [ {AvgReview : {$gte : rating}},
+					{Price : {$gte : price}}]}
 				]
 			}
 		).toArray(function(err, docs){
