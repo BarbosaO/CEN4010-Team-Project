@@ -10,156 +10,147 @@
         <main>
             <h1 align="center">BOOK DETAILS</h1>
             <div class="container-fluid">
-                <!-- Beginning of the cart -->
+                <!-- Beginning of the book detail -->
                 <div class="row">
                     <div class="col-xs-9 col-md-7">        
                         <div class="jumbotron">  
                             <div class="book"> 
-                                    <!-- main table --> 
-                                    <table style width="100%">
-                                        <tr>
-                                            <!-- Book title -->
-                                            <h5 class="title" >Title: <%= book.Title %> </h5>
-                                            <th> 
-                                                <!-- Book Author -->
-                                                <div class="product-author">
-                                                    <p class="author">Author: <a href="/author/<%=book.AuthorID%>"> <%= book.Author %></a></p>
-                                                </div>
-                                                <!-- Book cover -->
-                                                <div class="product-cover">
-                                                    <img src = <%= book.Cover %> width="140" height="200" title="" />    
-												</div> 
-												 <!-- Book price -->
-												 <div class="product-price">
-                                                    <p class="price">Price: $<%= book.Price %></p>
-												</div>
-												<!-- Book Description -->
-												<div class="product-description">
-                                                    <h3 class="description" >Description:</h3>
-                                                    <p class="description" > <%= book.Description %></p>
-												</div>
-												 <!-- Book ISBN -->
-												 <div class="product-ISBN">
-                                                    <p class="ISBN">ISBN: <%= book.ISBN %></p>
-												</div> 
-												 <!-- Book Genre -->
-												 <div class="product-genre">
-                                                    <p class="genre">Genre: <%= book.Genre %></p>
-												</div>
-												 <!-- Book AvgReview -->
-												 <div class="product-rating">
-                                                    <p class="AvgReview">Average Rating: <%= book.AvgReview %></p>
-												</div>
-												<!-- Book Publisher -->
-												<div class="product-publisher">
-                                                    <p class="publisher">Publisher: <%= book.Publisher %></p>
-												</div>
-												<!-- Book Publication Date -->
-												<div class="product-publication-date">
-                                                    <p class="publication-date">Date Published: <%= book.PublicationDate %></p>
-												</div>                                    
-											</th>
-                                        </tr>
-                                    </table> 
+                                <!-- main table --> 
+                                <table style width="100%">
+                                    <tr>
+                                        <!-- Book title -->
+                                        <h5 class="title" >Title: <%= book.Title %> </h5>
+                                        <th> 
+                                            <!-- Book Author -->
+                                            <div class="product-author">
+                                                <p class="author">Author: <a href="/author/<%=book.AuthorID%>"> <%= book.Author %></a></p>
+                                            </div>
+                                            <!-- Book cover -->
+                                            <div class="product-cover">
+                                                <img src = <%= book.Cover %> width="140" height="200" title="" />    
+                                            </div> 
+                                                <!-- Book price -->
+                                                <div class="product-price">
+                                                <p class="price">Price: $<%= book.Price %></p>
+                                            </div>
+                                            <!-- Book Description -->
+                                            <div class="product-description">
+                                                <h3 class="description" >Description:</h3>
+                                                <p class="description" > <%= book.Description %></p>
+                                            </div>
+                                                <!-- Book ISBN -->
+                                                <div class="product-ISBN">
+                                                <p class="ISBN">ISBN: <%= book.ISBN %></p>
+                                            </div> 
+                                                <!-- Book Genre -->
+                                                <div class="product-genre">
+                                                <p class="genre">Genre: <%= book.Genre %></p>
+                                            </div>
+                                                <!-- Book AvgReview -->
+                                                <div class="product-rating">
+                                                <p class="AvgReview">Average Rating: <%= book.AvgReview %></p>
+                                            </div>
+                                            <!-- Book Publisher -->
+                                            <div class="product-publisher">
+                                                <p class="publisher">Publisher: <%= book.Publisher %></p>
+                                            </div>
+                                            <!-- Book Publication Date -->
+                                            <div class="product-publication-date">
+                                                <p class="publication-date">Date Published: <%= book.PublicationDate %></p>
+                                            </div>                                    
+                                        </th>
+                                    </tr>
+                                </table> 
                             </div> 
                         </div>
                     </div>
                 </div>
-            </div>                         
-            <h2>Reviews List</h2>
-            <hr>
-            <!-- TODO: IF REVIEWS.LENGTH = 0 : display "no reviews yet"-->
-            <%if(reviews.length == 0){%>
-                <div class="row" style="margin-left:1px;">
-                    <p class="rating"> no reviews yet... </p>
-                </div>
-            <%} else {%>
-                <% reviews.forEach(review => {%>
-                    <div class="row">
-                        <p class="rating">Rating: </p>
-                        <%for (i = 0; i < review.Rating; i++){%>
-                            <span class="fa fa-star" style="color:orange;"></span>
-                        <%}%>
-                    </div>
-                    <p class="date">Date: <%= review.Date %></p>
-                    <p class="comment">Comment: <%= review.Comment %> </p>
-                    <%if(review.Anonymous == true){%>
-                        <p class="anon">Anonymous</p>
-                    <%}else{%>
-                        <p><%= review.Nickname %></p>
-                    <%}%>
-                    <hr>
-                <% })%>
-            <% }%>
-            <%if(purchased == true){ %>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-3"></div>
+            </div>    
+            <!-- reviews list and rating form -->        
+            <div>    
+                <h3>Reviews</h3>
+                <div class="row">
+                    <%if(purchased == true){ %>
                         <div class="col-6">
-                            <form action="/submitReview/<%= bookId %>" method="POST" onsubmit="return validateReview()">
-                                <div class="form-group">
+                            <hr>
+                    <% } else{ %>
+                        <div class="col-12">
+                            <hr>
+                    <% } %>
+                            <%if(reviews.length == 0){%>
+                                <div class="row" style="margin-left:1px;">
+                                    <p class="rating"> no reviews yet... </p>
+                                </div>
+                            <%} else {%>
+                                <% reviews.forEach(review => {%>
+                                    <div>
+                                        <span class="rating">Rating: </span>
+                                        <%for (i = 0; i < review.Rating; i++){%>
+                                            <span class="fa fa-star" style="color:orange;"></span>
+                                        <%}%>
+                                    </div>
+                                    <p class="comment" style="margin-top: 10px;"> <%= review.Comment %> </p>
+                                    <%if(review.Anonymous == true){%>
+                                        <span class="anon">By: Anonymous <%= review.Date %> </span>
+                                    <%}else{%>
+                                        <span>By: <%= review.Nickname %> <%= review.Date %></span>
+                                    <%}%>
+                                    <hr>
+                                <% })%>
+                            <% }%>
+                        </div>
+                    <%if(purchased == true){ %>
+                        <div class="col-6">
+                            <div class="container">
+                                <form action="/submitReview/<%= bookId %>" method="POST" onsubmit="return validateReview()">
+                                    <div class="form-group">
+                                        <div class="form-inline row">
+                                            <div class="col-5"></div>
+                                            <div class="col-7">
+                                                <p id="invisibleNickname"style="display:none"><%= nickname %></p>
+                                                <p id="nickname"style="margin-bottom:0; text-align:right;">Comment as: <%= nickname %></p>
+                                            </div>
+                                        </div>
+                                        <div id="commentWarning" class="alert alert-danger d-none" role="alert">You cannot leave an empty comment</div>
+                                        <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                                        <div id="ratingWarning" class="alert alert-danger d-none" role="alert" style="margin-top:15px;"> You must rate the book from 1 - 5 stars. </div>
+                                    
+                                    </div>
+
+                                    <!-- input will hold value for date -->
+                                    <input type="text" class="d-none" id="date" name="date">
+
+                                    <!-- this input will hold the value for rating to send to backend -->
+                                    <input type="number" class="d-none" id="rating" name="rating">
+
+                                    <!-- Star Rating -->
                                     <div class="form-inline row">
-                                        <div class="col-5"></div>
-                                        <div class="col-7">
-                                            <p id="invisibleNickname"style="display:none"><%= nickname %></p>
-                                            <p id="nickname"style="margin-bottom:0; text-align:right;">Comment as: <%= nickname %></p>
+                                        <div class="col-3">
+                                            <span class="fa fa-star" id="star1"></span>
+                                            <span class="fa fa-star" id="star2"></span>
+                                            <span class="fa fa-star" id="star3"></span>
+                                            <span class="fa fa-star" id="star4"></span>
+                                            <span class="fa fa-star" id="star5"></span>
+                                        </div>
+                                        <div class="col-4"></div>
+                                        <div class="form-check col-3">
+                                            <input class="form-check-input" type="checkbox" id="anonymous" name="anonymous" onclick="toggleAnon()">
+                                            <label class="form-check-label" style="color:grey;" for="anonymous">Anonymous</label>
+                                        </div> 
+                                        <div class="col-2">
+                                            <button class="btn btn-success btn-md" type="submit">Submit</button>
                                         </div>
                                     </div>
-                                    <div id="commentWarning" class="alert alert-danger d-none" role="alert">You cannot leave an empty comment</div>
-                                    <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
-                                    <div id="ratingWarning" class="alert alert-danger d-none" role="alert" style="margin-top:15px;"> You must rate the book from 1 - 5 stars. </div>
-                                
-                                </div>
-
-                                <!-- input will hold value for date -->
-                                <input type="text" class="d-none" id="date" name="date">
-
-                                <!-- this input will hold the value for rating to send to backend -->
-                                <input type="number" class="d-none" id="rating" name="rating">
-
-                                <!-- Star Rating -->
-                                <div class="form-inline row">
-                                    <div class="col-3">
-                                        <span class="fa fa-star" id="star1"></span>
-                                        <span class="fa fa-star" id="star2"></span>
-                                        <span class="fa fa-star" id="star3"></span>
-                                        <span class="fa fa-star" id="star4"></span>
-                                        <span class="fa fa-star" id="star5"></span>
-                                    </div>
-                                    <div class="col-6"></div>
-                                    <div class="form-check col-3">
-                                        <input class="form-check-input" type="checkbox" id="anonymous" name="anonymous" onclick="toggleAnon()">
-                                        <label class="form-check-label" style="color:grey;" for="anonymous">Anonymous</label>
-                                    </div> 
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-9"></div>
-                                    <div class="col-3">
-                                        <button class="btn btn-success btn-md" type="submit">Submit</button>
-                                    </div>
-                                </div>
-                            </form>
+                                </form>  
+                            </div>
                         </div>
-                        <div class="col-3"></div>
-                    </div>    
+                    <% } %>
                 </div>
-            <% } %>
+            </div>
         </main>
 
         <footer class="footer">
             <% include partials/footer.ejs %>
         </footer>
-
-        <script>
-                function toggleAnon(){
-                    if(document.getElementById('anonymous').checked == true){
-                        console.log('anon')
-                        document.getElementById('nickname').innerHTML = 'Comment as: Anonymous';
-                    }else{
-                        document.getElementById('nickname').innerHTML = 'Comment as: ' + document.getElementById('invisibleNickname').innerHTML;
-                    }
-                }
-            </script>
     </body>
 </html>

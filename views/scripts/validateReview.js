@@ -1,3 +1,12 @@
+function toggleAnon(){
+    if(document.getElementById('anonymous').checked == true){
+        console.log('anon')
+        document.getElementById('nickname').innerHTML = 'Comment as: Anonymous';
+    }else{
+        document.getElementById('nickname').innerHTML = 'Comment as: ' + document.getElementById('invisibleNickname').innerHTML;
+    }
+}
+
 function validateReview(){
     var comment = document.getElementById('comment').value;
     var date = document.getElementById('date');
@@ -37,6 +46,28 @@ function validateReview(){
             }
         }
     }
+}
+
+function commentEventListener(){
+
+    var text = document.getElementById('text');
+    function resize () {
+        text.style.height = 'auto';
+        text.style.height = text.scrollHeight+'px';
+    }
+    /* 0-timeout to get the already changed text */
+    function delayedResize () {
+        window.setTimeout(resize, 0);
+    }
+    observe(text, 'change',  resize);
+    observe(text, 'cut',     delayedResize);
+    observe(text, 'paste',   delayedResize);
+    observe(text, 'drop',    delayedResize);
+    observe(text, 'keydown', delayedResize);
+
+    text.focus();
+    text.select();
+    resize();
 }
 
 function getRating(){

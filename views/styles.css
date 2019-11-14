@@ -97,3 +97,7 @@ h2 {
 .headerButton:hover{
     color:rgb(180, 188, 190);
 }
+
+#comment{
+    max-height: 50vh;
+}

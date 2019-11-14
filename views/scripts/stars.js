@@ -1,4 +1,17 @@
 window.onload = function(e){
+
+    var textarea = document.getElementById('comment');
+
+    textarea.addEventListener('keydown', autosize);
+                
+    function autosize(){
+        var element = this;
+        setTimeout(function(){
+            element.style.cssText = 'height:auto; padding:0';
+            element.style.cssText = 'height:' + element.scrollHeight + 'px';
+        },0);
+    }
+
     var star1 = document.getElementById('star1');
     var star2 = document.getElementById('star2');
     var star3 = document.getElementById('star3');
