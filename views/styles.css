@@ -85,7 +85,7 @@ h2 {
     margin-bottom: 2em;
 }
 
-#logOutButton{
+.headerButton{
     border:none;
     color:rgb(144, 148, 150);
     padding:0;
@@ -94,6 +94,6 @@ h2 {
     margin-top:8px;
 }
 
-#logOutButton:hover, #cart:hover{
+.headerButton:hover{
     color:rgb(180, 188, 190);
 }
