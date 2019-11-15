@@ -77,6 +77,33 @@ div.scroll2 {
     padding: 10px;
 }
 
+.con {
+    position: relative;
+    width: 80px;
+    height: 100px;
+  }
+  
+  /* Make the image to responsive */
+  .image {
+    display: block;
+    width: 80px;
+    height: 100px;
+  }
+  
+  /* The overlay effect - lays on top of the container and over the image */
+  .overlay {
+    position: absolute; 
+    bottom: 0; 
+    width: 80px;
+    height: 100px;
+    transition: .5s ease;
+    opacity:0;
+  }
+
+  .con:hover .overlay {
+    opacity: 1;
+  }
+
 
 h2 {
     margin-top: 2em;
