@@ -553,24 +553,22 @@ app.post('/AddToCart', checkAuthenticated, (req,res) =>
 //add book to save for later list from cart
 app.post('/AddToSaved', checkAuthenticated, (req,res) =>
 {   
+	
 	var id = req.body.id;
 	var bookTitle = req.body.title;
 	var bookPrice = parseFloat(req.body.price);
 	var bookCover = req.body.cover;
+	var bookDescr = req.body.descr;
+
+	db.collection('carts').deleteOne({"_id": ObjectId(id)});
 
 	try{
-		db.collection('carts').deleteOne({"_id": ObjectId(id)});
-	}catch(e){
-		console.log(e);
-	}
-
-	try{
-		
 			db.collection('saved').insertOne({
 				Email: req.user[0].Email,
 				Title: bookTitle,
 				Price: bookPrice,
 				Cover: bookCover,
+				Description: bookDescr
 			});
 
 		}catch(e){
@@ -578,7 +576,48 @@ app.post('/AddToSaved', checkAuthenticated, (req,res) =>
 		}
 
 		res.redirect('/cart');
-          
+});
+
+//add book to cart from saved list
+app.post('/moveToCart', checkAuthenticated, (req,res) =>
+{
+	var id = req.body.id1;
+	var bookTitle = req.body.title1;
+	var bookDescr = req.body.descr1;
+	var bookPrice = parseFloat(req.body.price1);
+	var bookCover = req.body.cover1;
+	var qty = 1;
+
+	db.collection('saved').deleteOne({"_id": ObjectId(id)});
+
+	try{
+		db.collection('carts').insertOne({
+			Email: req.user[0].Email,
+			Title: bookTitle,
+			Description: bookDescr,
+			Price: bookPrice,
+			Cover: bookCover,
+			qty: qty
+		});
+
+		}catch(e){
+			console.log(e);
+		}
+		
+		res.redirect('/cart');  
+});
+
+//deletes book from Saved for later
+app.delete('/DeleteFromSaved', checkAuthenticated, (req,res) => {
+    var id = req.body.id1;
+    
+    try{
+        db.collection('saved').deleteOne({"_id": ObjectId(id)});
+    }catch(e){
+        console.log(e);
+    }
+    
+    res.redirect('/cart');
 });
 
 //BOOK DETAILS
