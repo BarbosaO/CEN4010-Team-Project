@@ -652,10 +652,10 @@ app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
 								    if (err) { console.log(err); }
 									else {
 										if(reviewsByUser.length > 0){
-											res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, bookId:bookId, purchased:true});
-										}else{
 											res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, nickname:req.user[0].Nickname, bookId:bookId, purchased:false});
-										}
+										}else{
+											res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, bookId:bookId, purchased:true});
+											}
 									}
 								});
 							}	
@@ -694,7 +694,8 @@ app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
     });
 
 	var averageReview = 0;
-	//find reviews
+
+	//find reviews - update average rating
 	db.collection('Reviews').find({"BookId":bookId}).toArray(function(err, reviews){
 		if (err) { console.log(err); }
 		else {
