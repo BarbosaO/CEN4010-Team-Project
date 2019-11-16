@@ -99,6 +99,9 @@
                                 <% })%>
                             <% }%>
                         </div>
+                      <%
+                        console.log(user)
+                      %>
                     <%if(purchased == true){ %>
                         <div class="col-6">
                             <div class="container">
@@ -107,8 +110,9 @@
                                         <div class="form-inline row">
                                             <div class="col-5"></div>
                                             <div class="col-7">
-                                                <p id="invisibleNickname"style="display:none"><%= nickname %></p>
-                                                <p id="nickname"style="margin-bottom:0; text-align:right;">Comment as: <%= nickname %></p>
+                                              
+                                                <p id="invisibleNickname"style="display:none"><%= user.Nickname %></p>
+                                                <p id="nickname"style="margin-bottom:0; text-align:right;">Comment as: <%= user.Nickname %></p>
                                             </div>
                                         </div>
                                         <div id="commentWarning" class="alert alert-danger d-none" role="alert">You cannot leave an empty comment</div>

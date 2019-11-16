@@ -30,6 +30,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method')); // for delete and put requests
 
+
 //ROUTES
 
 //BOOK LIST
@@ -51,6 +52,8 @@ app.get("/bookList", checkAuthenticated2, (req, res) => {
 	//console.log("Called find()");
 });
 
+//Displays for browsing all books with an Average Review score of 4/5 or higher, as the specifications
+//didn't mention a criteria for bestsellers we defaulted to books with high average ratings
 app.get("/bestsellers", checkAuthenticated2, (req, res) =>{
 	db.collection('Books').find().filter(	
 			{AvgReview : {$gte : 4}}
@@ -59,6 +62,9 @@ app.get("/bestsellers", checkAuthenticated2, (req, res) =>{
 			res.render("pages/bestsellers.ejs", {docs: docs, user: req.user});
 		});
 })
+
+//Books filter/sort
+//Finds books that match genre, title, author, or are greater than the minimum price, date, or avgerage review searched for
 app.post("/book_filter", checkAuthenticated2,(req, res) =>{
 	var genre = req.body.genre;
 	var author = req.body.author;
@@ -646,9 +652,9 @@ app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
 								    if (err) { console.log(err); }
 									else {
 										if(reviewsByUser.length > 0){
-											res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, bookId:bookId, purchased:false});
+											res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, bookId:bookId, purchased:true});
 										}else{
-											res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, nickname:req.user[0].Nickname, bookId:bookId, purchased:true});
+											res.render("pages/bookDetails.ejs", {reviews: reviews, book: book[0], user: req.user, nickname:req.user[0].Nickname, bookId:bookId, purchased:false});
 										}
 									}
 								});
