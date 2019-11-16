@@ -41,16 +41,23 @@
   <hr>
 <form align="center" action= "/book_filter/" method="post">
     	<label for="book_genre">Genre: </label>
-    	<input bGenre="book_genre" type="text" name="genre">
+        <select name="genre">
+          <option value="">Select Genre</option>
+          <option value="Thriller">Thriller</option>
+          <option value="Health">Health</option>
+          <option value="Science & Math">Science & Math</option>
+          <option value="Science Fiction">Science Fiction</option>
+          <option value="Computers & Technology">Computers & Technology</option>
+        </select>
       <label for="book_author">Author: </label>
       <input bAuthor="book_author" type="text" name="author">
       <label for="book_title">Title: </label>
       <input bTitle="book_title" type="text" name="title">
       <label for="book_avgReview">Min Rating (0-5):</label>
       <input bAvgReview="book_avgReview" type="number" name="avgReview">
-      <label for="book_price">$</label>
+      <label for="book_price">Min Price:</label>
       <input bPrice="book_price" type="double" name="price">
-      <label for="book_date">Date (MMDDYYYY):</label>
+      <label for="book_date">Date:</label>
       <input bDate="book_date" type="date" name="date">
       <input type="submit" value="OK">
 </form>

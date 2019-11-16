@@ -1,11 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\views",
-    "\\views\\pages",
-    "\\views\\pages\\partials",
-    "\\views\\scripts"
+    "\\views\\pages\\partials"
   ],
-  "SelectedNode": "\\views\\pages\\cart.ejs",
+  "SelectedNode": "\\views",
   "PreviewInSolutionExplorer": false
 }
