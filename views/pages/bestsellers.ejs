@@ -62,11 +62,8 @@
               <img src ="<%= book.Cover %>" width="180" height="225" title="" />
             </td>
             <td><a class = "" href="/bookDetails/<%=book._id%>"><%= book.Title %></a></td>
-            <td>
-              <p class = "" >
-                <%= book.Author %>
-              </p>
-            </td>
+            
+      <td><a class = "" href="/author/<%=book.AuthorID%>"><%= book.Author %></a></td>
             <td>
               <p class = "" >
                 <%= book.Genre %>
