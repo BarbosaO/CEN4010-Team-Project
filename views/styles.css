@@ -61,21 +61,21 @@ body{
 
 div.scroll {
     
-    border: 2px #e7e7e7;
-    width: 600px;
-    height: 350px;
-    overflow: scroll;
-    padding: 100px;
+  border: 2px #e7e7e7;
+  width: 300px;
+  height: 250px;
+  overflow: scroll;
+ 
 }
 
 div.scroll2 {
-    
-    color: 2px #e7e7e7;
-    width: 1200px;
-    height: 850px;
-    overflow: scroll;
-    padding: 10px;
+  
+  width: 800px;
+  height: 650px;
+  overflow: scroll;
+  padding: 10px;
 }
+
 
 .con {
     position: relative;
@@ -106,10 +106,10 @@ div.scroll2 {
 
 
 h2 {
-    margin-top: 2em;
-    margin-left: 2em;
-    margin-right: 2em;
-    margin-bottom: 2em;
+    margin-top: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-bottom: 1em;
 }
 
 .headerButton{
