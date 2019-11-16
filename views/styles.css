@@ -62,27 +62,51 @@ body{
 div.scroll {
   
   border: 2px #e7e7e7;
-  width: 600px;
-  height: 350px;
+  width: 300px;
+  height: 250px;
   overflow: scroll;
-  padding: 100px;
 }
 
 div.scroll2 {
   
-  color: 2px #e7e7e7;
-  width: 1200px;
-  height: 850px;
+  width: 800px;
+  height: 650px;
   overflow: scroll;
   padding: 10px;
 }
 
+.con {
+    position: relative;
+    width: 80px;
+    height: 100px;
+  }
+  
+  /* Make the image to responsive */
+  .image {
+    display: block;
+    width: 80px;
+    height: 100px;
+  }
+  
+  /* The overlay effect - lays on top of the container and over the image */
+  .overlay {
+    position: absolute; 
+    bottom: 0; 
+    width: 80px;
+    height: 100px;
+    transition: .5s ease;
+    opacity:0;
+  }
+
+  .con:hover .overlay {
+    opacity: 1;
+  }
 
 h2 {
-  margin-top: 2em;
-  margin-left: 2em;
-  margin-right: 2em;
-  margin-bottom: 2em;
+  margin-top: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-bottom: 1em;
 }
 
 .headerButton{
