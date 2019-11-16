@@ -1,25 +1,40 @@
 body{
-    padding:0;
+  padding:0;
 }
 
 /* 5 star rating system */
 .checked {
-    transition: color 0.5s ease;
-    color: orange;
+  transition: color 0.5s ease;
+  color: orange;
 }
 
 .center {
-    margin: auto;
-    width: 60%;
-    padding: 10px;
-    text-align: center;
-  }
+  margin: auto;
+  width: 60%;
+  padding: 10px;
+  text-align: center;
+}
 
 .button {
+
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button5 {background-color: #555555;} /* Black */
+
+.button2 {
  
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 15px 15px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -27,104 +42,62 @@ body{
     margin: 4px 2px;
     cursor: pointer;
   }
-  
-.button5 {background-color: #555555;} /* Black */
-  
-.button2 {
-   
-      border: none;
-      color: white;
-      padding: 15px 15px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-    }
-  
+
 .button1 {
-   
-      border: none;
-      color: rgb(7, 7, 7);
-      padding: 15px 15px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 10px;
-      font-weight: bold;
-      margin: 1px 1px;
-      cursor: pointer;
-    }
-    
+ 
+    border: none;
+    color: rgb(7, 7, 7);
+    padding: 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 1px 1px;
+    cursor: pointer;
+  }
+  
 .button4 {background-color: #e7e7e7;}/* Grey */
 
 div.scroll {
-    
-    border: 2px #e7e7e7;
-    width: 600px;
-    height: 350px;
-    overflow: scroll;
-    padding: 100px;
+  
+  border: 2px #e7e7e7;
+  width: 600px;
+  height: 350px;
+  overflow: scroll;
+  padding: 100px;
 }
 
 div.scroll2 {
-    
-    color: 2px #e7e7e7;
-    width: 1200px;
-    height: 850px;
-    overflow: scroll;
-    padding: 10px;
+  
+  color: 2px #e7e7e7;
+  width: 1200px;
+  height: 850px;
+  overflow: scroll;
+  padding: 10px;
 }
-
-.con {
-    position: relative;
-    width: 80px;
-    height: 100px;
-  }
-  
-  /* Make the image to responsive */
-  .image {
-    display: block;
-    width: 80px;
-    height: 100px;
-  }
-  
-  /* The overlay effect - lays on top of the container and over the image */
-  .overlay {
-    position: absolute; 
-    bottom: 0; 
-    width: 80px;
-    height: 100px;
-    transition: .5s ease;
-    opacity:0;
-  }
-
-  .con:hover .overlay {
-    opacity: 1;
-  }
 
 
 h2 {
-    margin-top: 2em;
-    margin-left: 2em;
-    margin-right: 2em;
-    margin-bottom: 2em;
+  margin-top: 2em;
+  margin-left: 2em;
+  margin-right: 2em;
+  margin-bottom: 2em;
 }
 
 .headerButton{
-    border:none;
-    color:rgb(144, 148, 150);
-    padding:0;
-    background-color:rgb(52, 58, 63);
-    text-align:baseline;
-    margin-top:8px;
+  border:none;
+  color:rgb(144, 148, 150);
+  padding:0;
+  background-color:rgb(52, 58, 63);
+  text-align:baseline;
+  margin-top:8px;
 }
 
 .headerButton:hover{
-    color:rgb(180, 188, 190);
+  color:rgb(180, 188, 190);
 }
 
 #comment{
-    max-height: 50vh;
+  max-height: 50vh;
 }

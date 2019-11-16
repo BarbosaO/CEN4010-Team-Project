@@ -818,8 +818,8 @@ var dbConnection = MongoClient.connect("mongodb+srv://test1:test1@cluster0-jdush
         console.log('connected to database');
 
     // Server
-    app.listen(3000, "localhost", function(){
-        console.log("Listening on port 3000...")
+    app.listen(3001, "localhost", function(){
+        console.log("Listening on port 3001...")
     });
 
 });
