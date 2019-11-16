@@ -5,10 +5,11 @@
         <% include partials/header.ejs %>
         <script type="text/javascript" src="../scripts/stars.js"></script>
         <script type="text/javascript" src="../scripts/validateReview.js"></script>
+        <title><%= book.Title %> | Geek Text</title>
     </head>
     <body class="container-fluid">
         <main>
-            <h1 align="center">BOOK DETAILS</h1>
+            <h1 align="center"><%= book.Title %></h1>
             <div class="container-fluid">
                 <!-- Beginning of the book detail -->
                 <div class="row">
@@ -18,8 +19,6 @@
                                 <!-- main table --> 
                                 <table style width="100%">
                                     <tr>
-                                        <!-- Book title -->
-                                        <h5 class="title" >Title: <%= book.Title %> </h5>
                                         <th> 
                                             <!-- Book Author -->
                                             <div class="product-author">
@@ -69,7 +68,7 @@
             <!-- reviews list and rating form -->        
             <div>    
                 <h3>Reviews</h3>
-                <div class="row">
+                <div class="row" style="width:100%;">
                     <%if(purchased == true){ %>
                         <div class="col-6">
                             <hr>
