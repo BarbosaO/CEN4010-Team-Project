@@ -22,9 +22,9 @@
         Password:<br>
         <input type="text" name="password" required><br>
 
-        <!-- <div class="alert alert-danger" id="addrAlert" role="alert" style="display:none;">
+        <div class="alert alert-danger" id="addrAlert" role="alert" style="display:none;">
             Address invalid.
-        </div> -->
+        </div>
 
         <h5><strong>Personal Information</strong></h5>
         First Name:<br>
@@ -59,13 +59,18 @@
         <input type="number" name="creditCard" id="ccNum" required><br>
         Expiration Date:<br>
         <input type="date" name="expDate" required>
+
         <div id="container_credit">
             <a href="#" id="addCredit" onclick="addCreditFields()">Add More (2)</a><br>
         </div>
 
+        <div class="alert alert-danger" id="addrAlert2" role="alert" style="display:none;">
+                Address invalid.
+        </div>
+
         <h5><strong>Shipping</strong></h5>
         Shipping Address:<br>
-        <input type="text" name="shipaddr" required><br>
+        <input type="text" name="shipaddr" id="addr2" required><br>
         City:<br>
         <input type="text" name="shipcity" required><br>
         State/Province/Region:<br>
@@ -74,6 +79,7 @@
         <input type="number" name="shipzip" required><br>
         Country:<br>
         <input type="text" name="shipcountry" required><br>
+
         <div id="container_shipping">
             <a href="#" id="addShipping" onclick="addShippingFields()">Add More (2)</a><br>
         </div>
@@ -86,6 +92,10 @@
     </footer>
 
         <script>
+            function validate(){
+                validateCC();
+                validateAddr();
+            }
             // used to validate credit card input
             function validateCC(){
                 var ccNum = document.getElementById("ccNum").value;
@@ -97,18 +107,19 @@
                     return false;
                 }
             }
-
-            // function validateAddr(){
-            //     var addr = document.getElementById("addr").value;
-            //     var regexp = /^[\w\s.-]+\d+,\s*[\w\s.-]+$/;
-            //     if(addr.match(regexp)){
-            //         return true;
-            //     }else{
-            //         document.getElementById('addrAlert').style.display = 'block';
-            //         return false;
-            //     }
-            // }
-            
+            // used to validate addresses
+            function validateAddr(){
+                var addr = document.getElementById("addr").value;
+                var addr2 = document.getElementById("addr2").value;
+                var regexp = /^\s*\S+(?:\s+\S+){2}/;
+                if(addr.match(regexp) || addr2.match(regexp)){
+                    return true;
+                }else{
+                    document.getElementById('addrAlert').style.display = 'block';
+                    document.getElementById('addrAlert2').style.display = 'block';
+                    return false;
+                }
+            }
             
             // used to register number of clicks for more credit cards
             var clicks_credit = 0;
