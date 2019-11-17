@@ -9,6 +9,7 @@ const LocalStrategy = require('passport-local');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const flash = require('express-flash');
+// const bcrypt = require('bcrypt');
 var ObjectId = require('mongodb').ObjectID;
 var db;
 var em;
@@ -784,7 +785,7 @@ function checkNotAuthenticated(req, res, next){
 }
 
 function initialize(passport){
-    const authenticateUser = (email, password, done) => {
+    const authenticateUser = async (email, password, done) => {
         db.collection('User').find({"Email": email}).toArray(function(err, user){
             if (err) { console.log(err); }
             else {
@@ -794,7 +795,17 @@ function initialize(passport){
                 if(userFound == null){
                     return done(null, false, {message: 'No user found with that email.'})
                 }
-    
+	
+				// try {
+				// 	if (bcrypt.compare(password, userFound.Password)) {
+				// 	  return done(null, user)
+				// 	} else {
+				// 	  return done(null, false, { message: 'Password incorrect' })
+				// 	}
+				//   } catch (e) {
+				// 	return done(e)
+				// }
+				
                 if(password.localeCompare(userFound.Password) == 0){ //equal
                     return done(null, user)
                 }else{
