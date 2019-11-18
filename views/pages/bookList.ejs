@@ -1,13 +1,43 @@
+
 <!DOCTYPE html>
+
 <html>
-    <head>
-    <% include partials/header.ejs %>
-  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+  <head>
+  <% include partials/header.ejs %>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
-	</head>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+  <title>Browse Books | Geek Text</title>
+    </head>
+    <script>
+      $(document).ready( function () {
+      $('#table_id').DataTable({
+      "autoWidth": true,
+      order: [[1, 'desc']],
+      "columns": [
+      { "orderable": false },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      <% if(user){ %>
+         {"orderable": false }
+      <% } %>
+      ],
+      "lengthMenu": [
+      [10,20],
+      ["10", "20"]
+        ],
+      "searching": false
+      });
+      } );
+    </script>
 	<body class ="container-fluid">
-<h1 align="center">Books List</h1>
+    <h1 align ="center">Books List</h1>
+    <a class = "btn btn-primary" href="/bestsellers/"> Bestsellers</a>
   <hr>
 <form align="center" action= "/book_filter/" method="post">
     	<label for="book_genre">Genre: </label>
@@ -18,21 +48,67 @@
       <input bTitle="book_title" type="text" name="title">
       <label for="book_avgReview">Min Rating (0-5):</label>
       <input bAvgReview="book_avgReview" type="number" name="avgReview">
-  	  <input type="submit" value="OK">
+      <label for="book_price">$</label>
+      <input bPrice="book_price" type="double" name="price">
+      <label for="book_date">Date (MMDDYYYY):</label>
+      <input bDate="book_date" type="date" name="date">
+      <input type="submit" value="OK">
+</form>
     <hr></hr>
     <main>
-  <% docs.forEach(book => {%>
-      <img src =" <%= book.Cover %>" width="180" height="225" title="" />
-	    <p class = "" ><%= book.Title %></p>
-  	  <p class = "" >By: <%= book.Author %></p>
-	    <p class = "" >Genre: <%= book.Genre %></p>
-	    <p class = "" >Price: $<%= book.Price %></p>
-      <a class = "" href="/bookDetails/<%=book._id%>"> View Details </a>
-      <a class = "" href="/AddToCartPlaceholder/<%=book._id%>"> Add to Cart </a>
-     <hr>
-    <% })%>
+      <table id="table_id" class="display" width="100%">
+        <thead>
+          <tr>
+            <th>Cover</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th>Price</th>
+            <th>Rating</th>
+            <th>Date</th>
+            <% if(user){ %>
+              <th> </th>
+            <% } %>
+          </tr>
+        </thead>
+        <tbody>
+  <% docs.forEach(book => {
+    book.PublicationDate = (new Date(book.PublicationDate))
+    book.PublicationDate = `${book.PublicationDate.getFullYear()}/${book.PublicationDate.getMonth()+1}/${book.PublicationDate.getDate()}`
+    %>
+      
+      <tr>
+      <td><img src =" <%= book.Cover %>" width="180" height="225" title="" /></td>
+	    <td><a class = "" href="/bookDetails/<%=book._id%>"><%= book.Title %></a></td>
+      <td><p class = "" ><%= book.Author %></p></td>
+      <td><p class = "" ><%= book.Genre %></p></td>
+      <td><p class = "" >$<%= book.Price %></p></td>
+      <td><p class = "" ><%= book.AvgReview %></p></td>
+      <td><p class = "" ><%= book.PublicationDate%></p></td>
+      <% if(user){ %>
+      <td>
+        <form action="/AddToCart?_method=ADD" method="POST">
+          <input type="text" name="id" value="<%= book._id %>" style="display:none;">
+          <input type="text" name ="title" value = "<%= book.Title %>" style="display:none;">
+          <input type="text" name ="author" value = "<%= book.Author %>" style="display:none;">
+          <input type="text" name ="price" value = "<%= book.Price %>" style="display:none;">
+          <input type="text" name ="descr" value = "<%= book.Description%>" style="display:none;">
+          <input type="text" name ="cover" value = "<%= book.Cover %>" style="display:none;">
+          <button class="button button5" type="submit"> Add to Cart </button>
+        </form>
+      </td>
+        <% } %>
+      
+      
+      </tr>
+  <% })%>
+    </tbody>
+  </table>
+     
   </main>
    <% include partials/footer.ejs %>
      
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
 </body>
 </html>

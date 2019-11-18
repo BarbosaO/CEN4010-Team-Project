@@ -1,0 +1,216 @@
+<!-- views/pages/bookDetails.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <% include partials/header.ejs %>
+        <script type="text/javascript" src="../scripts/stars.js"></script>
+        <script type="text/javascript" src="../scripts/validateReview.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="../owl.carousel.min.css">
+        <link rel="stylesheet" type="text/css" href="../styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700,800,900" rel="stylesheet">
+        <link rel="stylesheet" href="../zoom.css">
+        <title><%= book.Title %> | Geek Text</title>
+    </head>
+    <body>
+        <main>
+            <section class="product-sec">
+                    <div class="container">
+                        <h1><%= book.Title %></h1>
+                        <!-- Beginning of the book detail -->
+                        <div class="row">
+                            <div class="col-md-6 slider-sec">   
+                                <div id="myCarousel" class="carousel slide">
+                                    <div class="carousel-inner">
+                                        <div class="active item carousel-item" data-slide-number="0">     
+                                            <div class="book">
+                                                <!-- Book cover -->
+                                                <div class="product-cover">
+                                                    <img id = "myImg" src = <%= book.Cover %> width="333" height="500" title="" />    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- The Modal -->
+                                <div id="myModal" class="modal">
+                                        <span class="close">&times;</span>
+                                        <img class="modal-content" id="img01">
+                                        <div id="caption"></div>
+                                    </div>
+                            </div>
+                            <div class="col-md-6 slider-content">
+                                <!-- main table --> 
+                                <!-- Book Description -->
+                                <div class="product-description">
+                                    <p class="description"><%= book.Description %></p>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <!-- Book Author -->
+                                        <span class="name">Author</span><span class="clm">:</span>
+                                        <span class="tab"><a href="/author/<%=book.AuthorID%>"><%= book.Author %></a></span>
+                                    </li>
+                                    <li>
+                                        <!-- Book Publisher -->
+                                        <span class="name">Publisher</span><span class="clm">:</span>
+                                        <span class="tab"><%= book.Publisher %></span>
+                                    </li>
+                                    <li>
+                                        <!-- Book ISBN -->
+                                        <span class="name">ISBN</span><span class="clm">:</span>
+                                        <span class="tab"> <%= book.ISBN %></span>
+                                    </li>
+                                    <li>
+                                        <!-- Book Genre -->
+                                        <span class="name">Genre</span><span class="clm">:</span>
+                                        <span class="tab"> <%= book.Genre %></span>
+                                        
+                                    </li>
+                                    <li>
+                                        <!-- Book AvgReview -->
+                                        <span class="name">Avg. Rating</span><span class="clm">:</span>
+                                        <%if(reviews.length == 0){%>
+                                            <span class="tab">N/A</span>
+                                        <%} else {%>
+
+                                            <% var count = 0; %>
+                                            <% var average = 0; %>
+                                            <% var sum = 0; %>
+                                            <% reviews.forEach(review => {%>
+                                                   
+                                                <% count = count + 1; %>
+                                                <%for (i = 0; i < review.Rating; i++){%>
+                                                    <% sum = sum + 1; %>
+                                                <%}%>
+                                            <% })%>
+                                                
+                                            <% average = sum / count; %>
+                                            <%for (i = 0; i < average; i++){%>
+                                                <span class="fa fa-star checked tab"></span>
+                                            <%}%>
+                                            <%for (i = 0; i < Math.floor(5 - average); i++){%>
+                                                <span class="fa fa-star tab" ></span>
+                                            <%}%>
+                                        <% }%>
+                                       
+                                    </li>
+                                    <li>
+                                        <!-- Book Publication Date -->
+                                        <span class="name">Published On</span><span class="clm">:</span>
+                                        <span class="tab"><%= book.PublicationDate %></span>
+
+                                    </li>
+                                    <li>
+                                        <!-- Book price -->
+
+                                        <span class="name">Price</span><span class="clm">:</span>
+                                        <span class="tab final">$<%= book.Price %></span>
+                                        
+                                    </li>
+                                </ul>     
+                                <div class="btn-sec">
+                                    <button class="btn">Add To cart</button>
+                                    <button class="btn black">Buy Now</button>
+                                </div>  
+                            </div>
+                        </div>  
+                    </div>
+            </section>       
+            <!-- reviews list and rating form -->
+            <section class="reviews-sec">     
+                <div class="container">    
+                    <h3>Reviews</h3>
+                    <div class="row" style="width:100%;">
+                        <%if(purchased == true){ %>
+                            <div class="col-6">
+                                <hr>
+                        <% } else{ %>
+                            <div class="col-12">
+                                <hr>
+                        <% } %>
+                                <%if(reviews.length == 0){%>
+                                    <div class="row" style="margin-left:1px;">
+                                        <p class="rating"> no reviews yet... </p>
+                                    </div>
+                                <%} else {%>
+                                    <% reviews.forEach(review => {%>
+                                        <div>
+                                            <span class="rating">Rating: </span>
+                                            <%for (i = 0; i < review.Rating; i++){%>
+                                                <span class="fa fa-star checked"></span>
+                                            <%}%>
+                                            <%for (i = 0; i < 5 - review.Rating; i++){%>
+                                                <span class="fa fa-star"></span>
+                                            <%}%>
+                                        </div>
+                                        <p class="comment" style="margin-top: 10px;"> <%= review.Comment %> </p>
+                                        <%if(review.Anonymous == true){%>
+                                            <span class="anon">By: Anonymous <%= review.Date %> </span>
+                                        <%}else{%>
+                                            <span>By: <%= review.Nickname %> <%= review.Date %></span>
+                                        <%}%>
+                                        <hr>
+                                    <% })%>
+                                <% }%>
+                            </div>
+                        <%if(purchased == true){ %>
+                            <div class="col-6">
+                                <div class="container">
+                                    <form action="/submitReview/<%= bookId %>" method="POST" onsubmit="return validateReview()">
+                                        <div class="form-group">
+                                            <div class="form-inline row">
+                                                <div class="col-5"></div>
+                                                <div class="col-7">
+                                                
+                                                    <p id="invisibleNickname"style="display:none"><%= user.Nickname %></p>
+                                                    <p id="nickname"style="margin-bottom:0; text-align:right;">Comment as: <%= user.Nickname %></p>
+                                                </div>
+                                            </div>
+                                            <div id="commentWarning" class="alert alert-danger d-none" role="alert">You cannot leave an empty comment</div>
+                                            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                                            <div id="ratingWarning" class="alert alert-danger d-none" role="alert" style="margin-top:15px;"> You must rate the book from 1 - 5 stars. </div>
+                                        
+                                        </div>
+
+                                        <!-- input will hold value for date -->
+                                        <input type="text" class="d-none" id="date" name="date">
+
+                                        <!-- this input will hold the value for rating to send to backend -->
+                                        <input type="number" class="d-none" id="rating" name="rating">
+
+                                        <!-- Star Rating -->
+                                        <div class="form-inline row">
+                                            <div class="col-3">
+                                                <span class="fa fa-star" id="star1"></span>
+                                                <span class="fa fa-star" id="star2"></span>
+                                                <span class="fa fa-star" id="star3"></span>
+                                                <span class="fa fa-star" id="star4"></span>
+                                                <span class="fa fa-star" id="star5"></span>
+                                            </div>
+                                            <div class="col-4"></div>
+                                            <div class="form-check col-3">
+                                                <input class="form-check-input" type="checkbox" id="anonymous" name="anonymous" onclick="toggleAnon()">
+                                                <label class="form-check-label" style="color:grey;" for="anonymous">Anonymous</label>
+                                            </div> 
+                                            <div class="col-2">
+                                                <button class="btn btn-success btn-md" type="submit">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>  
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>    
+            </section>   
+        </main>
+        <footer class="footer">
+            <% include partials/footer.ejs %>
+        </footer>
+        <script  type="text/javascript" src="../scripts/zoom.js"></script>
+    </body>
+</html>

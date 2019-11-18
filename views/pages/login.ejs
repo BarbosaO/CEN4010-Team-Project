@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <% include partials/header.ejs %>
-    <title>Login | WebApp</title>
+    <title>Login | Geek Text</title>
 </head>
 <body>
     
     <div class="center">
     <h1>Login</h1>
     <% if(messages.error){ %>
-        <%= messages.error %>
+        <div class="alert alert-danger" role="alert"><%=messages.error %></div>
     <% } %>
     <form action="/login" method="POST">
         Email:<br>

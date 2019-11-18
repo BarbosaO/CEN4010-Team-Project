@@ -1,3 +1,12 @@
+function toggleAnon(){
+    if(document.getElementById('anonymous').checked == true){
+        console.log('anon')
+        document.getElementById('nickname').innerHTML = 'Comment as: Anonymous';
+    }else{
+        document.getElementById('nickname').innerHTML = 'Comment as: ' + document.getElementById('invisibleNickname').innerHTML;
+    }
+}
+
 function validateReview(){
     var comment = document.getElementById('comment').value;
     var date = document.getElementById('date');
@@ -7,18 +16,58 @@ function validateReview(){
     var formRating = document.getElementById('rating');
     formRating.value = rating;
 
-    // console.log('comment: ' + comment);
-    // console.log('anonymous: ' + anonymous);
-    // console.log('rating: ' + rating);
-
     if(rating == 0){
-        alertRating();
+        console.log('0 rating')
+        document.getElementById('ratingWarning').classList.remove('d-none');
         if(comment == "" || comment == " " ){
-            return alertMessage();
+            document.getElementById('commentWarning').classList.remove('d-none');
+        }else{
+            if(!document.getElementById('commentWarning').classList.contains("d-none")){
+                document.getElementById('commentWarning').classList.add("d-none")
+            }
         }
-    }else if(comment == "" || comment == " " ){
-        return alertComment();
+        return false;
+    }else{
+        if(!document.getElementById('ratingWarning').classList.contains("d-none")){
+            document.getElementById('ratingWarning').classList.add('d-none');
+            if(comment == "" || comment == " " ){
+                document.getElementById('commentWarning').classList.remove('d-none');
+                return false;
+            }else{
+                if(!document.getElementById('commentWarning').classList.contains("d-none")){
+                    document.getElementById('commentWarning').classList.add("d-none");
+                }
+                return true;
+            }
+        }else{
+            if(comment == "" || comment == " " ){
+                document.getElementById('commentWarning').classList.remove('d-none');
+                return false;
+            }
+        }
     }
+}
+
+function commentEventListener(){
+
+    var text = document.getElementById('text');
+    function resize () {
+        text.style.height = 'auto';
+        text.style.height = text.scrollHeight+'px';
+    }
+    /* 0-timeout to get the already changed text */
+    function delayedResize () {
+        window.setTimeout(resize, 0);
+    }
+    observe(text, 'change',  resize);
+    observe(text, 'cut',     delayedResize);
+    observe(text, 'paste',   delayedResize);
+    observe(text, 'drop',    delayedResize);
+    observe(text, 'keydown', delayedResize);
+
+    text.focus();
+    text.select();
+    resize();
 }
 
 function getRating(){
@@ -41,20 +90,6 @@ function getRating(){
     }else{
         return 0;
     }
-}
-
-function alertRating(){
-    var retVal = confirm("Are you sure you want to give this book 0 stars?");
-    return retVal;
-}
-
-function alertComment(){
-    var retVal = confirm("Are you sure you want to leave an empty comment?");
-    return retVal;
-}
-
-function alertMessage(){
-    alert("Please explain why you're leaving 0 stars.");
 }
 
 function getDate(){
