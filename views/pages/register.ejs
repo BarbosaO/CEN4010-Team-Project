@@ -15,70 +15,74 @@
     <% if(message){ %>
         <%= message %>
     <% } %>
-    <form  method="POST" onsubmit="return validate()">
+    <form action="/register" method="POST" onsubmit="return validate()">
         <h5><strong>Login Credentials</strong></h5>
         Email:<br>
-        <input type="email" name="email" required><br>
+        <input type="email" name="email" ><br>
         Password:<br>
-        <input type="text" name="password" required><br>
+        <input type="text" name="password" ><br>
 
         <div class="alert alert-danger" id="addrAlert" role="alert" style="display:none;">
-            Address invalid.
+            Home address invalid.
         </div>
 
         <h5><strong>Personal Information</strong></h5>
         First Name:<br>
-        <input type="text" name="firstname" required><br>
+        <input type="text" name="firstname" ><br>
         Last Name:<br>
-        <input type="text" name="lastname" required><br>
+        <input type="text" name="lastname" ><br>
         Home Address:<br>
-        <input type="text" name="homeaddr" id="addr" required><br>
+        <input type="text" name="homeaddr" id="addr" ><br>
         City:<br>
-        <input type="text" name="city" required><br>
+        <input type="text" name="city" ><br>
         State/Province/Region:<br>
-        <input type="text" name="state" required><br>
+        <input type="text" name="state" ><br>
         ZIP/Postal Code:<br>
-        <input type="number" name="zip" required><br>
+        <input type="number" name="zip" ><br>
         Country:<br>
-        <input type="text" name="country" required><br>
+        <input type="text" name="country" ><br>
 
         <h5><strong>Nickname</strong></h5>
         <h6><strong>(for Book Rating and Commenting)</strong></h6>
-        <input type="text" name="nickname" required><br>
+        <input type="text" name="nickname" ><br>
 
         <div class="alert alert-danger" id="ccAlert" role="alert" style="display:none;">
-            Credit card number invalid.
+            Credit card number must be 16 digits.
+          </div>
+
+        <div class="alert alert-danger" id="cvvAlert" role="alert" style="display:none;">
+            CVV invalid. Must be 3 or 4 digits.
         </div>
 
         <h5><strong>Credit Card Information</strong></h5>
         Owner:<br>
-        <input type="text" name="creditOwner" required><br>
-        CVV:<br>
-        <input type="number" name="cvv" required><br>
+        <input type="text" name="creditOwner" ><br>
         Card Number:<br>
-        <input type="number" name="creditCard" id="ccNum" required><br>
+        <input type="number" name="creditCard" id="ccNum"><br>
+        CVV:<br>
+        <input type="number" name="cvv" id="cvvNum"><br>
         Expiration Date:<br>
-        <input type="date" name="expDate" required>
+        <input type="date" name="expDate" >
 
         <div id="container_credit">
             <a href="#" id="addCredit" onclick="addCreditFields()">Add More (2)</a><br>
         </div>
 
         <div class="alert alert-danger" id="addrAlert2" role="alert" style="display:none;">
-                Address invalid.
+                Shipping address invalid.
         </div>
 
         <h5><strong>Shipping</strong></h5>
         Shipping Address:<br>
-        <input type="text" name="shipaddr" id="addr2" required><br>
+        <input type="text" name="shipaddr" id="addr2" ><br>
         City:<br>
-        <input type="text" name="shipcity" required><br>
+        <input type="text" name="shipcity" ><br>
         State/Province/Region:<br>
-        <input type="text" name="shipstate" required><br>
+        <input type="text" name="shipstate" ><br>
         ZIP/Postal Code:<br>
-        <input type="number" name="shipzip" required><br>
+        <input type="number" name="shipzip" ><br>
         Country:<br>
-        <input type="text" name="shipcountry" required><br>
+        <input type="text" name="shipcountry" ><br>
 
         <div id="container_shipping">
             <a href="#" id="addShipping" onclick="addShippingFields()">Add More (2)</a><br>
@@ -92,34 +96,47 @@
     </footer>
 
         <script>
-            function validate(){
-                validateCC();
-                validateAddr();
-            }
+            
             // used to validate credit card input
-            function validateCC(){
+            function validate(){
+                var addr = document.getElementById("addr").value;
                 var ccNum = document.getElementById("ccNum").value;
+                var cvvNum = document.getElementById("cvvNum").value;
+                var addr2 = document.getElementById("addr2").value;
+
+                var regexp_addr = /^\s*\S+(?:\s+\S+){2}/;
                 var numbers = /^[0-9]+$/;
-                if(ccNum.match(numbers)){
-                    return true;
-                }else{
+
+                if(!(addr.match(regexp_addr))){
+                    document.getElementById('addrAlert').style.display = 'block';
+                    return false;
+                }else if(ccNum.length < 16){
                     document.getElementById('ccAlert').style.display = 'block';
                     return false;
-                }
-            }
-            // used to validate addresses
-            function validateAddr(){
-                var addr = document.getElementById("addr").value;
-                var addr2 = document.getElementById("addr2").value;
-                var regexp = /^\s*\S+(?:\s+\S+){2}/;
-                if(addr.match(regexp) || addr2.match(regexp)){
-                    return true;
-                }else{
-                    document.getElementById('addrAlert').style.display = 'block';
+                }else if(cvvNum.length != 3){
+                    document.getElementById('cvvAlert').style.display = 'block';
+                    return false;
+                }else if(cvvNum.length != 4){
+                    document.getElementById('cvvAlert').style.display = 'block';
+                    return false;
+                }else if(!(addr2.match(regexp_addr))){
                     document.getElementById('addrAlert2').style.display = 'block';
                     return false;
                 }
             }
+            // used to validate addresses
+            // function validateAddr(){
+            //     var addr = document.getElementById("addr").value;
+            //     var addr2 = document.getElementById("addr2").value;
+            //     var regexp = /^\s*\S+(?:\s+\S+){2}/;
+            //     if(addr.match(regexp) || addr2.match(regexp)){
+            //         return true;
+            //     }else{
+            //         document.getElementById('addrAlert').style.display = 'block';
+            //         document.getElementById('addrAlert2').style.display = 'block';
+            //         return false;
+            //     }
+            // }
             
             // used to register number of clicks for more credit cards
             var clicks_credit = 0;
