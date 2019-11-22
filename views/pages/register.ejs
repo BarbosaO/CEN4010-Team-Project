@@ -10,13 +10,14 @@
 </head>
 <body>
     
-    <div class="center">
+    <id="addrAlert2" class="center">
     <h1>Register</h1>
     <% if(message){ %>
         <%= message %>
     <% } %>
     <form action="/register" method="POST" onsubmit="return validate()">
         <h5><strong>Login Credentials</strong></h5>
+
         Email:<br>
         <input type="email" name="email" ><br>
         Password:<br>
@@ -27,42 +28,65 @@
         </div>
 
         <h5><strong>Personal Information</strong></h5>
+        
         First Name:<br>
-        <input type="text" name="firstname" ><br>
+        <input type="text" name="firstname" required><br>
         Last Name:<br>
-        <input type="text" name="lastname" ><br>
+        <input type="text" name="lastname" required><br>
         Home Address:<br>
-        <input type="text" name="homeaddr" id="addr" ><br>
+        <input type="text" name="homeaddr" id="addr" required><br>
         City:<br>
-        <input type="text" name="city" ><br>
+        <input type="text" name="city" required><br>
         State/Province/Region:<br>
-        <input type="text" name="state" ><br>
+        <input type="text" name="state" required><br>
         ZIP/Postal Code:<br>
-        <input type="number" name="zip" ><br>
+        <input type="number" name="zip" required><br>
         Country:<br>
-        <input type="text" name="country" ><br>
+        <input type="text" name="country" required><br>
 
         <h5><strong>Nickname</strong></h5>
         <h6><strong>(for Book Rating and Commenting)</strong></h6>
-        <input type="text" name="nickname" ><br>
 
+        <input type="text" name="nickname" required><br>
+
+        
+        <h5><strong>Credit Card Information</strong></h5>
+        
+        Owner:<br>
+        <input type="text" name="creditOwner" required><br>
+        
+        Card Number:<br>
+        <input type="number" name="creditCard" id="ccNum" onkeyup="validateCC()" required><br>
+        
+        <div class="alert alert-success" id="ccVisa" role="alert" style="display:none;">
+            Visa Card Detected!
+        </div>
+        
+        <div class="alert alert-success" id="ccMast" role="alert" style="display:none;">
+            Mastercard Detected!
+        </div>
+        
+        <div class="alert alert-success" id="ccDisc" role="alert" style="display:none;">
+            Discover Card Detected!
+        </div>
+        
+        <div class="alert alert-success" id="ccAmex" role="alert" style="display:none;">
+            American Express Card Detected!
+        </div>
+        
         <div class="alert alert-danger" id="ccAlert" role="alert" style="display:none;">
-            Credit card number must be 16 digits.
-          </div>
+            Invalid Card Detected! Must be Visa, MasterCard, Discover, or American Express.
+        </div>
+        
+        CVV:<br>
+        <input type="number" name="cvv" id="cvvNum" required><br>
 
         <div class="alert alert-danger" id="cvvAlert" role="alert" style="display:none;">
             CVV invalid. Must be 3 or 4 digits.
         </div>
 
-        <h5><strong>Credit Card Information</strong></h5>
-        Owner:<br>
-        <input type="text" name="creditOwner" ><br>
-        Card Number:<br>
-        <input type="number" name="creditCard" id="ccNum"><br>
-        CVV:<br>
-        <input type="number" name="cvv" id="cvvNum"><br>
         Expiration Date:<br>
-        <input type="date" name="expDate" >
+        <input type="date" name="expDate" required>
 
         <div id="container_credit">
             <a href="#" id="addCredit" onclick="addCreditFields()">Add More (2)</a><br>
@@ -73,16 +97,17 @@
         </div>
 
         <h5><strong>Shipping</strong></h5>
+
         Shipping Address:<br>
-        <input type="text" name="shipaddr" id="addr2" ><br>
+        <input type="text" name="shipaddr" id="addr2" required><br>
         City:<br>
-        <input type="text" name="shipcity" ><br>
+        <input type="text" name="shipcity" required><br>
         State/Province/Region:<br>
-        <input type="text" name="shipstate" ><br>
+        <input type="text" name="shipstate" required><br>
         ZIP/Postal Code:<br>
-        <input type="number" name="shipzip" ><br>
+        <input type="number" name="shipzip" required><br>
         Country:<br>
-        <input type="text" name="shipcountry" ><br>
+        <input type="text" name="shipcountry" required><br>
 
         <div id="container_shipping">
             <a href="#" id="addShipping" onclick="addShippingFields()">Add More (2)</a><br>
@@ -96,50 +121,98 @@
     </footer>
 
         <script>
+
+            //regex for credit cards
+            var regex_visa = /^4[0-9]{12}(?:[0-9]{3})?$/;
+            var regex_mc = /^5[1-5][0-9]{14}$/;
+            var regex_disc = /^(?:6(?:011|5[0-9][0-9])[0-9]{12})$/;
+            var regex_amex = /^3[47][0-9]{13}$/;
+
+            // regex for home and shipping addresses
+            var regex_addr = /^\s*\S+(?:\s+\S+){2}/;
+
+            // regex for cvv number (3 or 4 digits)
+            var regex_cvv = /^[0-9]{3,4}$/;
             
-            // used to validate credit card input
+            // validates addresses, card number, and cvv after user clicks "Register"
             function validate(){
                 var addr = document.getElementById("addr").value;
                 var ccNum = document.getElementById("ccNum").value;
                 var cvvNum = document.getElementById("cvvNum").value;
                 var addr2 = document.getElementById("addr2").value;
 
-                var regexp_addr = /^\s*\S+(?:\s+\S+){2}/;
-                var numbers = /^[0-9]+$/;
+                // check the user input against regex
+                // credit cards
+                var isVisa = regex_visa.test( ccNum ) === true;
+                var isMast = regex_mc.test( ccNum ) === true;
+                var isAmex = regex_amex.test( ccNum ) === true;
+                var isDisc = regex_disc.test( ccNum ) === true;
 
-                if(!(addr.match(regexp_addr))){
+                // addresses
+                var isAddr = regex_addr.test(addr) === true;
+                var isShipAddr = regex_addr.test(addr2) === true;
+                
+                // cvv
+                var isCVV = regex_cvv.test(cvvNum) === true;
+
+                if(!isAddr){
                     document.getElementById('addrAlert').style.display = 'block';
                     return false;
-                }else if(ccNum.length < 16){
+                }else if(!isVisa && !isMast && !isAmex && !isDisc){
                     document.getElementById('ccAlert').style.display = 'block';
                     return false;
-                }else if(cvvNum.length != 3){
+                }else if(!isCVV){
                     document.getElementById('cvvAlert').style.display = 'block';
                     return false;
-                }else if(cvvNum.length != 4){
-                    document.getElementById('cvvAlert').style.display = 'block';
-                    return false;
-                }else if(!(addr2.match(regexp_addr))){
+                }else if(!isShipAddr){
                     document.getElementById('addrAlert2').style.display = 'block';
                     return false;
                 }
+                
             }
-            // used to validate addresses
-            // function validateAddr(){
-            //     var addr = document.getElementById("addr").value;
-            //     var addr2 = document.getElementById("addr2").value;
-            //     var regexp = /^\s*\S+(?:\s+\S+){2}/;
-            //     if(addr.match(regexp) || addr2.match(regexp)){
-            //         return true;
-            //     }else{
-            //         document.getElementById('addrAlert').style.display = 'block';
-            //         document.getElementById('addrAlert2').style.display = 'block';
-            //         return false;
-            //     }
-            // }
+
+            // checks if the credit card is a valid one
+            window.onload = function validateCC(){
+                // user input
+                var ccNum_input = document.getElementById("ccNum");
+                
+                // as the user types in the credit card, messages will display that indicate which card it is
+                ccNum_input.onkeyup = function(event) {
+                    console.log(this.value);
+
+                // visa
+                if(this.value.match(regex_visa)) {
+                    document.getElementById('ccVisa').style.display = 'block';
+                }else{
+                    document.getElementById('ccVisa').style.display = 'none';
+                }
+                
+                // mastercard
+                if(this.value.match(regex_mc)) {
+                    document.getElementById('ccMast').style.display = 'block';
+                }else{
+                    document.getElementById('ccMast').style.display = 'none';
+                }
+
+                // discover
+                if(this.value.match(regex_disc)) {
+                    document.getElementById('ccDisc').style.display = 'block';
+                }else{
+                    document.getElementById('ccDisc').style.display = 'none';
+                }
+
+                // american express
+                if(this.value.match(regex_amex)) {
+                    document.getElementById('ccAmex').style.display = 'block';
+                }else{
+                    document.getElementById('ccAmex').style.display = 'none';
+                }
+            }
+        }
             
             // used to register number of clicks for more credit cards
             var clicks_credit = 0;
+
             // used to keep track of number of cards
             var counter_credit = 1;
 
@@ -149,7 +222,7 @@
                 // Container <div> where dynamic content will be placed
                 var container = document.getElementById("container_credit");
                 
-                // Append node with new text for new owner
+                // Append node with new text for new card owner
                 container.appendChild(document.createTextNode("Owner "+(counter_credit)+":"));
 
                 // Append a line break 
@@ -207,6 +280,7 @@
 
             // used to register number of clicks for more shipping addresses
             var clicks_shipping = 0;
+
             // used to keep track of number of shipping addresses
             var counter_shipping = 1;
             
