@@ -532,6 +532,7 @@ app.delete('/deleteCart', checkAuthenticated, (req,res) => {
 //add book to cart from booklist
 app.post('/AddToCart', checkAuthenticated, (req,res) =>
 {
+	var bookID = req.body.id;
 	var bookTitle = req.body.title;
 	var bookAuth = req.body.author;
 	var bookDescr = req.body.descr;
@@ -541,6 +542,7 @@ app.post('/AddToCart', checkAuthenticated, (req,res) =>
 	try{
 		db.collection('carts').insertOne({
 			Email: req.user[0].Email,
+			bookID: bookID,
 			Title: bookTitle,
 			Author: bookAuth,
 			Description: bookDescr,
@@ -562,6 +564,8 @@ app.post('/AddToSaved', checkAuthenticated, (req,res) =>
 {   
 	
 	var id = req.body.id;
+	var bookID = req.body.bookID;
+	var bookAth = req.body.author;
 	var bookTitle = req.body.title;
 	var bookPrice = parseFloat(req.body.price);
 	var bookCover = req.body.cover;
@@ -572,6 +576,8 @@ app.post('/AddToSaved', checkAuthenticated, (req,res) =>
 	try{
 			db.collection('saved').insertOne({
 				Email: req.user[0].Email,
+				Author: bookAth,
+				bookID: bookID,
 				Title: bookTitle,
 				Price: bookPrice,
 				Cover: bookCover,
@@ -589,6 +595,8 @@ app.post('/AddToSaved', checkAuthenticated, (req,res) =>
 app.post('/moveToCart', checkAuthenticated, (req,res) =>
 {
 	var id = req.body.id1;
+	var bookID = req.body.bookID1;
+	var bookAth = req.body.author1;
 	var bookTitle = req.body.title1;
 	var bookDescr = req.body.descr1;
 	var bookPrice = parseFloat(req.body.price1);
@@ -601,6 +609,8 @@ app.post('/moveToCart', checkAuthenticated, (req,res) =>
 		db.collection('carts').insertOne({
 			Email: req.user[0].Email,
 			Title: bookTitle,
+			bookID: bookID,
+			Author: bookAth,
 			Description: bookDescr,
 			Price: bookPrice,
 			Cover: bookCover,
@@ -627,6 +637,40 @@ app.delete('/DeleteFromSaved', checkAuthenticated, (req,res) => {
     res.redirect('/cart');
 });
 
+//checkOut page
+app.get('/checkOut', checkAuthenticated, (req, res) =>{
+	
+    db.collection('Purchase').find({"Email": req.user[0].Email}).toArray(function(err, purch)
+    {
+        if (err) { console.log(err); }
+        else{  
+           		
+				res.render("pages/checkOut.ejs", {purch: purch, user: req.user});
+			}
+			
+	});  
+});
+
+
+//check out method/button in shopping cart
+app.post('/checkOut', checkAuthenticated, (req,res) => {
+	
+	db.collection('carts').find({"Email": req.user[0].Email}).toArray(function(err, books)
+    {
+        if (err) { console.log(err); }
+        else{  
+				   db.collection('Purchase').insert(books);
+				   try{
+					db.collection('carts').remove({"Email": req.user[0].Email});
+				}catch(e){
+					console.log(e);
+				}
+			}
+	});  
+
+	
+	res.redirect('/checkOut');
+});
 //BOOK DETAILS
 app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
 	var bookId = req.params.id;
