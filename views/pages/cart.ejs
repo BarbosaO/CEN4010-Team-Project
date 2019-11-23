@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,7 +13,6 @@
         <% if(cart[0]!=null){%>
         <h1 align="center" style="padding: 20px; font: LoTimes New Roman;">Your Shopping Cart</h1>
         <main>
-            
             <div class="container-fluid">
                 <!-- Beginning of the cart -->
                 <div class="row">
@@ -20,7 +20,6 @@
                     <div class="col-xs-10 col-md-8">        
                         <div class="jumbotron" style="width: 750px;">  
                             <div class="cart"> 
-                                
                                 <% cart.forEach(cart => {%>  
                                 <div class="container">
                                     <div class="panel panel-default">
@@ -67,19 +66,24 @@
                                                     </tr>
                                                 </table> 
                                             </div>
-
                                             <div class="col-md-10">
                                                 <!-- Book title -->
                                                 <div class="panel-body">
-                                                    <h5 class="title" align="center">Title: <%= cart.Title %> </h5>
+                                                    <h5 class="title" align="center">Author: <%= cart.Author %></h5>
+                                                    <h5 class="title" align="center">Title: <%= cart.Title %></h5>
                                                     <p class="" align="center">Description:</p>
                                                 </div>
                                                 <div class="panel-body">
                                                     <p align="center"><%= cart.Description %></p>
                                                 </div>
+                                                <div class="panel-body">
+                                                        <a class = "" href="/bookDetails/<%=cart.bookID%>">More Info</a>
+                                                </div>
                                                 <div class="panel-body" align="center">
                                                     <form action="/AddToSaved?_method=UPDATEONE" method="POST">
                                                         <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
+                                                        <input type="text" name="bookID" value="<%= cart.bookID %>" style="display:none;">
+                                                        <input type="text" name="author" value="<%= cart.Author %>" style="display:none;">
                                                         <input type="text" name="title" value="<%= cart.Title %>" style="display:none;">
                                                         <input type="text" name = "price" value = "<%= cart.Price %>" style="display:none;">
                                                         <input type="text" name = "cover" value = "<%= cart.Cover %>" style="display:none;">
@@ -132,10 +136,13 @@
                             </div>
                             <div class = "col-12" align = "center">
                                 <hr></hr>
-                                    <button class="button2 button5" type="submit">Check Out</button>
+                                
+                                    <form action="/checkOut?_method=ADD" method="POST">
+                                     <input type="text" name="ids" value="<%= cart.bookID %>" style="display:none;">
+                                     <button class="button2 button5" type="submit" >Check Out</button>
+                                    </form>    
                             </div>
                         </div>
-
                         <div class = "row" align ="center">
                                 <div class = "col-12">
                                     <div class="panel panel-default">
@@ -144,28 +151,29 @@
                                         </div>
                                         <div class="panel-body" >
                                             <div class="scroll" align ="center">
+
+                                            <!-- Begining of Saved List-->
+                                            <% if(saved[0]!=null){%>
                                             <% saved.forEach(saved => {%>
                                                 <div class="panel panel-default">
                                                     <div class="panel-body" ><%= saved.Title%></div>
                                                     <div class="panel-body" >
-                                                        
                                                         <div class = "con">
                                                             <img src = <%= saved.Cover%> class = "image" </img>
-                                                            
                                                                 <div class = "overlay"> 
-                                                                        <form action="/DeleteFromSaved?_method=DELETE" method="POST">
+                                                                    <form action="/DeleteFromSaved?_method=DELETE" method="POST">
                                                                         <input type="text" name="id1" value="<%= saved._id %>" style="display:none;">
                                                                         <input type="image" name="id1" src ="pages/D.png"  height= "100px" width = "80px" alt = "Submit">
-                                                                        </form>
+                                                                    </form>
                                                                 </div>
-                                                            
                                                         </div>
-                                                        
                                                     </div>
                                                     <div class="panel-body" >$<%= saved.Price%></div>
                                                     <div class="panel-body" align="center">
                                                         <form action="/moveToCart?_method=UPDATEONE" method="POST">
                                                             <input type="text" name="id1" value="<%= saved._id %>" style="display:none;">
+                                                            <input type="text" name="bookID1" value="<%= saved.bookID %>" style="display:none;">
+                                                            <input type="text" name="author1" value="<%= saved.Author %>" style="display:none;">
                                                             <input type="text" name="title1" value="<%= saved.Title %>" style="display:none;">
                                                             <input type="text" name = "price1" value = "<%= saved.Price %>" style="display:none;">
                                                             <input type="text" name = "cover1" value = "<%= saved.Cover %>" style="display:none;">
@@ -176,6 +184,11 @@
                                                 </div> 
                                                 <hr></hr>
                                             <% })%>
+
+                                            <%}else{%>
+                                                <a align="center">Empty</a>
+                                            <% }%>
+                                        
                                             </div>
                                         </div>
                                     </div>
@@ -186,12 +199,19 @@
                 </div>
             </div>                                
         </main>
-
         <%}else{%>
             <h1 align="center" style="padding: 20px;">Your Shopping Cart is Empty</h1>
             
+            
             <% if(saved[0]!=null){%>
-
+                <div class="panel panel-default">
+                    <div class="panel-body" align="center">
+                        <a >Lets add some books here,</a>
+                        <a >folow this </a>
+                        <a href="/bookList">Link</a>
+                        <a>to our amazing collection!</a>
+                    </div>
+               </div>
                 <div class = "row" align ="center">
                         <div class = "col-12">
                             <div class="panel panel-default">
@@ -235,12 +255,19 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                 </div>
             <%}else{%>
+                <div class="panel panel-default">
+                    <div class="panel-body" align="center">
+                        <a >Lets add some books here,</a>
+                        <a >folow this </a>
+                        <a href="/bookList">Link</a>
+                        <a>to our amazing collection!</a>
+                    </div>
+                    <hr></hr>
+                </div>
             <% } %>    
-
         <% } %> 
         <% include partials/footer.ejs %>
     </body>
