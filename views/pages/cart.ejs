@@ -13,7 +13,6 @@
         <% if(cart[0]!=null){%>
         <h1 align="center" style="padding: 20px; font: LoTimes New Roman;">Your Shopping Cart</h1>
         <main>
-            
             <div class="container-fluid">
                 <!-- Beginning of the cart -->
                 <div class="row">
@@ -42,6 +41,7 @@
                                                 <div class="panel-body">
                                                     <form action="/deleteCart?_method=DELETE" method="POST">
                                                         <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
+                                                        <input type="text" name="delete" value="yes" style="display:none;">
                                                         <button class="button2 button5" type="submit">Delete</button>
                                                     </form>
                                                 </div>
@@ -82,6 +82,7 @@
                                                 </div>
                                                 <div class="panel-body" align="center">
                                                     <form action="/AddToSaved?_method=UPDATEONE" method="POST">
+                                                        <input type="text" name="save" value="yes" style="display:none;">
                                                         <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
                                                         <input type="text" name="bookID" value="<%= cart.bookID %>" style="display:none;">
                                                         <input type="text" name="author" value="<%= cart.Author %>" style="display:none;">
