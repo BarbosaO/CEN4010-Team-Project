@@ -770,7 +770,7 @@ app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
 });
 
 // AUTHOR
-app.get('/author/:id', checkAuthenticated, function(req, res){
+app.get('/author/:id', checkAuthenticated2, function(req, res){
 
 	if(req.user){
 
