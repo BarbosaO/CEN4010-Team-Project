@@ -368,16 +368,61 @@ app.get('/profile', checkAuthenticated, (req, res) => {
 });
 
 // edit profile
-// TODO
 app.get('/editProfile', checkAuthenticated, (req, res) => {  
     res.render('pages/editProfile.ejs', {user: req.user});
 });
 
 app.put('/updateProfile', checkAuthenticated, (req, res) => {
 	
-	user = req.user[0];
+	var user = req.user[0];
 
 	var id = user._id;
+
+	var email = req.body.email;
+	var password = req.body.password;
+
+	var firstname = req.body.firstname;
+	var lastname = req.body.lastname;
+	var homeaddr = req.body.homeaddr;
+	var city = req.body.city;
+	var state = req.body.state;
+	var zip = req.body.zip;
+	var country = req.body.country;
+
+	var nickname = req.body.nickname;
+
+	var creditOwner = req.body.creditOwner;
+	var cvv = req.body.cvv;
+	var creditCard = req.body.creditCard;
+	var expDate = req.body.expDate;
+
+	var credit_owner2 = req.body.credit_owner2;
+	var credit_cvv2 = req.body.credit_cvv2;
+	var credit_num2 = req.body.credit_num2;
+	var credit_exp_date2 = req.body.credit_exp_date2;
+
+	var credit_owner3 = req.body.credit_owner3;
+	var credit_cvv3 = req.body.credit_cvv3;
+	var credit_num3 = req.body.credit_num3;
+	var credit_exp_date3 = req.body.credit_exp_date3;
+
+	var shipaddr = req.body.shipaddr;
+	var shipcity = req.body.shipcity;
+	var shipstate = req.body.shipstate;
+	var shipzip = req.body.shipzip;
+	var shipcountry = req.body.shipcountry;
+
+	var shipping_addr2 = req.body.shipping_addr2;
+	var shipping_city2 = req.body.shipping_city2;
+	var shipping_state2 = req.body.shipping_state2;
+	var shipping_zip2 = req.body.shipping_zip2;
+	var shipping_country2 = req.body.shipping_country2;
+
+	var shipping_addr3 = req.body.shipping_addr3;
+	var shipping_city3 = req.body.shipping_city3;
+	var shipping_state3 = req.body.shipping_state3;
+	var shipping_zip3 = req.body.shipping_zip3;
+	var shipping_country3 = req.body.shipping_country3;
 
 	db.collection('User').updateOne({"_id": ObjectId(id)}, {$set: {
 		Email: email,
@@ -431,6 +476,7 @@ app.put('/updateProfile', checkAuthenticated, (req, res) => {
 		  console.log(err);
 		} else {
 			console.log("User updated!");
+			res.redirect('pages/editProfile.ejs');
 		 }
 	});
 
@@ -532,7 +578,6 @@ app.delete('/deleteCart', checkAuthenticated, (req,res) => {
 //add book to cart from booklist
 app.post('/AddToCart', checkAuthenticated, (req,res) =>
 {
-	var bookID = req.body.id;
 	var bookTitle = req.body.title;
 	var bookAuth = req.body.author;
 	var bookDescr = req.body.descr;
@@ -542,7 +587,6 @@ app.post('/AddToCart', checkAuthenticated, (req,res) =>
 	try{
 		db.collection('carts').insertOne({
 			Email: req.user[0].Email,
-			bookID: bookID,
 			Title: bookTitle,
 			Author: bookAuth,
 			Description: bookDescr,
@@ -564,8 +608,6 @@ app.post('/AddToSaved', checkAuthenticated, (req,res) =>
 {   
 	
 	var id = req.body.id;
-	var bookID = req.body.bookID;
-	var bookAth = req.body.author;
 	var bookTitle = req.body.title;
 	var bookPrice = parseFloat(req.body.price);
 	var bookCover = req.body.cover;
@@ -576,8 +618,6 @@ app.post('/AddToSaved', checkAuthenticated, (req,res) =>
 	try{
 			db.collection('saved').insertOne({
 				Email: req.user[0].Email,
-				Author: bookAth,
-				bookID: bookID,
 				Title: bookTitle,
 				Price: bookPrice,
 				Cover: bookCover,
@@ -595,8 +635,6 @@ app.post('/AddToSaved', checkAuthenticated, (req,res) =>
 app.post('/moveToCart', checkAuthenticated, (req,res) =>
 {
 	var id = req.body.id1;
-	var bookID = req.body.bookID1;
-	var bookAth = req.body.author1;
 	var bookTitle = req.body.title1;
 	var bookDescr = req.body.descr1;
 	var bookPrice = parseFloat(req.body.price1);
@@ -609,8 +647,6 @@ app.post('/moveToCart', checkAuthenticated, (req,res) =>
 		db.collection('carts').insertOne({
 			Email: req.user[0].Email,
 			Title: bookTitle,
-			bookID: bookID,
-			Author: bookAth,
 			Description: bookDescr,
 			Price: bookPrice,
 			Cover: bookCover,
@@ -637,40 +673,6 @@ app.delete('/DeleteFromSaved', checkAuthenticated, (req,res) => {
     res.redirect('/cart');
 });
 
-//checkOut page
-app.get('/checkOut', checkAuthenticated, (req, res) =>{
-	
-    db.collection('Purchase').find({"Email": req.user[0].Email}).toArray(function(err, purch)
-    {
-        if (err) { console.log(err); }
-        else{  
-           		
-				res.render("pages/checkOut.ejs", {purch: purch, user: req.user});
-			}
-			
-	});  
-});
-
-
-//check out method/button in shopping cart
-app.post('/checkOut', checkAuthenticated, (req,res) => {
-	
-	db.collection('carts').find({"Email": req.user[0].Email}).toArray(function(err, books)
-    {
-        if (err) { console.log(err); }
-        else{  
-				   db.collection('Purchase').insert(books);
-				   try{
-					db.collection('carts').remove({"Email": req.user[0].Email});
-				}catch(e){
-					console.log(e);
-				}
-			}
-	});  
-
-	
-	res.redirect('/checkOut');
-});
 //BOOK DETAILS
 app.get("/bookDetails/:id", checkAuthenticated2, function(req,res){
 	var bookId = req.params.id;
