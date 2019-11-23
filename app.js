@@ -769,32 +769,23 @@ app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
     res.redirect('/bookDetails/' + bookId);
 });
 
-// AUTHOR
+// AUTHOR DETAILS
 app.get('/author/:id', checkAuthenticated2, function(req, res){
 
-	if(req.user){
-
-		AuthorId = req.params.id
-		//console.log("id: " + AuthorId);
-		db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
-		{
-			if (err) { console.log(err); }
-			else{   
-				res.render("pages/author.ejs", {author: author, user: req.user});
-			}
-		});  
-	}
-	else{
-		AuthorId = req.params.id
-		//console.log("id: " + AuthorId);
-		db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
-		{
-			if (err) { console.log(err); }
-			else{   
-				res.render("pages/author.ejs", {author: author, user: req.user});
-			}
-		});  
-	}
+	AuthorId = req.params.id
+	//console.log("id: " + AuthorId);
+	db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
+	{
+		if (err) { console.log(err); }
+		else{
+			db.collection('Books').find({AuthorID: AuthorId}).toArray(function(err, book){
+				if (err) { console.log(err); }
+				else{ 
+					res.render("pages/author.ejs", {author: author, book: book});
+				}
+			});
+		}
+	});  
 });
 
 //log out
