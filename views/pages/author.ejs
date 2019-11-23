@@ -18,60 +18,65 @@
     </head>
     <body>
         <main>
-            <section class = "static author-sec">
+            <section class = "author-sec">
                 <div class="container">
-                    <div class="book">  
-                        <% author.forEach(author => {%>  
-                            <!-- main table --> 
-                            <table style width="100%">
-                                <tr>
-                                    <!-- Author Name -->
-                                    <h1 align="center"><%= author.Name %></h1>      
-                                    <th> 
-                                        <!-- Author Picture -->
-                                        <div class="author-picture">
-                                            <img src = <%= author.Picture %> width="300" height="400" title="" />    
-                                        </div> 
-                                        <!-- Author-Bio -->
-                                        <div class="author-bio">
-                                            <p class="bio light"> <%= author.Bio %></p>
-                                        </div>
-                                        <!-- Author-Born -->
+                    <div class="slider-content">
+                        <% author.forEach(author => {%> 
+                            <h1><%= author.Name %></h1>
+                             <!-- Author Picture -->
+                             <div class="author-picture">
+                                <img src = <%= author.Picture %> width="300" height="400" title="" />    
+                            </div>
+                            <!-- Author-Bio -->
+                            <div class="author-bio">
+                                <p class="bio light"> <%= author.Bio %></p>
+                            </div>  
+                            <ul>
+                                <li>
+                                     <!-- Author-Born -->
+                                     <% if (author.Born) {%>
                                         <div class="author-born">
                                             <span class="born lead" >Born In</span><span class="tab light">:</span>
                                             <span class="born light"><%=author.Born %></span>
                                         </div>
-                                            <!-- Author-Website -->
-                                            <div class="author-website">
-                                                <span class="born lead" >Website</span><span class="tab light">:</span>
-                                                <span class="born light"><a href="<%= author.Website %>"><%= author.Website %> </a></span>
-                                            </div> 
-                                        
-                                        <% if (author.Genre) {%>
-                                            <!-- Author-Genre -->
-                                            <div class="author-genre">
-                                                <span class="born lead" >Genre</span><span class="tab light">:</span>
-                                                <span class="born light"> <%= author.Genre %></span>
-                                            </div> 
-                                        <% }%>
-
-                                        <% if (author.Influences) {%>
-                                            <!-- Author-Genre -->
-                                            <div class="author-influences">
-                                                <span class="born lead" >Influences</span><span class="tab light">:</span>
-                                                <span class="born light"><%= author.Influences %></span>
-                                            </div> 
-                                        <% }%>
-
-                                        <% if (author.Twitter) {%>
-                                            <!-- Author-Genre -->
-                                            <div class="author-twitter">
-                                                <span class="born lead" ><a href="<%= author.Twitter %>"> Twitter</a></span>
-                                            </div> 
-                                        <% }%>
-                                    </th>
-                                </tr>
-                            </table> 
+                                    <% }%>
+                                </li>
+                                <li>
+                                    <!-- Author-Website -->
+                                    <% if (author.Website) {%>
+                                        <div class="author-website">
+                                            <span class="born lead" >Website</span><span class="tab light">:</span>
+                                            <span class="born light"><a href="<%= author.Website %>"><%= author.Website %> </a></span>
+                                        </div>
+                                    <% }%> 
+                                </li>
+                                <li>
+                                    <!-- Author-Genre -->
+                                    <% if (author.Genre) {%>
+                                        <div class="author-genre">
+                                            <span class="born lead" >Genre</span><span class="tab light">:</span>
+                                            <span class="born light"> <%= author.Genre %></span>
+                                        </div> 
+                                    <% }%>
+                                </li>
+                                <li>
+                                    <!-- Author-Genre -->
+                                    <% if (author.Influences) {%>
+                                        <div class="author-influences">
+                                            <span class="born lead" >Influences</span><span class="tab light">:</span>
+                                            <span class="born light"><%= author.Influences %></span>
+                                        </div> 
+                                    <% }%>
+                                </li>
+                                <li>
+                                     <!-- Author-Twitter -->
+                                    <% if (author.Twitter) {%>
+                                        <div class="author-twitter">
+                                            <a target="_blank" href="<%= author.Twitter %>"><img src="https://c866088.ssl.cf3.rackcdn.com/assets/twitter30x30.png" border=0></a>
+                                        </div> 
+                                    <% }%>
+                                </li>
+                            </ul>
                         <% })%>
                     </div>
                 </div>  
@@ -90,7 +95,9 @@
                                             <h3><%= book.Title %></h3>
                                             <h6><span class="price">$<%= book.Price %></span></h6>
                                             <div class="hover">
-                                                <span><i class="fa fa-long-arrow-right" aria-hidden="true"></i></span>
+                                                <a href="/bookDetails/<%=book._id%>">
+                                                    <span><i class="fa fa-long-arrow-right" aria-hidden="true"></i></span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>

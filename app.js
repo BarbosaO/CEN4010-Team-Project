@@ -723,46 +723,22 @@ app.post('/submitReview/:id', checkAuthenticated, (req,res) => {
 });
 
 // AUTHOR DETAILS
-app.get('/author/:id', checkAuthenticated, function(req, res){
+app.get('/author/:id', checkAuthenticated2, function(req, res){
 
-	if(req.user){
-		AuthorId = req.params.id
-		//console.log("id: " + AuthorId);
-		db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
-		{
-			if (err) { console.log(err); }
-			else{
-				db.collection('Books').find({AuthorID: AuthorId}).toArray(function(err, book){
-					if (err) { console.log(err); }
-					else if(req.user){ //if user logged in
-						var userId = req.user[0]._id
-						res.render("pages/author.ejs", {author: author, book: book, user: req.user});
-					}else{
-						res.render("pages/author.ejs", {author: author, book: book, user: req.user});
-					}
-				});
-			}
-		});  
-	}
-	else{
-		AuthorId = req.params.id
-		//console.log("id: " + AuthorId);
-		db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
-		{
-			if (err) { console.log(err); }
-			else{
-				db.collection('Books').find({AuthorID : AuthorId}).toArray(function(err, book){
-					if (err) { console.log(err); }
-					else if(req.user){ //if user logged in
-						var userId = req.user[0]._id
-						res.render("pages/author.ejs", {author: author, book: book, user: req.user});
-					}else{
-						res.render("pages/author.ejs", {author: author, book: book, user: req.user});
-					}
-				});
-			}
-		}); 
-	}
+	AuthorId = req.params.id
+	//console.log("id: " + AuthorId);
+	db.collection('Authors').find({_id: ObjectId(AuthorId)}).toArray(function(err, author)
+	{
+		if (err) { console.log(err); }
+		else{
+			db.collection('Books').find({AuthorID: AuthorId}).toArray(function(err, book){
+				if (err) { console.log(err); }
+				else{ 
+					res.render("pages/author.ejs", {author: author, book: book});
+				}
+			});
+		}
+	});  
 });
 
 //log out
