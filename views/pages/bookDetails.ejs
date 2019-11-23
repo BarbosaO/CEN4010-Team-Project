@@ -107,12 +107,12 @@
                                             <div class="col-5"></div>
                                             <div class="col-7">
                                               
-                                                <p id="invisibleNickname"style="display:none"><%= user.Nickname %></p>
-                                                <p id="nickname"style="margin-bottom:0; text-align:right;">Comment as: <%= user.Nickname %></p>
+                                                <p id="invisibleNickname"style="display:none"><%= nickname %></p>
+                                                <p id="nickname"style="margin-bottom:0; text-align:right;">Comment as: <%= nickname %></p>
                                             </div>
                                         </div>
                                         <div id="commentWarning" class="alert alert-danger d-none" role="alert">You cannot leave an empty comment</div>
-                                        <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                                        <textarea maxlength="700"class="form-control" id="comment" name="comment" rows="3"></textarea>
                                         <div id="ratingWarning" class="alert alert-danger d-none" role="alert" style="margin-top:15px;"> You must rate the book from 1 - 5 stars. </div>
                                     
                                     </div>
