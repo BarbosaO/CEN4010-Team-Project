@@ -1,7 +1,176 @@
 body{
-    padding-top:25px;
+  padding:0;
 }
 
+.myAlert-top{
+  position: fixed;
+  top: 40px; 
+  left:2%;
+  width: 96%;
+}
+
+.alert{
+    display: none;
+}
+
+/* 5 star rating system */
 .checked {
-    color: orange;
+  transition: color 0.5s ease;
+  color: orange;
+}
+
+.center {
+  margin: auto;
+  width: 60%;
+  padding: 10px;
+  text-align: center;
+}
+
+.button {
+
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button5 {background-color: #555555;} /* Black */
+
+.button2 {
+ 
+    border: none;
+    color: white;
+    padding: 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+.button1 {
+ 
+    border: none;
+    color: rgb(7, 7, 7);
+    padding: 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 1px 1px;
+    cursor: pointer;
+  }
+  
+.button4 {background-color: #e7e7e7;}/* Grey */
+
+div.scroll {
+  
+  border: 2px #e7e7e7;
+  width: 300px;
+  height: 250px;
+  overflow: scroll;
+}
+
+div.scroll2 {
+  
+  width: 800px;
+  height: 650px;
+  overflow: scroll;
+  padding: 10px;
+}
+
+.con {
+    position: relative;
+    width: 80px;
+    height: 100px;
+  }
+  
+  /* Make the image to responsive */
+  .image {
+    display: block;
+    width: 80px;
+    height: 100px;
+  }
+  
+  /* The overlay effect - lays on top of the container and over the image */
+  .overlay {
+    position: absolute; 
+    bottom: 0; 
+    width: 80px;
+    height: 100px;
+    transition: .5s ease;
+    opacity:0;
+  }
+
+  .con:hover .overlay {
+    opacity: 1;
+  }
+
+h2 {
+  margin-top: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-bottom: 1em;
+}
+
+.headerButton{
+  border:none;
+  color:rgb(144, 148, 150);
+  padding:0;
+  background-color:rgb(52, 58, 63);
+  text-align:baseline;
+  margin-top:8px;
+}
+
+.headerButton:hover{
+  color:rgb(180, 188, 190);
+}
+
+#comment{
+  max-height: 50vh;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
