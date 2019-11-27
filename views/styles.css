@@ -180,7 +180,7 @@ h2 {
 }
 
 
-
+/* Messed up further */
 
 .author-sec{
   
@@ -283,7 +283,7 @@ html,body {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-h1, h2, h3, h4, h5, h6, ul {
+h1, h3, h4, h5, h6, ul {
   margin: 0px;
   padding: 0px; }
 
@@ -310,10 +310,10 @@ textarea {
     background: #fff;
     color: #ff9700; }
 
-.container {
-  width: 1200px;
+.container1 {
+  
   padding: 0 50px;
-  max-width: 1200px; 
+   
 }
 
 section {
@@ -878,4 +878,3 @@ margin-right: 15px; }
           -ms-flex: 20%;
           flex: 20%;
           max-width: 20%; }
-  
