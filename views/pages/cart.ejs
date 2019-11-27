@@ -24,7 +24,9 @@
                                 <div class="container">
                                     <div class="panel panel-default">
                                         <div class="row">
-                                            <div class="col-sm-2">
+                                            
+                                            <div class="col-sm-4">
+                                                    
                                                 <!-- Book price -->
                                                 <div class="panel-body">
                                                     <p class="price" >Price: $<%= cart.Price %></p>
@@ -50,14 +52,14 @@
                                                     <tr>
                                                         <th>
                                                             <div style=display:inline-block horizontal-align:right> 
-                                                                <form action="/add1?_method=UPDATEONE" method="POST">
+                                                                <form action="/increaseQty?_method=UPDATEONE" method="POST">
                                                                     <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
                                                                     <input type="text" name = "qty" value = "<%= cart.qty %>" style="display:none;">
                                                                     <button class="button1 button4" type="submit">+</button>
                                                                 </form>
                                                             </div> 
                                                             <div style=display:inline-block horizontal-align:right> 
-                                                                <form action="/minus1?_method=UPDATEONE" method="POST">
+                                                                <form action="/decreaseQty?_method=UPDATEONE" method="POST">
                                                                     <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
                                                                     <input type="text" name ="qty" value = "<%= cart.qty %>" style="display:none;">
                                                                     <button class="button1 button4" type="submit">-</button>
@@ -67,33 +69,28 @@
                                                     </tr>
                                                 </table> 
                                             </div>
-                                            <div class="col-md-10">
+                                        </th>
+                                        <th>
+                                            <div class="col-md-7">
                                                 <!-- Book title -->
-                                                <div class="panel-body">
+                                                <div class="panel-body" align="center">
                                                     <h5 class="title" align="center">Author: <%= cart.Author %></h5>
                                                     <h5 class="title" align="center">Title: <%= cart.Title %></h5>
-                                                    <p class="" align="center">Description:</p>
-                                                </div>
-                                                <div class="panel-body">
-                                                    <p align="center"><%= cart.Description %></p>
-                                                </div>
-                                                <div class="panel-body">
-                                                        <a class = "" href="/bookDetails/<%=cart.bookID%>">More Info</a>
+                                                    <a class = ""  href="/bookDetails/<%=cart.bookID%>">More Info</a>
                                                 </div>
                                                 <div class="panel-body" align="center">
                                                     <form action="/AddToSaved?_method=UPDATEONE" method="POST">
-                                                        <input type="text" name="save" value="yes" style="display:none;">
                                                         <input type="text" name="id" value="<%= cart._id %>" style="display:none;">
                                                         <input type="text" name="bookID" value="<%= cart.bookID %>" style="display:none;">
                                                         <input type="text" name="author" value="<%= cart.Author %>" style="display:none;">
                                                         <input type="text" name="title" value="<%= cart.Title %>" style="display:none;">
                                                         <input type="text" name = "price" value = "<%= cart.Price %>" style="display:none;">
                                                         <input type="text" name = "cover" value = "<%= cart.Cover %>" style="display:none;">
-                                                        <input type="text" name = "descr" value = "<%= cart.Description %>" style="display:none;">
                                                         <button class="button1 button4" type="submit" style="margin: 4px 2px;">save for later</button>
                                                     </form>
                                                 </div>
                                             </div>
+                                        
                                         </div>
                                     </div>
                                 </div>
