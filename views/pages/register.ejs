@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <% include partials/header.ejs %>
+    <title>Register | WebApp</title>
+</head>
+<body>
+    
+    <id="addrAlert2" class="center">
+    <h1>Register</h1>
+    <% if(message){ %>
+        <%= message %>
+    <% } %>
+    <form action="/register" method="POST" onsubmit="return validate()">
+        <h5><strong>Login Credentials</strong></h5>
+
+        Email:<br>
+        <input type="email" name="email" ><br>
+        Password:<br>
+        <input type="text" name="password" ><br><br><br>
+
+        <div class="alert alert-danger" id="addrAlert" role="alert" style="display:none;">
+            Home address invalid.
+        </div>
+
+        <!-- <div class="alert alert-danger" id="addrAlert" role="alert" style="display:none;">
+            Address invalid.
+        </div> -->
+
+        <h5><strong>Personal Information</strong></h5>
+        
+        First Name:<br>
+        <input type="text" name="firstname" required><br>
+        Last Name:<br>
+        <input type="text" name="lastname" required><br>
+        Home Address:<br>
+        <input type="text" name="homeaddr" id="addr" required><br>
+        City:<br>
+        <input type="text" name="city" required><br>
+        State/Province/Region:<br>
+        <input type="text" name="state" required><br>
+        ZIP/Postal Code:<br>
+        <input type="number" name="zip" required><br>
+        Country:<br>
+        <input type="text" name="country" required><br><br><br>
+
+        <h5><strong>Nickname</strong></h5>
+        <h6><strong>(for Book Rating and Commenting)</strong></h6>
+
+        <input type="text" name="nickname" required><br><br><br>
+
+        
+        <h5><strong>Credit Card Information</strong></h5>
+        
+        Owner:<br>
+        <input type="text" name="creditOwner" required><br>
+        
+        Card Number:<br>
+        <input type="number" name="creditCard" id="ccNum" onkeyup="validateCC()" required><br>
+        
+        <div class="alert alert-success" id="ccVisa" role="alert" style="display:none;">
+            Visa Card Detected!
+        </div>
+        
+        <div class="alert alert-success" id="ccMast" role="alert" style="display:none;">
+            Mastercard Detected!
+        </div>
+        
+        <div class="alert alert-success" id="ccDisc" role="alert" style="display:none;">
+            Discover Card Detected!
+        </div>
+        
+        <div class="alert alert-success" id="ccAmex" role="alert" style="display:none;">
+            American Express Card Detected!
+        </div>
+        
+        <div class="alert alert-danger" id="ccAlert" role="alert" style="display:none;">
+            Invalid Card Detected! Must be Visa, MasterCard, Discover, or American Express.
+        </div>
+        
+        CVV:<br>
+        <input type="number" name="cvv" id="cvvNum" required><br>
+
+        <div class="alert alert-danger" id="cvvAlert" role="alert" style="display:none;">
+            CVV invalid. Must be 3 or 4 digits.
+        </div>
+
+        Expiration Date:<br>
+        <input type="date" name="expDate" required><br><br>
+
+        <div id="container_credit">
+            <a href="#" id="addCredit" onclick="addCreditFields()">Add More (2)</a><br>
+        </div>
+
+        <div class="alert alert-danger" id="addrAlert2" role="alert" style="display:none;">
+                Shipping address invalid.
+        </div>
+
+        <h5><strong>Shipping</strong></h5>
+
+        Shipping Address:<br>
+        <input type="text" name="shipaddr" id="addr2" required><br>
+        City:<br>
+        <input type="text" name="shipcity" required><br>
+        State/Province/Region:<br>
+        <input type="text" name="shipstate" required><br>
+        ZIP/Postal Code:<br>
+        <input type="number" name="shipzip" required><br>
+        Country:<br>
+        <input type="text" name="shipcountry" required><br><br><br>
+
+        <div id="container_shipping">
+            <a href="#" id="addShipping" onclick="addShippingFields()">Add More (2)</a><br>
+        </div>
+        
+        <button type="submit" class="btn btn-secondary" id="register">Register</button>
+    </form>
+
+    <footer>
+        <% include partials/footer %>
+    </footer>
+
+        <script>
+
+            //regex for credit cards
+            var regex_visa = /^4[0-9]{12}(?:[0-9]{3})?$/;
+            var regex_mc = /^5[1-5][0-9]{14}$/;
+            var regex_disc = /^(?:6(?:011|5[0-9][0-9])[0-9]{12})$/;
+            var regex_amex = /^3[47][0-9]{13}$/;
+
+            // regex for home and shipping addresses
+            var regex_addr = /^\s*\S+(?:\s+\S+){2}/;
+
+            // regex for cvv number (3 or 4 digits)
+            var regex_cvv = /^[0-9]{3,4}$/;
+            
+            // validates addresses, card number, and cvv after user clicks "Register"
+            function validate(){
+                var addr = document.getElementById("addr").value;
+                var ccNum = document.getElementById("ccNum").value;
+                var cvvNum = document.getElementById("cvvNum").value;
+                var addr2 = document.getElementById("addr2").value;
+
+                // check the user input against regex
+                // credit cards
+                var isVisa = regex_visa.test( ccNum ) === true;
+                var isMast = regex_mc.test( ccNum ) === true;
+                var isAmex = regex_amex.test( ccNum ) === true;
+                var isDisc = regex_disc.test( ccNum ) === true;
+
+                // addresses
+                var isAddr = regex_addr.test(addr) === true;
+                var isShipAddr = regex_addr.test(addr2) === true;
+                
+                // cvv
+                var isCVV = regex_cvv.test(cvvNum) === true;
+
+                if(!isAddr){
+                    document.getElementById('addrAlert').style.display = 'block';
+                    return false;
+                }else if(!isVisa && !isMast && !isAmex && !isDisc){
+                    document.getElementById('ccAlert').style.display = 'block';
+                    return false;
+                }else if(!isCVV){
+                    document.getElementById('cvvAlert').style.display = 'block';
+                    return false;
+                }else if(!isShipAddr){
+                    document.getElementById('addrAlert2').style.display = 'block';
+                    return false;
+                }
+                
+            }
+
+            // checks if the credit card is a valid one
+            window.onload = function validateCC(){
+                // user input
+                var ccNum_input = document.getElementById("ccNum");
+                
+                // as the user types in the credit card, messages will display that indicate which card it is
+                ccNum_input.onkeyup = function(event) {
+                    console.log(this.value);
+
+                // visa
+                if(this.value.match(regex_visa)) {
+                    document.getElementById('ccVisa').style.display = 'block';
+                }else{
+                    document.getElementById('ccVisa').style.display = 'none';
+                }
+                
+                // mastercard
+                if(this.value.match(regex_mc)) {
+                    document.getElementById('ccMast').style.display = 'block';
+                }else{
+                    document.getElementById('ccMast').style.display = 'none';
+                }
+
+                // discover
+                if(this.value.match(regex_disc)) {
+                    document.getElementById('ccDisc').style.display = 'block';
+                }else{
+                    document.getElementById('ccDisc').style.display = 'none';
+                }
+
+                // american express
+                if(this.value.match(regex_amex)) {
+                    document.getElementById('ccAmex').style.display = 'block';
+                }else{
+                    document.getElementById('ccAmex').style.display = 'none';
+                }
+            }
+        }
+            
+            // used to register number of clicks for more credit cards
+            var clicks_credit = 0;
+
+            // used to keep track of number of cards
+            var counter_credit = 1;
+
+            function addCreditFields(){
+                
+                counter_credit += 1;
+                // Container <div> where dynamic content will be placed
+                var container = document.getElementById("container_credit");
+                
+                // Append node with new text for new card owner
+                container.appendChild(document.createTextNode("Owner "+(counter_credit)+":"));
+
+                // Append a line break 
+                container.appendChild(document.createElement("br"));
+                
+                // Create an <input> element, set its type and name attributes for each field
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "credit_owner" + counter_credit;
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+                
+                container.appendChild(document.createTextNode("CVV: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "number";
+                input.name = "credit_cvv" + counter_credit;
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+
+                container.appendChild(document.createTextNode("Card Number: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "number";
+                input.name = "credit_num" + counter_credit;
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+
+                container.appendChild(document.createTextNode("Expiration Date: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "date";
+                input.name = "credit_exp_date" + counter_credit;
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+                container.appendChild(document.createElement("br"));
+                
+                clicks_credit += 1;
+                document.getElementById("addCredit").innerHTML = "Add More (1)";
+                
+                // link disappears after two clicks 
+                if (clicks_credit == 2)
+                    document.getElementById("addCredit").style.display = 'none';
+            }
+
+            // used to register number of clicks for more shipping addresses
+            var clicks_shipping = 0;
+
+            // used to keep track of number of shipping addresses
+            var counter_shipping = 1;
+            
+            function addShippingFields(){
+                
+                counter_shipping += 1;
+                // Container <div> where dynamic content will be placed
+                var container = document.getElementById("container_shipping");
+                
+                // Append node with new text for new address
+                container.appendChild(document.createTextNode("Shipping Address "+(counter_shipping)+":"));
+
+                // Append a line break 
+                container.appendChild(document.createElement("br"));
+                
+                // Create an <input> element, set its type and name attributes for each field
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "shipping_addr" + counter_shipping;
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+                
+                container.appendChild(document.createTextNode("City: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "shipping_city" + counter_shipping;
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+
+                container.appendChild(document.createTextNode("State/Province/Region: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "shipping_state" + counter_shipping;
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+
+                container.appendChild(document.createTextNode("ZIP/Postal Code: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "shipping_zip" + counter_shipping;
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+
+                container.appendChild(document.createTextNode("Country: "));
+
+                container.appendChild(document.createElement("br"));
+                
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "shipping_country" + counter_shipping;
+                container.appendChild(input);
+
+                container.appendChild(document.createElement("br"));
+                container.appendChild(document.createElement("br"));
+                
+                clicks_shipping += 1;
+                
+                document.getElementById("addShipping").innerHTML = "Add More (1)";
+                
+                // link disappears after two clicks 
+                if (clicks_shipping == 2)
+                    document.getElementById("addShipping").style.display = 'none';
+            }
+        </script>
+    </div>
+</body>
+</html>

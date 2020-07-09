@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include partials/header.ejs %>
+    <title>Edit Profile | WebApp</title>
+</head>
+<body>
+    
+    <div class="center">
+    <h1>Edit Profile</h1>
+    <form action="/updateProfile?_method=PUT" method="POST">
+        <br>
+        <h5><strong>Login Credentials</strong></h5>
+        Email:<br>
+        <input type="email" name="email" value="<%= user[0].Email %>"><br>
+        Password:<br>
+        <input type="text" name="password" value="<%= user[0].Password %>"><br><br><br>
+
+        <h5><strong>Personal Information</strong></h5>
+        First Name:<br>
+        <input type="text" name="firstname" value="<%= user[0].First_Name %>"><br>
+        Last Name:<br>
+        <input type="text" name="lastname" value="<%= user[0].Last_Name %>"><br>
+        Home Address:<br>
+        <input type="text" name="homeaddr" value="<%= user[0].Home_Address %>"><br>
+        City:<br>
+        <input type="text" name="city" value="<%= user[0].Home_City %>"><br>
+        State/Province/Region:<br>
+        <input type="text" name="state" value="<%= user[0].Home_State %>"><br>
+        ZIP/Postal Code:<br>
+        <input type="number" name="zip" value="<%= user[0].Home_Zip %>"><br>
+        Country:<br>
+        <input type="text" name="country" value="<%= user[0].Home_Country %>"><br><br><br>
+
+        <h5><strong>Nickname</strong></h5>
+        <input type="text" name="nickname" value="<%= user[0].Nickname %>"><br><br><br>
+
+        <div class="alert alert-danger" id="ccAlert" role="alert" style="display:none;">
+            Credit card number invalid.
+        </div>
+        <h5><strong>Credit Card Information</strong></h5>
+        Owner:<br>
+        <input type="text" name="creditOwner" value="<%= user[0].Credit_Owner %>"><br>
+        CVV:<br>
+        <input type="number" name="cvv" value="<%= user[0].CVV %>"><br>
+        Card Number:<br>
+        <input type="number" name="creditCard" id="ccNum" value="<%= user[0].Credit_Card %>"><br>
+        Expiration Date:<br>
+        <input type="date" name="expDate" value="<%= user[0].Exp_Date %>"><br>
+        <br><br>
+
+        Owner 2:<br>
+        <input type="text" name="creditOwner2" value="<%= user[0].Credit_Owner2 %>"><br>
+        CVV:<br>
+        <input type="number" name="cvv2" value="<%= user[0].CVV2 %>"><br>
+        Card Number:<br>
+        <input type="number" name="creditCard2" id="ccNum" value="<%= user[0].Credit_Card2 %>"><br>
+        Expiration Date:<br>
+        <input type="date" name="expDate2" value="<%= user[0].Exp_Date2 %>"><br>
+        <br><br>
+
+        Owner 3:<br>
+        <input type="text" name="creditOwner3" value="<%= user[0].Credit_Owner3 %>"><br>
+        CVV:<br>
+        <input type="number" name="cvv3" value="<%= user[0].CVV3 %>"><br>
+        Card Number:<br>
+        <input type="number" name="creditCard3" id="ccNum" value="<%= user[0].Credit_Card3 %>"><br>
+        Expiration Date:<br>
+        <input type="date" name="expDate3" value="<%= user[0].Exp_Date3 %>"><br>
+        <br><br>
+
+        <h5><strong>Shipping</strong></h5>
+        Shipping Address:<br>
+        <input type="text" name="shipaddr" value="<%= user[0].Ship_Address %>"><br>
+        City:<br>
+        <input type="text" name="shipcity" value="<%= user[0].Ship_City %>"><br>
+        State/Province/Region:<br>
+        <input type="text" name="shipstate" value="<%= user[0].Ship_State %>"><br>
+        ZIP/Postal Code:<br>
+        <input type="number" name="shipzip" value="<%= user[0].Ship_Zip %>"><br>
+        Country:<br>
+        <input type="text" name="shipcountry" value="<%= user[0].Ship_Country %>"><br>
+        <br><br>
+
+        Shipping Address 2:<br>
+        <input type="text" name="shipaddr2" value="<%= user[0].Ship_Address2 %>"><br>
+        City:<br>
+        <input type="text" name="shipcity2" value="<%= user[0].Ship_City2 %>"><br>
+        State/Province/Region:<br>
+        <input type="text" name="shipstate2" value="<%= user[0].Ship_State2 %>"><br>
+        ZIP/Postal Code:<br>
+        <input type="number" name="shipzip2" value="<%= user[0].Ship_Zip2 %>"><br>
+        Country:<br>
+        <input type="text" name="shipcountry2" value="<%= user[0].Ship_Country2 %>"><br>
+        <br><br>
+
+        Shipping Address 3:<br>
+        <input type="text" name="shipaddr3" value="<%= user[0].Ship_Address3 %>"><br>
+        City:<br>
+        <input type="text" name="shipcity3" value="<%= user[0].Ship_City3 %>"><br>
+        State/Province/Region:<br>
+        <input type="text" name="shipstate3" value="<%= user[0].Ship_State3 %>"><br>
+        ZIP/Postal Code:<br>
+        <input type="number" name="shipzip3" value="<%= user[0].Ship_Zip3 %>"><br>
+        Country:<br>
+        <input type="text" name="shipcountry3" value="<%= user[0].Ship_Country3 %>"><br>
+        
+        <button type="submit" class="btn btn-default" id="saveChanges">Save Changes</button>
+    </form>
+    <footer>
+        <% include partials/footer %>
+    </footer>
+    <script>
+        function validate(){
+            var ccNum = document.getElementById("ccNum").value;
+            var numbers = /^[0-9]+$/;
+            if(ccNum.match(numbers)){
+                return true;
+            }else{
+                //alert('please input numeric characters only');
+                document.getElementById('ccAlert').style.display = 'block';
+                return false;
+            }
+        }
+    </script>
+</div>
+</body>
+</html>
