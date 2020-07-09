@@ -26,10 +26,6 @@ body{
   text-align: center;
 }
 
-img {
-  border-radius: 5px;
-}
-
 .button {
 
   border: none;
@@ -878,3 +874,4 @@ margin-right: 15px; }
           -ms-flex: 20%;
           flex: 20%;
           max-width: 20%; }
+
